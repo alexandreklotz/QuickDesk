@@ -1,5 +1,7 @@
 package fr.alexandreklotz.quickdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,21 +16,25 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    //@JsonView
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
     private int ticketId;
 
-    @Column
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
     private String ticketTitle;
 
-    @Column
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
     private String ticketDescription;
 
-    @Column
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     private Date ticketDateCreated;
 
     @Column
+    @JsonView(CustomJsonView.TicketView.class)
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     private Date ticketDateClosed;
 
@@ -37,14 +43,17 @@ public class Ticket {
     /////////////
 
     //A ticket can have multiple affected users and a user can create multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
     @ManyToMany(mappedBy = "ticketsUsr")
     private Set<User> users = new HashSet<>();
 
-    //A ticket can have multiple affected groups and a group can create multiple tickets
-    @ManyToMany(mappedBy = "ticketsGrp")
-    private Set<Group> groups = new HashSet<>();
+    //A ticket can have multiple affected teams and a team can create multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToMany(mappedBy = "ticketsTeams")
+    private Set<Team> tkteams = new HashSet<>();
 
     //A ticket can have multiple affected devices and a device can be affected to multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
     @ManyToMany(mappedBy = "ticketsDev")
     private Set<Device> devices = new HashSet<>();
 
@@ -103,12 +112,12 @@ public class Ticket {
         this.users = users;
     }
 
-    public Set<Group> getGroups() {
-        return groups;
+    public Set<Team> getteams() {
+        return tkteams;
     }
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
+    public void setteams(Set<Team> teams) {
+        this.tkteams = teams;
     }
 
     public Set<Device> getDevices() {
@@ -117,5 +126,13 @@ public class Ticket {
 
     public void setDevices(Set<Device> devices) {
         this.devices = devices;
+    }
+
+    public Set<Team> getTkteams() {
+        return tkteams;
+    }
+
+    public void setTkteams(Set<Team> teams) {
+        this.tkteams = teams;
     }
 }

@@ -32,14 +32,14 @@ public class Device {
 
     //A device can be used by only one user at a time but a user can use multiple devices
     @ManyToOne
-    private User userDevice;
+    private User user;
 
     //A device can be assigned to multiple tickets and one ticket can be assigned to multiple devices
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "deviceTickets",
-            joinColumns = { @JoinColumn(name = "device_deviceId")},
-            inverseJoinColumns = {@JoinColumn(name = "ticket_ticketId")}
+            joinColumns = { @JoinColumn(name = "deviceId")},
+            inverseJoinColumns = {@JoinColumn(name = "ticketId")}
     )
     Set<Ticket> ticketsDev = new HashSet<>();
 
@@ -90,12 +90,12 @@ public class Device {
         this.deviceDesc = deviceDesc;
     }
 
-    public User getUserDevice() {
-        return userDevice;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserDevice(User userDevice) {
-        this.userDevice = userDevice;
+    public void setUser(User userDevice) {
+        this.user = userDevice;
     }
 
     public Set<Ticket> getTicketsDev() {
