@@ -36,7 +36,7 @@ public class Team {
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.TeamView.class)
-    private boolean isTeamEnabled;
+    private boolean teamEnabled;
 
     /////////////
     //Relations//
@@ -126,11 +126,11 @@ public class Team {
         this.role = role;
     }
 
-    public boolean isIsTeamEnabled() {
-        return isTeamEnabled;
+    public boolean isTeamEnabled() {
+        return teamEnabled;
     }
 
-    public void setIsTeamEnabled(boolean teamIsEnabled) {
-        this.isTeamEnabled = teamIsEnabled;
+    public void setTeamEnabled(boolean teamIsEnabled) {
+        this.teamEnabled = teamIsEnabled;
     }
 }

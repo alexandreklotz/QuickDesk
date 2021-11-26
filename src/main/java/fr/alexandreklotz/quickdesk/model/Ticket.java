@@ -14,6 +14,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
+    //TODO : ENUM for ticket types !!
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

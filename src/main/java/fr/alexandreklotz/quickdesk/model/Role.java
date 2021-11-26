@@ -48,7 +48,7 @@ public class Role {
     //A role can be assigned to multiple groups but a group can only be affected a single group
     @JsonView(CustomJsonView.RoleView.class)
     @OneToMany(mappedBy = "role")
-    private List<Team> teams;
+    private Set<Team> teams;
 
     ///////////////
     //Constructor//
@@ -100,11 +100,11 @@ public class Role {
         this.rolePermissions = rolePermissions;
     }
 
-    public List<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
-    public void setTeams(List<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 }

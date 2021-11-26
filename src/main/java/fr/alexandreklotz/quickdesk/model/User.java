@@ -40,7 +40,7 @@ public class User {
 
     @JsonView(CustomJsonView.UserView.class)
     @Column(nullable = false)
-    private boolean userIsEnabled;
+    private boolean userEnabled;
 
     /////////////
     //Relations//
@@ -64,7 +64,7 @@ public class User {
     //A user can use multiple devices but a device can only be used by one user at a time
     @JsonView(CustomJsonView.UserView.class)
     @OneToMany(mappedBy = "user")
-    private List<Device> device;
+    private Set<Device> device;
 
 
 
@@ -105,12 +105,12 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public boolean isUserIsEnabled() {
-        return userIsEnabled;
+    public boolean isUserEnabled() {
+        return userEnabled;
     }
 
-    public void setUserIsEnabled(boolean userIsEnabled) {
-        this.userIsEnabled = userIsEnabled;
+    public void setUserEnabled(boolean userIsEnabled) {
+        this.userEnabled = userIsEnabled;
     }
 
     public Team getTeam() {
@@ -129,11 +129,11 @@ public class User {
         this.ticketsUsr = ticketsUsr;
     }
 
-    public List<Device> getDevice() {
+    public Set<Device> getDevice() {
         return device;
     }
 
-    public void setDevice(List<Device> userDevices) {
+    public void setDevice(Set<Device> userDevices) {
         this.device = userDevices;
     }
 

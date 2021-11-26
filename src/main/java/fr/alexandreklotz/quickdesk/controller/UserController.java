@@ -1,6 +1,7 @@
 package fr.alexandreklotz.quickdesk.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesk.dao.TeamDao;
 import fr.alexandreklotz.quickdesk.dao.UserDao;
 import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
@@ -17,10 +18,12 @@ import java.util.List;
 public class UserController {
 
     private UserDao userDao;
+    private TeamDao teamDao;
 
     @Autowired
-    UserController (UserDao userDao) {
+    UserController (UserDao userDao, TeamDao teamDao) {
         this.userDao = userDao;
+        this.teamDao = teamDao;
     }
 
     ////////////////
@@ -34,9 +37,19 @@ public class UserController {
         user.setUserFirstName(user.getUserFirstName());
         user.setUserLastName(user.getUserLastName());
         user.setUserPassword(user.getUserPassword());
-        user.setTeam(user.getTeam()); //TODO : Doesn't work when sending a JSON form. Won't assign an id to it, needs to be checked.
+
+        // TODO
+        /*Team userteam = user.getTeam();
+        Optional<Team> teamBdd = teamDao.findById(userteam.getTeamId());
+
+        if (teamBdd.isPresent()){
+            user.setTeam(userteam);
+            List<User> userteamusers = userteam.getTeamUsersList();
+            userteamusers.add(user);
+        }*/
+
         user.setUserCreationDate(Date.from(Instant.now()));
-        user.setUserIsEnabled(true);
+        user.setUserEnabled(true);
 
         userDao.saveAndFlush(user);
     }

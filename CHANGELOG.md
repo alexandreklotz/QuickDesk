@@ -1,5 +1,20 @@
 #QuickDesk Development Follow-Up
 ***
+##26/11/2021
+
+* application.properties has been modified => the database name in the url has been modified and ddl-auto now __updates instead of creating__.
+* The boolean "isTeamEnabled" in the Team model has been refactored to "teamEnabled"
+* The boolean "isRoleCanBeDeleted" in the Role model has been refactored to "roleCanBeDeleted"
+* The boolean "isUserEnabled" in the User model has been refactored to "userEnabled"
+* Creation of the following classes and their daos : Contract, Contractor, Software, License. The relations for each have been created aswell.
+* Most of the relations "List" have been migrated to "Set" in the User and Team classes.
+* There is an issue when creating a user, it won't assign it in a team and it won't update the team members list. Post methods are still being modified to solve this issue but have been "disabled" for the time being.
+* Classes have been added in CustomJsonView
+
+Lots of research has been done today, especially for the post methods that won't assign the group to a user and vice versa. Once this issue will be solved, the remaining functions etc should be developed quickly.
+Just a quick note, all the models are currently entities. Some of them may be converted to @Embeddable classes.
+
+***
 ##25/11/2021
 The roles will have permissions that will be attributed to each team. That means that a user will automatically and always be a normal user when he registers or when he is created.
 He will only be admin through team permissions. A superadmin account will be created though.
