@@ -1,5 +1,21 @@
 #QuickDesk Development Follow-Up
 ***
+##02/12/2021
+* Getters, setters and constructors have been removed in each class => Lombok has been implemented, therefore i just needed to add annotations for lombok to generate these automatically
+* Column(nullable = false) has been set in the device model for two fields
+* TicketStatus enum has been created in the ticket class to assign a status to the ticket
+* TicketType enum has been created in the ticket class to assign a type to the ticket
+* TicketCategorization enum has been created in the ticket class to assign a category to the ticket
+* TicketPriority enum has been created in the ticket class to assign a priority to the ticket
+* User creation is now working 100%, it was impossible to assign a team to the user when sending a JSON form from postman to the api but the @JoinColumn wasn't specified in the user model...(__facepalm__).
+
+Didn't make many changes nor much progress today, have done quite some research again, was planning to change a few models from entity to embeddable but it will remain as it is for the time being.
+I will keep on working on controller methods to get all the default functionalities to work (team update/deletion, user update, tickets, etc...). I'll create the security config once all the controller methods will be working
+or atleast when the user and team controller will be complete (BCryptPassword at first and then role restricted URLs).
+I will also develop a python script/agent that will retrieve all the device peripherals/info and send it to the api to automatically create the device with the correct system info and link it to the current user.
+But, i'll probably need to find a way to manage how to authenticate the user through the agent or something considering that the users are users from the software database and not LDAP users.
+I'll also do some research later on to see how i can manage LDAP authentication and even implement SSO or something like that. But it will be __WAY__ later.
+***
 ##26/11/2021
 
 * application.properties has been modified => the database name in the url has been modified and ddl-auto now __updates instead of creating__.

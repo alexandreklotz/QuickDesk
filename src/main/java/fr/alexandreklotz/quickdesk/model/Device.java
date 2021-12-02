@@ -1,22 +1,30 @@
 package fr.alexandreklotz.quickdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(nullable = false)
     //@JsonView
     private int deviceId;
 
-    @Column
+    @Column(nullable = false)
     private String deviceName;
 
     @Column
@@ -28,7 +36,9 @@ public class Device {
     @Column
     private String deviceDesc;
 
-    //Relations
+    /////////////
+    //Relations//
+    /////////////
 
     //A device can be used by only one user at a time but a user can use multiple devices
     @ManyToOne
@@ -43,66 +53,9 @@ public class Device {
     )
     Set<Ticket> ticketsDev = new HashSet<>();
 
+    //A device can be linked to only one contract but a contract can have multiple devices linked to it
+    @JsonView(CustomJsonView.DeviceView.class)
+    @ManyToOne
+    private Contract contract;
 
-
-    //Constructor
-    public Device(){}
-
-
-    //Getters and setters
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getDeviceName() {
-        return deviceName;
-    }
-
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
-    }
-
-    public String getDeviceManufacturer() {
-        return deviceManufacturer;
-    }
-
-    public void setDeviceManufacturer(String deviceManufacturer) {
-        this.deviceManufacturer = deviceManufacturer;
-    }
-
-    public String getDeviceSerialNbr() {
-        return deviceSerialNbr;
-    }
-
-    public void setDeviceSerialNbr(String deviceSerialNbr) {
-        this.deviceSerialNbr = deviceSerialNbr;
-    }
-
-    public String getDeviceDesc() {
-        return deviceDesc;
-    }
-
-    public void setDeviceDesc(String deviceDesc) {
-        this.deviceDesc = deviceDesc;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User userDevice) {
-        this.user = userDevice;
-    }
-
-    public Set<Ticket> getTicketsDev() {
-        return ticketsDev;
-    }
-
-    public void setTicketsDev(Set<Ticket> ticketsDev) {
-        this.ticketsDev = ticketsDev;
-    }
 }

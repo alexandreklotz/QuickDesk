@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -9,6 +10,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Role {
@@ -50,61 +56,4 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<Team> teams;
 
-    ///////////////
-    //Constructor//
-    ///////////////
-
-    public Role(){}
-
-    ///////////////////////
-    //Setters and getters//
-    ///////////////////////
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRoleDescription() {
-        return roleDescription;
-    }
-
-    public void setRoleDescription(String roleDescription) {
-        this.roleDescription = roleDescription;
-    }
-
-    public boolean isRoleCanBeDeleted() {
-        return roleCanBeDeleted;
-    }
-
-    public void setRoleCanBeDeleted(boolean roleCanBeDeleted) {
-        this.roleCanBeDeleted = roleCanBeDeleted;
-    }
-
-    public Set<Ticket> getRolePermissions() {
-        return rolePermissions;
-    }
-
-    public void setRolePermissions(Set<Ticket> rolePermissions) {
-        this.rolePermissions = rolePermissions;
-    }
-
-    public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
-    }
 }

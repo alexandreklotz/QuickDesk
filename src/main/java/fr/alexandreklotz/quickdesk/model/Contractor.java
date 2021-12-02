@@ -2,11 +2,17 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Contractor {
@@ -30,38 +36,4 @@ public class Contractor {
     @OneToMany(mappedBy = "contractor")
     private Set<Contract> contracts;
 
-
-    ///////////////
-    //Constructor//
-    ///////////////
-
-    public Contractor(){}
-
-    /////////////////////
-    //Getters & Setters//
-    /////////////////////
-
-    public int getContractorId() {
-        return contractorId;
-    }
-
-    public void setContractorId(int contractorId) {
-        this.contractorId = contractorId;
-    }
-
-    public String getContractorName() {
-        return contractorName;
-    }
-
-    public void setContractorName(String contractorName) {
-        this.contractorName = contractorName;
-    }
-
-    public Set<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(Set<Contract> contracts) {
-        this.contracts = contracts;
-    }
 }

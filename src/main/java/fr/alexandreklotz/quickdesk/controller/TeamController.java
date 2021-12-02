@@ -38,7 +38,7 @@ public class TeamController {
 
         team.setTeamName(team.getTeamName());
         team.setTeamDescription(team.getTeamDescription());
-        team.setTeamUsersList(team.getTeamUsersList());
+        //team.setTeamUsersList(team.getTeamUsersList()); //There will be a method solely dedicated to that through the update function.
         team.setTeamDateCreated(Date.from(Instant.now()));
 
         team.setTeamEnabled(true);
@@ -46,20 +46,21 @@ public class TeamController {
         teamDao.saveAndFlush(team);
     }
 
-    // TODO
-    /*
-    @JsonView(CustomJsonView.TeamView.class)
-    @PatchMapping("/group/update/{id}")
+    // TODO : Create a new update method to update an existing group
+    /*@JsonView(CustomJsonView.TeamView.class)
+    @PatchMapping("/group/{id}/update")
     public String addTeamUsers(@PathVariable int id){
 
+        Optional<Team> teamBdd = teamDao.findById(id);
+        Team team = teamDao.getById(id);
         User user = userDao.getById(id);
         String userName = user.getUserFirstName() + " " + user.getUserLastName();
-        Optional<Team> teamBdd = teamDao.findById(id);
         String groupName = teamBdd.get().getTeamName();
 
         if(teamBdd.isPresent()){
             List<User> teamusers = teamBdd.get().getTeamUsersList();
             teamusers.add(user);
+            //user.setTeam(); //find a way to change the user's team
             return "The user " + userName + " has been successfully added to the " + groupName + " group.";
         } else if (userDao.findById(user.getUserId()).isEmpty()){
             return "The specified user doesn't exist.";

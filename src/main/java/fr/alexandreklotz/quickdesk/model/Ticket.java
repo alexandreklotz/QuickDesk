@@ -2,19 +2,58 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
-    //TODO : ENUM for ticket types !!
+    //TODO : Create a String variable/embedabble/class to add comments in a ticket. See how we can add multiple comments (and if the concerned user and tech/team can aswell.
+    //TODO : Manage images implementation => Images in the ticket desc or comments.
+
+    //TODO : ENUM for ticket status and types !! -> Created, testing needed
+    private enum TicketStatus {
+        OPEN,
+        ONHOLD,
+        ONGOING,
+        CLOSED,
+        REVIEW
+    }
+
+    private enum TicketTypes {
+        REQUEST,
+        INCIDENT,
+        CHANGE,
+        ISSUE
+    }
+
+    private enum TicketCategorization {
+        NETWORK,
+        HARDWARE,
+        SOFTWARE,
+        SECURITY,
+        LICENSE
+    }
+
+    private enum TicketPriority {
+        LOW,
+        MEDIUM,
+        HIGH,
+        CRITICAL
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +79,22 @@ public class Ticket {
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     private Date ticketDateClosed;
 
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
+    private TicketStatus ticketStatus;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
+    private TicketTypes ticketTypes;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
+    private TicketCategorization ticketCategorization;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
+    private TicketPriority ticketPriority;
+
     /////////////
     //Relations//
     /////////////
@@ -59,82 +114,4 @@ public class Ticket {
     @ManyToMany(mappedBy = "ticketsDev")
     private Set<Device> devices = new HashSet<>();
 
-
-    //Constructor
-    public Ticket(){}
-
-
-    //Setters and getters
-
-    public int getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(int ticketId) {
-        this.ticketId = ticketId;
-    }
-
-    public String getTicketTitle() {
-        return ticketTitle;
-    }
-
-    public void setTicketTitle(String ticketTitle) {
-        this.ticketTitle = ticketTitle;
-    }
-
-    public String getTicketDescription() {
-        return ticketDescription;
-    }
-
-    public void setTicketDescription(String ticketDescription) {
-        this.ticketDescription = ticketDescription;
-    }
-
-    public Date getTicketDateCreated() {
-        return ticketDateCreated;
-    }
-
-    public void setTicketDateCreated(Date ticketDateCreated) {
-        this.ticketDateCreated = ticketDateCreated;
-    }
-
-    public Date getTicketDateClosed() {
-        return ticketDateClosed;
-    }
-
-    public void setTicketDateClosed(Date ticketDateClosed) {
-        this.ticketDateClosed = ticketDateClosed;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Set<Team> getteams() {
-        return tkteams;
-    }
-
-    public void setteams(Set<Team> teams) {
-        this.tkteams = teams;
-    }
-
-    public Set<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(Set<Device> devices) {
-        this.devices = devices;
-    }
-
-    public Set<Team> getTkteams() {
-        return tkteams;
-    }
-
-    public void setTkteams(Set<Team> teams) {
-        this.tkteams = teams;
-    }
 }

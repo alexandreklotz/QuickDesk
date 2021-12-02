@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +11,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class License {
@@ -47,68 +53,14 @@ public class License {
     /////////////
 
     //A license can be affected to only one contract but a contract can have multiple licenses
-    //@ManyToOne
+    @JsonView(CustomJsonView.LicenseView.class)
+    @ManyToOne
+    private Contract contract;
 
     //A software has a single license but a license can be affected to multiple software
     @JsonView(CustomJsonView.LicenseView.class)
     @OneToMany(mappedBy = "license")
     private Set<Software> softwares;
 
-    ///////////////
-    //Constructor//
-    ///////////////
 
-    public License(){}
-
-    /////////////////////
-    //Getters & setters//
-    /////////////////////
-    //TODO : Add relations getters and setters
-    public int getLicenseId() {
-        return licenseId;
-    }
-
-    public void setLicenseId(int licenseId) {
-        this.licenseId = licenseId;
-    }
-
-    public String getLicenseKey() {
-        return licenseKey;
-    }
-
-    public void setLicenseKey(String licenseKey) {
-        this.licenseKey = licenseKey;
-    }
-
-    public int getLicenseMaxDev() {
-        return licenseMaxDev;
-    }
-
-    public void setLicenseMaxDev(int licenseMaxDev) {
-        this.licenseMaxDev = licenseMaxDev;
-    }
-
-    public Date getLicenseStartDate() {
-        return licenseStartDate;
-    }
-
-    public void setLicenseStartDate(Date licenseStartDate) {
-        this.licenseStartDate = licenseStartDate;
-    }
-
-    public Date getLicenseEndDate() {
-        return licenseEndDate;
-    }
-
-    public void setLicenseEndDate(Date licenseEndDate) {
-        this.licenseEndDate = licenseEndDate;
-    }
-
-    public String getLicenseDesc() {
-        return licenseDesc;
-    }
-
-    public void setLicenseDesc(String licenseDesc) {
-        this.licenseDesc = licenseDesc;
-    }
 }

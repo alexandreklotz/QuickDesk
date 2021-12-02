@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Team {
@@ -18,11 +24,11 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    @JsonView(CustomJsonView.TeamView.class)
+    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UserView.class})
     private int teamId;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TeamView.class)
+    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UserView.class})
     private String teamName;
 
     @Column
@@ -62,75 +68,4 @@ public class Team {
     @ManyToOne
     private Role role;
 
-
-
-
-    //Constructor
-    public Team(){}
-
-
-    //Setters and getters
-    public int getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getTeamDescription() {
-        return teamDescription;
-    }
-
-    public void setTeamDescription(String teamDescription) {
-        this.teamDescription = teamDescription;
-    }
-
-    public List<User> getTeamUsersList() {
-        return teamUsersList;
-    }
-
-    public void setTeamUsersList(List<User> teamUsersList) {
-        this.teamUsersList = teamUsersList;
-    }
-
-    public Set<Ticket> getTicketsTeams() {
-        return ticketsTeams;
-    }
-
-    public void setTicketsTeams(Set<Ticket> ticketsGrp) {
-        this.ticketsTeams = ticketsGrp;
-    }
-
-    public Date getTeamDateCreated() {
-        return teamDateCreated;
-    }
-
-    public void setTeamDateCreated(Date teamDateCreated) {
-        this.teamDateCreated = teamDateCreated;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public boolean isTeamEnabled() {
-        return teamEnabled;
-    }
-
-    public void setTeamEnabled(boolean teamIsEnabled) {
-        this.teamEnabled = teamIsEnabled;
-    }
 }

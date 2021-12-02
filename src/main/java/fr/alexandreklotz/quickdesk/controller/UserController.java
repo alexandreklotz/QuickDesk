@@ -3,15 +3,18 @@ package fr.alexandreklotz.quickdesk.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.dao.TeamDao;
 import fr.alexandreklotz.quickdesk.dao.UserDao;
+import fr.alexandreklotz.quickdesk.model.Team;
 import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -38,15 +41,12 @@ public class UserController {
         user.setUserLastName(user.getUserLastName());
         user.setUserPassword(user.getUserPassword());
 
-        // TODO
-        /*Team userteam = user.getTeam();
+        Team userteam = user.getTeam();
         Optional<Team> teamBdd = teamDao.findById(userteam.getTeamId());
 
         if (teamBdd.isPresent()){
             user.setTeam(userteam);
-            List<User> userteamusers = userteam.getTeamUsersList();
-            userteamusers.add(user);
-        }*/
+        }
 
         user.setUserCreationDate(Date.from(Instant.now()));
         user.setUserEnabled(true);

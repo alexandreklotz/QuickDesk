@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class User {
@@ -21,11 +27,11 @@ public class User {
     @JsonView(CustomJsonView.UserView.class)
     private int userId;
 
-    @JsonView(CustomJsonView.UserView.class)
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class})
     @Column(nullable = false)
     private String userFirstName;
 
-    @JsonView(CustomJsonView.UserView.class)
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class})
     @Column(nullable = false)
     private String userLastName;
 
@@ -49,7 +55,8 @@ public class User {
     //A user can only be a member of a single group
     @JsonView(CustomJsonView.UserView.class)
     @ManyToOne
-    private Team team; //TODO : See why it's impossible to create a user with a specified group when sending a JSON form. IDs don't work.
+    @JoinColumn(name="teamId", nullable = false)
+    private Team team;
 
     //A user can create multiple tickets and a ticket can have multiple affected users
     @JsonView(CustomJsonView.UserView.class)
@@ -66,82 +73,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Device> device;
 
-
-
-    //Constructor
-    public User(){}
-
-
-    //Getters and setters
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getUserFirstName() {
-        return userFirstName;
-    }
-
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
-    }
-
-    public String getUserLastName() {
-        return userLastName;
-    }
-
-    public void setUserLastName(String userLastName) {
-        this.userLastName = userLastName;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public boolean isUserEnabled() {
-        return userEnabled;
-    }
-
-    public void setUserEnabled(boolean userIsEnabled) {
-        this.userEnabled = userIsEnabled;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public Set<Ticket> getTicketsUsr() {
-        return ticketsUsr;
-    }
-
-    public void setTicketsUsr(Set<Ticket> ticketsUsr) {
-        this.ticketsUsr = ticketsUsr;
-    }
-
-    public Set<Device> getDevice() {
-        return device;
-    }
-
-    public void setDevice(Set<Device> userDevices) {
-        this.device = userDevices;
-    }
-
-    public Date getUserCreationDate() {
-        return userCreationDate;
-    }
-
-    public void setUserCreationDate(Date userCreationDate) {
-        this.userCreationDate = userCreationDate;
-    }
 }

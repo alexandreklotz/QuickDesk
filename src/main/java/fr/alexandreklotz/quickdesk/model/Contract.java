@@ -2,10 +2,17 @@ package fr.alexandreklotz.quickdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Contract {
@@ -34,45 +41,17 @@ public class Contract {
     private Contractor contractor;
 
     //To device
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @OneToMany(mappedBy = "contract")
+    private Set<Device> devices;
 
     //To license
-    //@OneToMany
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @OneToMany(mappedBy = "contract")
+    private Set<License> licenses;
 
     //To software
     @OneToOne(mappedBy = "contract")
     private Software software;
 
-    ///////////////
-    //Constructor//
-    ///////////////
-
-    public Contract(){}
-
-    //////////////////////
-    //Getters & Setters//
-    /////////////////////
-    //TODO : Add relations getters and setters
-    public int getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(int contractId) {
-        this.contractId = contractId;
-    }
-
-    public String getContractNumber() {
-        return contractNumber;
-    }
-
-    public void setContractNumber(String contractNumber) {
-        this.contractNumber = contractNumber;
-    }
-
-    public String getContractName() {
-        return contractName;
-    }
-
-    public void setContractName(String contractName) {
-        this.contractName = contractName;
-    }
 }
