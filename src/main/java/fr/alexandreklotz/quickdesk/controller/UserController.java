@@ -4,16 +4,21 @@ import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.dao.TeamDao;
 import fr.alexandreklotz.quickdesk.dao.UserDao;
 import fr.alexandreklotz.quickdesk.model.Team;
+import fr.alexandreklotz.quickdesk.model.Ticket;
 import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +58,10 @@ public class UserController {
 
         userDao.saveAndFlush(user);
     }
+
+
+    /*@JsonView(CustomJsonView.UserView.class)
+    @PatchMapping("/user/update/{userId}")*/
 
 
 

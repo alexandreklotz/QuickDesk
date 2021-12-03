@@ -44,6 +44,7 @@ public class User {
     @DateTimeFormat(pattern = "MM-dd-YYYY")
     private Date userCreationDate;
 
+    //TODO : See if it will still be useful once a UserDetailsConfig will be implemented in the security package. Will probably need to be deleted.
     @JsonView(CustomJsonView.UserView.class)
     @Column(nullable = false)
     private boolean userEnabled;

@@ -18,6 +18,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Device {
 
+    //TODO : Implement an history of previous users with the dates at which they used the device. See if modifications have to be made in other classes aswell (in which there is a relation with this model)
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -42,6 +44,7 @@ public class Device {
 
     //A device can be used by only one user at a time but a user can use multiple devices
     @ManyToOne
+    @JoinColumn(name = "userId")
     private User user;
 
     //A device can be assigned to multiple tickets and one ticket can be assigned to multiple devices
@@ -56,6 +59,7 @@ public class Device {
     //A device can be linked to only one contract but a contract can have multiple devices linked to it
     @JsonView(CustomJsonView.DeviceView.class)
     @ManyToOne
+    @JoinColumn(name = "contractId")
     private Contract contract;
 
 }

@@ -1,5 +1,14 @@
 #QuickDesk Development Follow-Up
 ***
+##03/12/2021
+* @Repository annotation added in all dao
+* Created "ContractController" with basic rest methods => still need to be tested
+* Created "ContractorController" with basic rest methods => Still need to be tested
+* Created "DeviceController" with basic rest methods => Still need to be tested. I will start developing a small python agent/script to retrieve the device info and sent them to the API (but first, it will only retrieve info without sending it. I'd like to get all my rest requests to work first)
+* Corrected a few mistakes in the "Device" class
+
+Spent much time trying to get the PatchRequest in UserController to work but without any success. Haven't made much progress yet again...
+***
 ##02/12/2021
 * Getters, setters and constructors have been removed in each class => Lombok has been implemented, therefore i just needed to add annotations for lombok to generate these automatically
 * Column(nullable = false) has been set in the device model for two fields
