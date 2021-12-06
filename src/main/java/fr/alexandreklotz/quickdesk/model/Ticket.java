@@ -25,7 +25,7 @@ public class Ticket {
     //TODO : Manage images implementation => Images in the ticket desc or comments.
 
     //TODO : ENUM for ticket status and types !! -> Created, testing needed
-    private enum TicketStatus {
+    public enum TicketStatus {
         OPEN,
         ONHOLD,
         ONGOING,
@@ -45,7 +45,8 @@ public class Ticket {
         HARDWARE,
         SOFTWARE,
         SECURITY,
-        LICENSE
+        LICENSE,
+        CONTRACT
     }
 
     private enum TicketPriority {

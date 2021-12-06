@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -51,7 +52,9 @@ public class ContractController {
     @DeleteMapping("/contracts/delete/{contractId}")
     public String deleteContract (@PathVariable int contractId){
 
-        if (contractDao.findById(contractId).isPresent()){
+        Optional<Contract> contractBdd = contractDao.findById(contractId);
+
+        if (contractBdd.isPresent()){
             String ctrName = contractDao.getById(contractId).getContractName();
             String ctrNbr = contractDao.getById(contractId).getContractNumber();
             contractDao.deleteById(contractId);

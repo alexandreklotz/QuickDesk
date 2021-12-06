@@ -6,12 +6,10 @@ import fr.alexandreklotz.quickdesk.model.Contractor;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -29,9 +27,35 @@ public class ContractorController {
     ////////////////
 
     @JsonView(CustomJsonView.ContractorView.class)
-    @GetMapping("/contractors/all")
+    @GetMapping("/contractor/all")
     public ResponseEntity<List<Contractor>> getAllContractors(){
         return ResponseEntity.ok(contractorDao.findAll());
     }
+
+    @JsonView(CustomJsonView.ContractorView.class)
+    @PostMapping("/contractor/new")
+    public void createNewContractor (@RequestBody Contractor contractor) {
+        contractor.setContractorName(contractor.getContractorName());
+        contractorDao.saveAndFlush(contractor);
+    }
+
+    /*@JsonView(CustomJsonView.ContractorView.class)
+    @PatchMapping("/contractor/update/{contractorId}")
+    public ResponseEntity<?> updateContractor*/
+
+    @JsonView(CustomJsonView.ContractorView.class)
+    @DeleteMapping("/contractor/delete/{contractorId}")
+    public String deleteContractor(@PathVariable int contractorId) {
+
+        Optional<Contractor> contractorBdd = contractorDao.findById(contractorId);
+
+        if (contractorBdd.isPresent()) {
+            String cName = contractorBdd.get().getContractorName();
+            contractorDao.deleteById(contractorId);
+            return "The contractor " + cName + " has been succesfully deleted.";
+        }
+        return "This contractor doesn't exist.";
+    }
+
 
 }

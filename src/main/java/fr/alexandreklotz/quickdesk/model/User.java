@@ -21,17 +21,19 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
+    //TODO : Implement an ENUM for user type ? ADMIN/USER and ENTITYADMIN ?
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     @JsonView(CustomJsonView.UserView.class)
     private int userId;
 
-    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class})
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
     @Column(nullable = false)
     private String userFirstName;
 
-    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class})
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
     @Column(nullable = false)
     private String userLastName;
 
@@ -54,7 +56,7 @@ public class User {
     /////////////
 
     //A user can only be a member of a single group
-    @JsonView(CustomJsonView.UserView.class)
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TicketView.class})
     @ManyToOne
     @JoinColumn(name="teamId", nullable = false)
     private Team team;

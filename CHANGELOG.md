@@ -1,5 +1,14 @@
 #QuickDesk Development Follow-Up
 ***
+##06/12/2021
+* All the remaining controllers have been created (license, software, ticket, role, permission, contractor). Basic rest methods have been implemented
+* Comments have been added in a few classes.
+* Rest methods created in SoftwareController, TicketController, LicenseController.
+* RoleController and PermissionController will be finalized later.
+
+Rest methods in the controllers are __REALLY BASIC__. They will be improved, PatchRequests will be implemented later, and i may implement a server sided confirmation when sending a delete request to avoid any user mistake (or client sided).
+I will finalize the PatchMappings and also a few details in the controllers. Once done, i will start implementing security.
+***
 ##03/12/2021
 * @Repository annotation added in all dao
 * Created "ContractController" with basic rest methods => still need to be tested

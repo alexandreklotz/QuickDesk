@@ -20,6 +20,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class License {
 
+    //TODO : Embeddable ?
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

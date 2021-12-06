@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -52,8 +53,10 @@ public class DeviceController {
     @DeleteMapping("/devices/delete/{deviceId}")
     public String deleteDevice (@PathVariable int deviceId) {
 
-        if (deviceDao.findById(deviceId).isPresent()){
-            String dvName = deviceDao.findById(deviceId).get().getDeviceName();
+        Optional<Device> deviceBdd = deviceDao.findById(deviceId);
+
+        if (deviceBdd.isPresent()){
+            String dvName = deviceBdd.get().getDeviceName();
             deviceDao.deleteById(deviceId);
             return "The device " + dvName + " has been deleted.";
         }

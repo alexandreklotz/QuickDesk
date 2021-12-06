@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.dao.TeamDao;
 import fr.alexandreklotz.quickdesk.dao.UserDao;
 import fr.alexandreklotz.quickdesk.model.Team;
-import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,11 +55,14 @@ public class TeamController {
 
 
     @JsonView(CustomJsonView.TeamView.class)
-    @DeleteMapping("/group/delete/{id}")
-    public String teamDelete (@PathVariable int id){
-        if(teamDao.findById(id).isPresent()){
-            String deletedTeam = teamDao.findById(id).get().getTeamName();
-            teamDao.deleteById(id);
+    @DeleteMapping("/group/delete/{teamId}")
+    public String teamDelete (@PathVariable int teamId){
+
+        Optional<Team> teamBdd = teamDao.findById(teamId);
+
+        if(teamBdd.isPresent()){
+            String deletedTeam = teamBdd.get().getTeamName();
+            teamDao.deleteById(teamId);
             return "The " + deletedTeam + " group has been successfully deleted.";
         } else {
             return "The specified group doesn't exist.";
