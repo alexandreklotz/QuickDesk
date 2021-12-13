@@ -49,7 +49,7 @@ public class Role {
             joinColumns = { @JoinColumn(name = "roleId")},
             inverseJoinColumns = {@JoinColumn(name = "permissionId")}
     )
-    Set<Ticket> rolePermissions = new HashSet<>();
+    Set<Permission> rolePermissions = new HashSet<>();
 
     //A role can be assigned to multiple groups but a group can only be affected a single group
     @JsonView(CustomJsonView.RoleView.class)

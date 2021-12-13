@@ -35,7 +35,6 @@ public class ContractorController {
     @JsonView(CustomJsonView.ContractorView.class)
     @PostMapping("/contractor/new")
     public void createNewContractor (@RequestBody Contractor contractor) {
-        contractor.setContractorName(contractor.getContractorName());
         contractorDao.saveAndFlush(contractor);
     }
 

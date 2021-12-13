@@ -35,12 +35,6 @@ public class LicenseController {
     @JsonView(CustomJsonView.LicenseView.class)
     @PostMapping("/license/new")
     public void newLicense (@RequestBody License license) {
-
-        license.setLicenseDesc(license.getLicenseDesc());
-        license.setLicenseKey(license.getLicenseKey());
-        license.setLicenseStartDate(license.getLicenseStartDate());
-        license.setLicenseEndDate(license.getLicenseEndDate());
-
         licenseDao.saveAndFlush(license);
     }
 

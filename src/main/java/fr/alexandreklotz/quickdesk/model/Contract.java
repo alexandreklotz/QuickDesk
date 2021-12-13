@@ -41,17 +41,18 @@ public class Contract {
     private Contractor contractor;
 
     //To device
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.DeviceView.class})
     @OneToMany(mappedBy = "contract")
     private Set<Device> devices;
 
     //To license
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.LicenseView.class})
     @OneToMany(mappedBy = "contract")
     private Set<License> licenses;
 
     //To software
-    @OneToOne(mappedBy = "contract")
-    private Software software;
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.SoftwareView.class})
+    @OneToMany(mappedBy = "contract")
+    private Set<Software> softwares;
 
 }

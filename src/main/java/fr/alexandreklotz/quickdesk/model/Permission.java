@@ -18,6 +18,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Permission {
 
+    //TODO : From @Entity to @Embeddable ? Need to take into consideration that a role has multiple permissions, therefore a list or a set might be needed in role
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

@@ -22,6 +22,10 @@ import java.util.Set;
 public class User {
 
     //TODO : Implement an ENUM for user type ? ADMIN/USER and ENTITYADMIN ?
+    public enum UserType {
+        USER,
+        ADMIN
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +54,10 @@ public class User {
     @JsonView(CustomJsonView.UserView.class)
     @Column(nullable = false)
     private boolean userEnabled;
+
+    @JsonView(CustomJsonView.UserView.class)
+    @Column(nullable = false)
+    private UserType userType;
 
     /////////////
     //Relations//

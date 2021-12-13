@@ -35,11 +35,6 @@ public class SoftwareController {
     @JsonView(CustomJsonView.SoftwareView.class)
     @PostMapping("/software/new")
     public void addSoftware (@RequestBody Software software) {
-        software.setSoftwareName(software.getSoftwareName());
-        software.setSoftwareManufacturer(software.getSoftwareManufacturer());
-        /*software.setContract(software.getContract());
-        software.setLicense(software.getLicense());*/
-
         softwareDao.saveAndFlush(software);
     }
 

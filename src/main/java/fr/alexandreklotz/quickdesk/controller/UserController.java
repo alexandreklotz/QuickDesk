@@ -4,21 +4,15 @@ import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.dao.TeamDao;
 import fr.alexandreklotz.quickdesk.dao.UserDao;
 import fr.alexandreklotz.quickdesk.model.Team;
-import fr.alexandreklotz.quickdesk.model.Ticket;
 import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -42,15 +36,16 @@ public class UserController {
     @PostMapping("/user/new")
     public void newUserCreation (@RequestBody User user) {
 
-        user.setUserFirstName(user.getUserFirstName());
-        user.setUserLastName(user.getUserLastName());
         user.setUserPassword(user.getUserPassword());
 
         Team userteam = user.getTeam();
         Optional<Team> teamBdd = teamDao.findById(userteam.getTeamId());
-
         if (teamBdd.isPresent()){
             user.setTeam(userteam);
+        }
+
+        if(user.getUserType() == null) {
+            user.setUserType(User.UserType.USER);
         }
 
         user.setUserCreationDate(Date.from(Instant.now()));
@@ -74,11 +69,14 @@ public class UserController {
 
 
     @JsonView(CustomJsonView.UserView.class)
-    @DeleteMapping("user/delete/{id}")
-    public String deleteUser (@PathVariable int id){
-        if (userDao.findById(id).isPresent()){
-            String deletedUser = userDao.getById(id).getUserFirstName() + " " + userDao.getById(id).getUserLastName();
-            userDao.deleteById(id);
+    @DeleteMapping("user/delete/{userId}")
+    public String deleteUser (@PathVariable int userId){
+
+        Optional<User> userBdd = userDao.findById(userId);
+
+        if (userBdd.isPresent()){
+            String deletedUser = userBdd.get().getUserFirstName() + " " + userBdd.get().getUserLastName();
+            userDao.deleteById(userId);
             return "The user " + deletedUser + " has been successfully deleted.";
         } else {
             return "The specified user doesn't exist.";

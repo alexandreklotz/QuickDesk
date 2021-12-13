@@ -23,18 +23,22 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    //@JsonView
+    @JsonView(CustomJsonView.DeviceView.class)
     private int deviceId;
 
+    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.UserView.class})
     @Column(nullable = false)
     private String deviceName;
 
+    @JsonView(CustomJsonView.DeviceView.class)
     @Column
     private String deviceManufacturer;
 
+    @JsonView(CustomJsonView.DeviceView.class)
     @Column
     private String deviceSerialNbr;
 
+    @JsonView(CustomJsonView.DeviceView.class)
     @Column
     private String deviceDesc;
 
@@ -43,11 +47,13 @@ public class Device {
     /////////////
 
     //A device can be used by only one user at a time but a user can use multiple devices
+    @JsonView(CustomJsonView.DeviceView.class)
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
     //A device can be assigned to multiple tickets and one ticket can be assigned to multiple devices
+    @JsonView(CustomJsonView.DeviceView.class)
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "deviceTickets",
@@ -57,7 +63,7 @@ public class Device {
     Set<Ticket> ticketsDev = new HashSet<>();
 
     //A device can be linked to only one contract but a contract can have multiple devices linked to it
-    @JsonView(CustomJsonView.DeviceView.class)
+    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.ContractView.class})
     @ManyToOne
     @JoinColumn(name = "contractId")
     private Contract contract;

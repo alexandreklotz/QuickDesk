@@ -35,9 +35,8 @@ public class TeamController {
     @PostMapping("/group/new")
     public void newTeamCreation(@RequestBody Team team){
 
-        team.setTeamName(team.getTeamName());
-        team.setTeamDescription(team.getTeamDescription());
-        //team.setTeamUsersList(team.getTeamUsersList()); //There will be a method solely dedicated to that through the update function.
+        // team.setTeamUsersList(team.getTeamUsersList()); //There will be a method solely dedicated to that through the update function.
+
         team.setTeamDateCreated(Date.from(Instant.now()));
         team.setTeamEnabled(true);
 

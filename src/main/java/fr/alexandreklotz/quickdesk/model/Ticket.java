@@ -29,18 +29,19 @@ public class Ticket {
         OPEN,
         ONHOLD,
         ONGOING,
-        CLOSED,
-        REVIEW
+        REVIEW,
+        CLOSED
     }
 
-    private enum TicketTypes {
+    public enum TicketTypes {
         REQUEST,
         INCIDENT,
         CHANGE,
         ISSUE
     }
 
-    private enum TicketCategorization {
+    public enum TicketCategorization {
+        TOCATEGORIZE,
         NETWORK,
         HARDWARE,
         SOFTWARE,
@@ -49,7 +50,7 @@ public class Ticket {
         CONTRACT
     }
 
-    private enum TicketPriority {
+    public enum TicketPriority {
         LOW,
         MEDIUM,
         HIGH,
@@ -95,6 +96,10 @@ public class Ticket {
     @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
     private TicketPriority ticketPriority;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketView.class)
+    private boolean editableTicket;
 
     /////////////
     //Relations//

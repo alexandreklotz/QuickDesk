@@ -1,8 +1,12 @@
 package fr.alexandreklotz.quickdesk.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesk.dao.ContractDao;
 import fr.alexandreklotz.quickdesk.dao.DeviceDao;
+import fr.alexandreklotz.quickdesk.dao.UserDao;
+import fr.alexandreklotz.quickdesk.model.Contract;
 import fr.alexandreklotz.quickdesk.model.Device;
+import fr.alexandreklotz.quickdesk.model.User;
 import fr.alexandreklotz.quickdesk.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +21,14 @@ import java.util.Optional;
 public class DeviceController {
 
     private DeviceDao deviceDao;
+    private UserDao userDao;
+    private ContractDao contractDao;
 
     @Autowired
-    DeviceController (DeviceDao deviceDao) {
+    DeviceController (DeviceDao deviceDao, UserDao userDao, ContractDao contractDao) {
         this.deviceDao = deviceDao;
+        this.userDao = userDao;
+        this.contractDao = contractDao;
     }
 
     ////////////////
@@ -37,11 +45,17 @@ public class DeviceController {
     @PostMapping("/devices/new")
     public void newDevice(@RequestBody Device device){
 
-        device.setDeviceDesc(device.getDeviceDesc());
-        device.setDeviceManufacturer(device.getDeviceManufacturer());
-        device.setContract(device.getContract());
-        device.setDeviceSerialNbr(device.getDeviceSerialNbr());
-        device.setUser(device.getUser());
+        Contract devCtr = device.getContract();
+        Optional<Contract> contractBdd = contractDao.findById(devCtr.getContractId());
+        if (contractBdd.isPresent()) {
+            device.setContract(device.getContract());
+        }
+
+        User devUsr = device.getUser();
+        Optional<User> userBdd = userDao.findById(devUsr.getUserId());
+        if (userBdd.isPresent()) {
+            device.setUser(device.getUser());
+        }
 
         deviceDao.saveAndFlush(device);
     }

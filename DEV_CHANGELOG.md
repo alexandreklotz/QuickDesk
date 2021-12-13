@@ -1,5 +1,18 @@
 #QuickDesk Development Follow-Up
 ***
+##07 + 13/12/2021
+* Post methods have been corrected in a few controllers where a List was required if multiple objects were needed (TicketController for example if multiple devices/users were linked to it)
+* Software => Contract relationship has been modified to a ManyToOne. Multiple softwares can have the same contract.
+* Post methods have been slightly modified => The @RequestBody doesn't actually require me to use the setters and getters to retrieve the info in the JSON form.
+* Implementation of "User Types" in the User model. There only is two roles at the moment, user and admin. There might be something in between but it needs to be defined properly since there is a "Role" class and a "Permission" class.
+* "PermissionController" will probably be deleted and "Permission" will probably be @Embeddable instead of @Entity. I cannot code in a way that allows the custom permissions to work.
+* "RoleController" has been created.
+* CHANGELOG.md has been renamed to DEV_CHANGELOG.md to avoid any confusion if a CHANGELOG textfile is created later on to list and track the latest changes in the software version.
+
+The PATCH methods still need to be defined, i cannot find any resource to go through this process. However, i guess it could be possible to code partial updates using
+post requests.
+
+***
 ##06/12/2021
 * All the remaining controllers have been created (license, software, ticket, role, permission, contractor). Basic rest methods have been implemented
 * Comments have been added in a few classes.
