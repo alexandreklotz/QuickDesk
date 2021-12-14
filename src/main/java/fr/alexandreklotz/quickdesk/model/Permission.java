@@ -6,8 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +40,6 @@ public class Permission {
     //A role can have multiple permissions and a permission can have multiple roles
     @JsonView(CustomJsonView.PermissionView.class)
     @ManyToMany(mappedBy = "rolePermissions")
-    private Set<Role> permissionsRoles = new HashSet<>();
+    private List<Role> permissionsRoles;
 
 }

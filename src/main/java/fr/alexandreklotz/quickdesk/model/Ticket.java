@@ -8,9 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,7 +31,7 @@ public class Ticket {
         CLOSED
     }
 
-    public enum TicketTypes {
+    public enum TicketType {
         REQUEST,
         INCIDENT,
         CHANGE,
@@ -87,7 +85,7 @@ public class Ticket {
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
-    private TicketTypes ticketTypes;
+    private TicketType ticketType;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
@@ -107,17 +105,17 @@ public class Ticket {
 
     //A ticket can have multiple affected users and a user can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticketsUsr")
-    private Set<User> users = new HashSet<>();
+    @ManyToMany(mappedBy = "ticket")
+    private List<User> user;
 
     //A ticket can have multiple affected teams and a team can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticketsTeams")
-    private Set<Team> tkteams = new HashSet<>();
+    @ManyToMany(mappedBy = "ticket")
+    private List<Team> team;
 
     //A ticket can have multiple affected devices and a device can be affected to multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
     @ManyToMany(mappedBy = "ticketsDev")
-    private Set<Device> devices = new HashSet<>();
+    private List<Device> device;
 
 }

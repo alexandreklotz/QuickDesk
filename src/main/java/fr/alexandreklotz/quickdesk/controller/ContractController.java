@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,31 +50,46 @@ public class ContractController {
         Optional<Contractor> contractBdd = contractorDao.findById(ctrContr.getContractorId());
         if (contractBdd.isPresent()){
             contract.setContractor(contract.getContractor());
+        } else if (contractBdd.isEmpty()) {
+            contract.setContractor(null);
         }
 
-        Set<Device> ctrDev = contract.getDevices();
-        for (Device device : ctrDev) {
+        List<Device> ctrDev = new ArrayList<>();
+        for (Device device : contract.getDevice()) {
             Optional<Device> deviceBdd = deviceDao.findById(device.getDeviceId());
-            if (deviceBdd.isPresent()){
-                contract.setDevices(contract.getDevices());
+            if (deviceBdd.isPresent()) {
+                ctrDev.add(device);
+                contract.setDevice(ctrDev);
+            } else if (deviceBdd.isEmpty()) {
+                //We don't do anything.
             }
+
         }
 
-        Set<License> ctrLic = contract.getLicenses();
-        for (License license : ctrLic) {
+        List<License> ctrLic = new ArrayList<>();
+        for (License license : contract.getLicense()) {
             Optional<License> licenseBdd = licenseDao.findById(license.getLicenseId());
-            if(licenseBdd.isPresent()) {
-                contract.setLicenses(contract.getLicenses());
+            if (licenseBdd.isPresent()) {
+                ctrLic.add(license);
+                contract.setLicense(ctrLic);
+            } else if (licenseBdd.isEmpty()) {
+                //No action
             }
+
         }
 
-        Set<Software> ctrSoft = contract.getSoftwares();
-        for (Software software : ctrSoft) {
+        List<Software> ctrSoft = new ArrayList<>();
+        for (Software software : contract.getSoftware()) {
             Optional<Software> softwareBdd = softwareDao.findById(software.getSoftwareId());
             if (softwareBdd.isPresent()) {
-                contract.setSoftwares(contract.getSoftwares());
+                ctrSoft.add(software);
+                contract.setSoftware(ctrSoft);
+            } else if (softwareBdd.isEmpty()) {
+                //No action
             }
         }
+
+        contractDao.saveAndFlush(contract);
     }
 
     /*@JsonView(CustomJsonView.ContractView.class)

@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -62,7 +61,7 @@ public class License {
     //A software has a single license but a license can be affected to multiple software
     @JsonView(CustomJsonView.LicenseView.class)
     @OneToMany(mappedBy = "license")
-    private Set<Software> softwares;
+    private List<Software> softwares;
 
 
 }

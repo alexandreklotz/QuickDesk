@@ -49,6 +49,8 @@ public class DeviceController {
         Optional<Contract> contractBdd = contractDao.findById(devCtr.getContractId());
         if (contractBdd.isPresent()) {
             device.setContract(device.getContract());
+        } else if (contractBdd.isEmpty()) {
+            device.setContract(null);
         }
 
         User devUsr = device.getUser();

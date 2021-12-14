@@ -8,9 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +26,7 @@ public class Team {
     private int teamId;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UserView.class})
+    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UserView.class, CustomJsonView.DeviceView.class})
     private String teamName;
 
     @Column
@@ -51,7 +49,7 @@ public class Team {
     //A team has multiple members but a user can only be in one team.
     @JsonView(CustomJsonView.TeamView.class)
     @OneToMany(mappedBy = "team")
-    private List<User> teamUsersList;
+    private List<User> user;
 
     //A team can create multiple tickets and a ticket can have multiple affected teams
     @JsonView(CustomJsonView.TeamView.class)
@@ -61,7 +59,7 @@ public class Team {
             joinColumns = { @JoinColumn(name = "teamId") },
             inverseJoinColumns = { @JoinColumn(name = "ticketId") }
     )
-    private Set<Ticket> ticketsTeams = new HashSet<>();
+    private List<Ticket> ticket;
 
     //A team can only have one role but a role can have multiple teams
     @JsonView(CustomJsonView.TeamView.class)

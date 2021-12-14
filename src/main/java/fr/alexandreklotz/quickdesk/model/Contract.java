@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,11 +24,11 @@ public class Contract {
     private int contractId;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.ContractView.class)
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.DeviceView.class, CustomJsonView.ContractorView.class})
     private String contractNumber;
 
     @Column
-    @JsonView(CustomJsonView.ContractView.class)
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
     private String contractName;
 
     /////////////
@@ -36,23 +36,24 @@ public class Contract {
     /////////////
 
     //A contract can only be linked to one contractor but a contractor can be linked to multiple contracts
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @JsonView(CustomJsonView.ContractView.class)
     @ManyToOne
+    @JoinColumn(name = "contractorId")
     private Contractor contractor;
 
     //To device
     @JsonView({CustomJsonView.ContractView.class, CustomJsonView.DeviceView.class})
     @OneToMany(mappedBy = "contract")
-    private Set<Device> devices;
+    private List<Device> device;
 
     //To license
     @JsonView({CustomJsonView.ContractView.class, CustomJsonView.LicenseView.class})
     @OneToMany(mappedBy = "contract")
-    private Set<License> licenses;
+    private List<License> license;
 
     //To software
     @JsonView({CustomJsonView.ContractView.class, CustomJsonView.SoftwareView.class})
     @OneToMany(mappedBy = "contract")
-    private Set<Software> softwares;
+    private List<Software> software;
 
 }

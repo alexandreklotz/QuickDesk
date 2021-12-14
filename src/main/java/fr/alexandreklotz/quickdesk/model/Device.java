@@ -6,8 +6,8 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -60,12 +60,14 @@ public class Device {
             joinColumns = { @JoinColumn(name = "deviceId")},
             inverseJoinColumns = {@JoinColumn(name = "ticketId")}
     )
-    Set<Ticket> ticketsDev = new HashSet<>();
+    private List<Ticket> ticketsDev;
 
     //A device can be linked to only one contract but a contract can have multiple devices linked to it
     @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.ContractView.class})
     @ManyToOne
     @JoinColumn(name = "contractId")
     private Contract contract;
+
+    //To software
 
 }

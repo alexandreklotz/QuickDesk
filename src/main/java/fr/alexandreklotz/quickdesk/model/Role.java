@@ -6,9 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -49,11 +47,11 @@ public class Role {
             joinColumns = { @JoinColumn(name = "roleId")},
             inverseJoinColumns = {@JoinColumn(name = "permissionId")}
     )
-    Set<Permission> rolePermissions = new HashSet<>();
+    private List<Permission> rolePermissions;
 
     //A role can be assigned to multiple groups but a group can only be affected a single group
     @JsonView(CustomJsonView.RoleView.class)
     @OneToMany(mappedBy = "role")
-    private Set<Team> teams;
+    private List<Team> teams;
 
 }

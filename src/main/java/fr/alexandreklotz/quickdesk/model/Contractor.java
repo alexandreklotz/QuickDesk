@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,8 +32,8 @@ public class Contractor {
     /////////////
 
     //A contract can only be linked to one contractor but a contractor can be linked to multiple contracts
-    @JsonView({CustomJsonView.ContractorView.class, CustomJsonView.ContractView.class})
+    @JsonView(CustomJsonView.ContractorView.class)
     @OneToMany(mappedBy = "contractor")
-    private Set<Contract> contracts;
+    private List<Contract> contracts;
 
 }

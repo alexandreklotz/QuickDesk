@@ -1,5 +1,21 @@
 #QuickDesk Development Follow-Up
 ***
+##14/12/2021
+* The "Infinite recusion" error between device and user has been fixed. The ManyToOne/OneToMany relation between these two entities were generating the following error :
+Resolved [org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: Infinite recursion (StackOverflowError); nested exception is com.fasterxml.jackson.databind.JsonMappingException: Infinite recursion (StackOverflowError)
+The error was caused by the "Set<...>". It was therefore replaced by a List and it works fine now.
+* All the "Set<>" have been replaced by "List<>" for every relation in every model and in every controller.
+* JSON views have been modified to show the user's details in the device details
+* ContractorController POST Method has been updated but it still isn't working => i have a JSON Parse error : 
+[nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.ArrayList<fr.alexandreklotz.quickdesk.model.Device>` 
+from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.util.ArrayList<fr.alexandreklotz.quickdesk.model.Device>` from Object value (token `JsonToken.START_OBJECT`)<LF> 
+at [Source: (PushbackInputStream); line: 7, column: 16] (through reference chain: fr.alexandreklotz.quickdesk.model.Contract["device"])]
+* Objects in "Ticket" model such as List<Team> tkteams, etc... have been refactored. The same has been done in other classes to keep consistent JSON forms. Custom variables were quite confusing.
+* "TicketTypes" in "Ticket" has been refactored to => TicketType
+
+I need to troubleshoot this JSON Parse issue ASAP. Then i'll be able to do the patch mappings. Security will then follow, JWT, etc...
+
+***
 ##07 + 13/12/2021
 * Post methods have been corrected in a few controllers where a List was required if multiple objects were needed (TicketController for example if multiple devices/users were linked to it)
 * Software => Contract relationship has been modified to a ManyToOne. Multiple softwares can have the same contract.

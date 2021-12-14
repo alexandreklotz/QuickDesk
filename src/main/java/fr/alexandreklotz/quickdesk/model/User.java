@@ -8,9 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,11 +31,11 @@ public class User {
     @JsonView(CustomJsonView.UserView.class)
     private int userId;
 
-    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.DeviceView.class})
     @Column(nullable = false)
     private String userFirstName;
 
-    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.DeviceView.class})
     @Column(nullable = false)
     private String userLastName;
 
@@ -64,7 +62,7 @@ public class User {
     /////////////
 
     //A user can only be a member of a single group
-    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UserView.class, CustomJsonView.TicketView.class, CustomJsonView.DeviceView.class})
     @ManyToOne
     @JoinColumn(name="teamId", nullable = false)
     private Team team;
@@ -77,11 +75,11 @@ public class User {
             joinColumns = { @JoinColumn(name = "userId") },
             inverseJoinColumns = { @JoinColumn(name = "ticketId") }
     )
-    Set<Ticket> ticketsUsr = new HashSet<>();
+    private List<Ticket> ticket;
 
     //A user can use multiple devices but a device can only be used by one user at a time
     @JsonView(CustomJsonView.UserView.class)
     @OneToMany(mappedBy = "user")
-    private Set<Device> device;
+    private List<Device> device;
 
 }

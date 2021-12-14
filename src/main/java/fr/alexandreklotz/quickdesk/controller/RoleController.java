@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class RoleController {
 
         role.setRoleCanBeDeleted(false);
 
-        Set<Permission> rolePerm = role.getRolePermissions();
+        List<Permission> rolePerm = role.getRolePermissions();
         for(Permission permission : rolePerm) {
             Optional<Permission> permissionBdd = permissionDao.findById(permission.getPermissionId());
             if(permissionBdd.isPresent()) {
@@ -57,7 +58,7 @@ public class RoleController {
             }
         }
 
-        Set<Team> roleTeam = role.getTeams();
+        List<Team> roleTeam = role.getTeams();
         for (Team team : roleTeam) {
             Optional<Team> teamBdd = teamDao.findById(team.getTeamId());
             if(teamBdd.isPresent()) {
