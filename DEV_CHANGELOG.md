@@ -1,5 +1,16 @@
 #QuickDesk Development Follow-Up
 ***
+##15/12/2021
+__QUICK UPDATE ABOUT THE JSON PARSE ISSUE__ : It turns out that i was sending an __invalid JSON form...__. It was validated on jsonlint.com but it wasn't matching the form required
+by my API to create an object. Therefore the JSON parse issue is __SOLVED__.
+
+* In the previous changelog, i specified that i had replaced all the Set by List. I reverted this change in a few models, all ManyToMany relations are using Sets again as it was before.
+* JsonView issues have been corrected (infinite loops)
+* All the POST requests are working fine, except for Ticket which creates a ticket but doesn't save the users/devices/teams. Maybe a ticket should only have one team/one user/one device (replacing this relation by a onetomany). The ManyToMany creates a table in MySQL but nothing is stored in it which leaves the fields blank when sending a GET request to the controller. Maybe i need to check if a property/setting is missing.
+
+There's a possibility that i'll replace the Lists by Sets since Lists allow duplicates to exist.
+
+***
 ##14/12/2021
 * The "Infinite recusion" error between device and user has been fixed. The ManyToOne/OneToMany relation between these two entities were generating the following error :
 Resolved [org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: Infinite recursion (StackOverflowError); nested exception is com.fasterxml.jackson.databind.JsonMappingException: Infinite recursion (StackOverflowError)

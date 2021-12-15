@@ -6,8 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -26,15 +25,15 @@ public class Device {
     @JsonView(CustomJsonView.DeviceView.class)
     private int deviceId;
 
-    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.UserView.class})
+    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.UserView.class, CustomJsonView.ContractView.class, CustomJsonView.TicketView.class})
     @Column(nullable = false)
     private String deviceName;
 
-    @JsonView(CustomJsonView.DeviceView.class)
+    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.ContractView.class})
     @Column
     private String deviceManufacturer;
 
-    @JsonView(CustomJsonView.DeviceView.class)
+    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.ContractView.class})
     @Column
     private String deviceSerialNbr;
 
@@ -49,23 +48,22 @@ public class Device {
     //A device can be used by only one user at a time but a user can use multiple devices
     @JsonView(CustomJsonView.DeviceView.class)
     @ManyToOne
-    @JoinColumn(name = "userId")
     private User user;
 
     //A device can be assigned to multiple tickets and one ticket can be assigned to multiple devices
     @JsonView(CustomJsonView.DeviceView.class)
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "deviceTickets",
             joinColumns = { @JoinColumn(name = "deviceId")},
             inverseJoinColumns = {@JoinColumn(name = "ticketId")}
     )
-    private List<Ticket> ticketsDev;
+    private Set<Ticket> ticket;
+
 
     //A device can be linked to only one contract but a contract can have multiple devices linked to it
-    @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.ContractView.class})
+    @JsonView(CustomJsonView.DeviceView.class)
     @ManyToOne
-    @JoinColumn(name = "contractId")
     private Contract contract;
 
     //To software

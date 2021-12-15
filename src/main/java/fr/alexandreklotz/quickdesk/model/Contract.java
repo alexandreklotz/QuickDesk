@@ -42,7 +42,7 @@ public class Contract {
     private Contractor contractor;
 
     //To device
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.DeviceView.class})
+    @JsonView(CustomJsonView.ContractView.class)
     @OneToMany(mappedBy = "contract")
     private List<Device> device;
 

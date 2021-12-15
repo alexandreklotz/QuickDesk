@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -69,13 +70,14 @@ public class User {
 
     //A user can create multiple tickets and a ticket can have multiple affected users
     @JsonView(CustomJsonView.UserView.class)
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.MERGE})
     @JoinTable(
             name = "userTickets",
-            joinColumns = { @JoinColumn(name = "userId") },
-            inverseJoinColumns = { @JoinColumn(name = "ticketId") }
+            joinColumns = { @JoinColumn(name = "ticketId") },
+            inverseJoinColumns = { @JoinColumn(name = "userId") }
     )
-    private List<Ticket> ticket;
+    private Set<Ticket> ticket;
+
 
     //A user can use multiple devices but a device can only be used by one user at a time
     @JsonView(CustomJsonView.UserView.class)

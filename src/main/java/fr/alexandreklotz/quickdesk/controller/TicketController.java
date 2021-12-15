@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -53,7 +51,7 @@ public class TicketController {
 
         ticket.setTicketDateCreated(Date.from(Instant.now()));
 
-        List<User> ticketUsers = ticket.getUser();
+        Set<User> ticketUsers = ticket.getUser();
         for (User user : ticketUsers) {
             Optional<User> userBdd = userDao.findById(user.getUserId());
             if (userBdd.isPresent()) {
@@ -61,7 +59,7 @@ public class TicketController {
             }
         }
 
-        List<Device> ticketDevices = ticket.getDevice();
+        Set<Device> ticketDevices = ticket.getDevice();
         for (Device device : ticketDevices) {
             Optional<Device> deviceBdd = deviceDao.findById(device.getDeviceId());
             if(deviceBdd.isPresent()){
@@ -72,7 +70,8 @@ public class TicketController {
         /*TODO : See if this block is needed. The ManyToMany between ticket and team might be more of a trouble than something useful. The user's team will appear in the ticket details but do we need to assign a ticket to a whole team ?
             An IF needs to be implemented. If the ticket doesn't have a team assigned (which can be the case if the user isn't part of a service in its business or whatever */
 
-        List<Team> ticketTeam = ticket.getTeam();
+
+        Set<Team> ticketTeam = ticket.getTeam();
         for (Team team : ticketTeam) {
             Optional<Team> teamBdd = teamDao.findById(team.getTeamId());
             if(teamBdd.isPresent()){
@@ -80,19 +79,22 @@ public class TicketController {
             }
         }
 
-
         if (ticket.getTicketCategorization() == null) {
             ticket.setTicketCategorization(Ticket.TicketCategorization.TOCATEGORIZE);
         } else {
             ticket.setTicketCategorization(ticket.getTicketCategorization());
         }
 
+        if (ticket.getTicketType() == null) {
+            ticket.setTicketType(Ticket.TicketType.REQUEST);
+        } else {
+            ticket.setTicketType(ticket.getTicketType());
+        }
+
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
         ticket.setTicketPriority(Ticket.TicketPriority.LOW);
         ticket.setEditableTicket(true);
 
-        /*ticket.setTicketTypes(ticket.getTicketTypes());
-        ticket.setTicketPriority(ticket.getTicketPriority());*/
 
         ticketDao.saveAndFlush(ticket);
     }

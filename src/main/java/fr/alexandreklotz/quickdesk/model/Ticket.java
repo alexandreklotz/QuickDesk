@@ -8,7 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -106,16 +107,16 @@ public class Ticket {
     //A ticket can have multiple affected users and a user can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
     @ManyToMany(mappedBy = "ticket")
-    private List<User> user;
+    private Set<User> user;
 
     //A ticket can have multiple affected teams and a team can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
     @ManyToMany(mappedBy = "ticket")
-    private List<Team> team;
+    private Set<Team> team;
 
     //A ticket can have multiple affected devices and a device can be affected to multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticketsDev")
-    private List<Device> device;
+    @ManyToMany(mappedBy = "ticket")
+    private Set<Device> device;
 
 }
