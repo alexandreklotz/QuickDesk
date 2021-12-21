@@ -1,4 +1,10 @@
 #QuickDesk Development Follow-Up
+##21/12/2021
+
+Removal of "Role" and "Permission" model, dao and controller.
+
+Had done other changes but it wouldn't work, just reverted the project to its last state and only removed this two.
+
 ***
 ##15/12/2021
 __QUICK UPDATE ABOUT THE JSON PARSE ISSUE__ : It turns out that i was sending an __invalid JSON form...__. It was validated on jsonlint.com but it wasn't matching the form required

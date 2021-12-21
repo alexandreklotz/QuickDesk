@@ -62,10 +62,4 @@ public class Team {
     )
     private Set<Ticket> ticket;
 
-
-    //A team can only have one role but a role can have multiple teams
-    @JsonView(CustomJsonView.TeamView.class)
-    @ManyToOne
-    private Role role;
-
 }
