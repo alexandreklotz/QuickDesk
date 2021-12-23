@@ -56,6 +56,7 @@ public class License {
     //A license can be affected to only one contract but a contract can have multiple licenses
     @JsonView(CustomJsonView.LicenseView.class)
     @ManyToOne
+    @JoinColumn(name = "contractId")
     private Contract contract;
 
     //A software has a single license but a license can be affected to multiple software

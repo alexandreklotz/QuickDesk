@@ -66,8 +66,9 @@ public class Device {
     //A device can be linked to only one contract but a contract can have multiple devices linked to it
     @JsonView(CustomJsonView.DeviceView.class)
     @ManyToOne
+    @JoinColumn(name = "contractId")
     private Contract contract;
 
-    //To software
+    //To software ??
 
 }

@@ -36,12 +36,12 @@ public class Software {
 
     //A software has a single license but a license can be affected to multiple software
     @ManyToOne
-    @JoinColumn(name = "licenseId", referencedColumnName = "licenseId")
+    @JoinColumn(name = "licenseId")
     private License license;
 
     //A software can be affected to one contract and vice versa
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contractId", referencedColumnName = "contractId")
+    @JoinColumn(name = "contractId")
     private Contract contract;
 
     //Devices

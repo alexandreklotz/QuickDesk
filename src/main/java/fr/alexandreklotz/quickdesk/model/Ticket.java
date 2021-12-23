@@ -63,11 +63,11 @@ public class Ticket {
     private int ticketId;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketView.class)
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.DeviceView.class})
     private String ticketTitle;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketView.class)
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UserView.class, CustomJsonView.TeamView.class, CustomJsonView.DeviceView.class})
     private String ticketDescription;
 
     @Column(nullable = false)
