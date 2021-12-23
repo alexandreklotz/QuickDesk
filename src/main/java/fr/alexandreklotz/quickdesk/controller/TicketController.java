@@ -51,33 +51,21 @@ public class TicketController {
 
         ticket.setTicketDateCreated(Date.from(Instant.now()));
 
-        Set<User> ticketUsers = ticket.getUser();
-        for (User user : ticketUsers) {
-            Optional<User> userBdd = userDao.findById(user.getUserId());
-            if (userBdd.isPresent()) {
-                ticket.setUser(ticket.getUser());
-            }
+        Optional<User> userBdd = userDao.findById(ticket.getUser().getUserId());
+        if (userBdd.isPresent()) {
+            ticket.setUser(ticket.getUser());
         }
 
-        Set<Device> ticketDevices = ticket.getDevice();
-        for (Device device : ticketDevices) {
-            Optional<Device> deviceBdd = deviceDao.findById(device.getDeviceId());
-            if(deviceBdd.isPresent()){
-                ticket.setDevice(ticket.getDevice());
-            }
+        Optional<Team> teamBdd = teamDao.findById(ticket.getTeam().getTeamId());
+        if(teamBdd.isPresent()) {
+            ticket.setTeam(ticket.getTeam());
         }
 
-        /*TODO : See if this block is needed. The ManyToMany between ticket and team might be more of a trouble than something useful. The user's team will appear in the ticket details but do we need to assign a ticket to a whole team ?
-            An IF needs to be implemented. If the ticket doesn't have a team assigned (which can be the case if the user isn't part of a service in its business or whatever */
-
-
-        Set<Team> ticketTeam = ticket.getTeam();
-        for (Team team : ticketTeam) {
-            Optional<Team> teamBdd = teamDao.findById(team.getTeamId());
-            if(teamBdd.isPresent()){
-                ticket.setTeam(ticket.getTeam());
-            }
+        Optional<Device> deviceBdd = deviceDao.findById(ticket.getDevice().getDeviceId());
+        if(deviceBdd.isPresent()){
+            ticket.setDevice(ticket.getDevice());
         }
+
 
         if (ticket.getTicketCategorization() == null) {
             ticket.setTicketCategorization(Ticket.TicketCategorization.TOCATEGORIZE);

@@ -104,19 +104,31 @@ public class Ticket {
     //Relations//
     /////////////
 
-    //A ticket can have multiple affected users and a user can create multiple tickets
+    //A ticket can have one affected user and a user can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticket")
-    private Set<User> user;
+    /*@ManyToMany(mappedBy = "ticket")
+    private Set<User> user;*/
 
-    //A ticket can have multiple affected teams and a team can create multiple tickets
-    @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticket")
-    private Set<Team> team;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
-    //A ticket can have multiple affected devices and a device can be affected to multiple tickets
+    //A ticket can have one affected team and a team can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
-    @ManyToMany(mappedBy = "ticket")
-    private Set<Device> device;
+    /*@ManyToMany(mappedBy = "ticket")
+    private Set<Team> team;*/
+
+    @ManyToOne
+    @JoinColumn(name = "teamId")
+    private Team team;
+
+    //A ticket can have one affected device and a device can be affected to multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
+    /*@ManyToMany(mappedBy = "ticket")
+    private Set<Device> device;*/
+
+    @ManyToOne
+    @JoinColumn(name = "deviceId")
+    private Device device;
 
 }

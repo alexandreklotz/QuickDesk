@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -52,14 +51,17 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<User> user;
 
-    //A team can create multiple tickets and a ticket can have multiple affected teams
+    //A team can create multiple tickets and a ticket can have oneaffected team
     @JsonView(CustomJsonView.TeamView.class)
-    @ManyToMany(cascade = { CascadeType.MERGE })
+    /*@ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "teamTickets",
             joinColumns = { @JoinColumn(name = "teamId") },
             inverseJoinColumns = { @JoinColumn(name = "ticketId") }
     )
-    private Set<Ticket> ticket;
+    private Set<Ticket> ticket;*/
+
+    @OneToMany(mappedBy = "team")
+    private List<Ticket> tickets;
 
 }

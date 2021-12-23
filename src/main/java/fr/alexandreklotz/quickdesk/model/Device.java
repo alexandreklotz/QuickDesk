@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -50,15 +50,17 @@ public class Device {
     @ManyToOne
     private User user;
 
-    //A device can be assigned to multiple tickets and one ticket can be assigned to multiple devices
+    //A device can be assigned to multiple tickets and one ticket can be assigned to a single device
     @JsonView(CustomJsonView.DeviceView.class)
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    /*@ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "deviceTickets",
             joinColumns = { @JoinColumn(name = "deviceId")},
             inverseJoinColumns = {@JoinColumn(name = "ticketId")}
     )
-    private Set<Ticket> ticket;
+    private Set<Ticket> ticket;*/
+    @OneToMany(mappedBy = "device")
+    private List<Ticket> tickets;
 
 
     //A device can be linked to only one contract but a contract can have multiple devices linked to it

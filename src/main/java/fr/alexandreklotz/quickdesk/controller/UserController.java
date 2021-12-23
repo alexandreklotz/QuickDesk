@@ -55,11 +55,6 @@ public class UserController {
     }
 
 
-    /*@JsonView(CustomJsonView.UserView.class)
-    @PatchMapping("/user/update/{userId}")*/
-
-
-
     @JsonView(CustomJsonView.UserView.class)
     @GetMapping("/user/all")
     public ResponseEntity<List<User>> getAllUsers(){

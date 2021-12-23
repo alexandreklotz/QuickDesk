@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +22,7 @@ public class User {
     //TODO : Implement an ENUM for user type ? ADMIN/USER and ENTITYADMIN ?
     public enum UserType {
         USER,
+        TECHNICIAN,
         ADMIN
     }
 
@@ -70,13 +70,15 @@ public class User {
 
     //A user can create multiple tickets and a ticket can have multiple affected users
     @JsonView(CustomJsonView.UserView.class)
-    @ManyToMany(cascade = { CascadeType.MERGE})
+    /*@ManyToMany(cascade = { CascadeType.MERGE})
     @JoinTable(
             name = "userTickets",
             joinColumns = { @JoinColumn(name = "ticketId") },
             inverseJoinColumns = { @JoinColumn(name = "userId") }
     )
-    private Set<Ticket> ticket;
+    private Set<Ticket> ticket;*/
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> tickets;
 
 
     //A user can use multiple devices but a device can only be used by one user at a time
