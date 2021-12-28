@@ -1,5 +1,14 @@
 #QuickDesk Lite Development Changelog
 ***
+##28/12/2021
+* Creation of PutMappings to update existing objects such as Users, Tickets and Teams. Methods are functional after testing. Ifs have been implemented in the linked methods to avoid empty fields.
+* DeleteMappings have been created for each class.
+
+PutMappings will be restricted to specific roles. The "updateTicket" method linked to the PutMapping in the TicketController will be split in two or the user will only
+be able to add/modify comments once the ticket is created. Only a technician or an admin will be able to modify all its fields.
+All the other PutMappings linked to update methods will be restricted to technician/admin only to avoid any security issues.
+
+***
 ##23/12/2021
 * Creation of the three main models : Utilisateur, Ticket, Team
 * Creation of CustomJsonView

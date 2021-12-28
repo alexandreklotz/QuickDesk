@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -55,7 +56,63 @@ public class TicketController {
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
         ticket.setTicketPriority(Ticket.TicketPriority.LOW);
 
-        ticketRepository.saveAndFlush(ticket);
-
     }
+
+    @JsonView(CustomJsonView.TicketView.class)
+    @PutMapping("/ticket/update/{ticketId}")
+    public ResponseEntity<String> updateTicket (@PathVariable Long ticketId, @RequestBody Ticket ticket){
+
+        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
+        if(ticketBdd.isPresent()){
+
+            if (ticket.getTicketTitle() != null) {
+                ticketBdd.get().setTicketTitle(ticket.getTicketTitle());
+            }
+
+            if (ticket.getTicketType() != null) {
+                ticketBdd.get().setTicketType(ticket.getTicketType());
+            }
+
+            if (ticket.getTicketPriority() != null) {
+                ticketBdd.get().setTicketPriority(ticket.getTicketPriority());
+            }
+
+            if(ticket.getTicketStatus() != null){
+                ticketBdd.get().setTicketStatus(ticket.getTicketStatus());
+            }
+
+            if(ticket.getTicketCategorization() != null) {
+                ticketBdd.get().setTicketCategorization(ticket.getTicketCategorization());
+            }
+
+            if (ticket.getTicketDescription() != null) {
+                ticketBdd.get().setTicketDescription(ticket.getTicketDescription());
+            }
+
+            if(ticket.getUtilisateur() != null) {
+                ticketBdd.get().setUtilisateur(ticket.getUtilisateur());
+            }
+
+            ticketRepository.save(ticketBdd.get());
+
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @JsonView(CustomJsonView.TicketView.class)
+    @DeleteMapping("/ticket/delete/{ticketId}")
+    public String deleteTicket (@PathVariable Long ticketId) {
+
+        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
+        if(ticketBdd.isPresent()){
+            String deletedTicket = ticketBdd.get().getTicketTitle() + " has been deleted.";
+            ticketRepository.deleteById(ticketId);
+            return deletedTicket;
+        } else {
+            return "The specified ticket doesn't exist or an error occurred.";
+        }
+    }
+
 }

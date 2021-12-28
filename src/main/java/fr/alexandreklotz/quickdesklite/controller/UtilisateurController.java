@@ -61,4 +61,53 @@ public class UtilisateurController {
         utilisateurRepository.saveAndFlush(utilisateur);
     }
 
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @PutMapping("/user/update/{userId}")
+    public ResponseEntity<String> updateUtilisateur (@PathVariable Long userId, @RequestBody Utilisateur utilisateur){
+
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+        if(userBdd.isPresent()){
+
+            if (utilisateur.getUserType() != null){
+                userBdd.get().setUserType(utilisateur.getUserType());
+            }
+
+            if (utilisateur.getTeam() != null){
+                userBdd.get().setTeam(utilisateur.getTeam());
+            }
+
+            if(utilisateur.getUtilFirstName() != null){
+                userBdd.get().setUtilFirstName(utilisateur.getUtilFirstName());
+            }
+
+            if(utilisateur.getUtilLastName() != null) {
+                userBdd.get().setUtilLastName(utilisateur.getUtilLastName());
+            }
+
+            if(utilisateur.getUtilPwd() != null){
+                userBdd.get().setUtilPwd(utilisateur.getUtilPwd());
+            }
+
+            utilisateurRepository.save(userBdd.get());
+            return ResponseEntity.ok().build();
+
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @DeleteMapping("/user/delete/{userId}")
+    public String deleteUtilisateur (@PathVariable Long userId){
+
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+        if(userBdd.isPresent()){
+            String deletedUser = userBdd.get().getUtilFirstName() + " " + userBdd.get().getUtilLastName() + " which was in the " + userBdd.get().getTeam().getTeamName() + " team has been deleted.";
+            utilisateurRepository.deleteById(userId);
+            return deletedUser;
+        } else {
+            return "The specified user doesn't exist or an error occurred.";
+        }
+    }
+
 }
