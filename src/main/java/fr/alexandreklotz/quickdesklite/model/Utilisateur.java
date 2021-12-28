@@ -43,6 +43,10 @@ public class Utilisateur {
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
+    private String utilLogin;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilPwd;
 
     @Column(nullable = false)
