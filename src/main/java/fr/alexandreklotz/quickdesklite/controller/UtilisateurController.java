@@ -88,6 +88,10 @@ public class UtilisateurController {
                 userBdd.get().setUtilPwd(utilisateur.getUtilPwd());
             }
 
+            if(utilisateur.getUtilLogin() != null){
+                userBdd.get().setUtilLogin(utilisateur.getUtilLogin());
+            }
+
             utilisateurRepository.save(userBdd.get());
             return ResponseEntity.ok().build();
 
