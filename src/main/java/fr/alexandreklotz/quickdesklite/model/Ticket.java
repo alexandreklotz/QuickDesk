@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -104,5 +105,10 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
+
+    //A ticket can be linked to multiple comments but a comment can only be linked to one ticket
+    @JsonView(CustomJsonView.TicketView.class)
+    @OneToMany(mappedBy = "ticket")
+    private List<Comment> comments;
 
 }
