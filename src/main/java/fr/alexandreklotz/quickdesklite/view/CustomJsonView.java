@@ -7,4 +7,6 @@ public class CustomJsonView {
     public static class TicketView{};
 
     public static class TeamView{};
+
+    public static class CommentView{};
 }
