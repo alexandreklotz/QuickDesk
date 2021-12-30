@@ -73,4 +73,9 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur")
     private List<Ticket> tickets;
 
+    //A user, whatever is role is, can create multiple comments but a comment can only be created/linked by/to one user.
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Comment> comments;
+
 }

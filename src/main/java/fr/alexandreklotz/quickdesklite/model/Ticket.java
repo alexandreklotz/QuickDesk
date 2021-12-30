@@ -94,7 +94,7 @@ public class Ticket {
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
-    private boolean editableTicket;
+    private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin one created ? Need to define this
 
     /////////////
     //Relations//

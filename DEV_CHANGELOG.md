@@ -4,6 +4,8 @@
 * Created a new class : Comment. Users, technicians and admins will be able to add comments in a ticket. I will work on the possibility of adding images or documents in a comment.
 * The controller and the repository have been created for the new "Comment" entity.
 * The relation between Comment and Ticket has been created.
+* All the PostMappings have been created in the CommentController.
+* A few TODOs have been added, a few functionalities need to be clarified/defined properly to be implemented later in the software's logic.
 
 ***
 ## 28/12/2021
