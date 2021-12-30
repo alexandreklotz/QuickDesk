@@ -1,6 +1,6 @@
 # QuickDesk Lite Development Changelog
 ***
-## 30/12/2021 - 1
+## 30/12/2021
 * Created a new class : Comment. Users, technicians and admins will be able to add comments in a ticket. I will work on the possibility of adding images or documents in a comment.
 * The controller and the repository have been created for the new "Comment" entity.
 * The relation between Comment and Ticket has been created.
