@@ -23,11 +23,18 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String commentText;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Date commentDate;
+
+    @Column(nullable = true)
+    private Date commentLastModification;
+
+    //TODO : Check if this variable will be useful.
+    @Column(nullable = false)
+    private boolean editableComment;
 
     /////////////
     //Relations//
@@ -39,4 +46,9 @@ public class Comment implements Serializable {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
+    //A comment can be created by a single user only.
+    @JsonView(CustomJsonView.CommentView.class)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Utilisateur utilisateur;
 }
