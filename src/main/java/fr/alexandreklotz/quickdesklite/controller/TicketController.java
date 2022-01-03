@@ -38,6 +38,18 @@ public class TicketController {
     }
 
     @JsonView(CustomJsonView.TicketView.class)
+    @GetMapping("/ticket/{ticketid}")
+    public ResponseEntity<Ticket> getSpecifiedTicket(@PathVariable Long ticketid){
+
+       Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
+       if(ticketBdd.isPresent()){
+           return ResponseEntity.ok(ticketBdd.get());
+       } else {
+           return ResponseEntity.noContent().build();
+       }
+    }
+
+    @JsonView(CustomJsonView.TicketView.class)
     @PostMapping("user/ticket/new")
     public void newTicket(@RequestBody Ticket ticket){
 

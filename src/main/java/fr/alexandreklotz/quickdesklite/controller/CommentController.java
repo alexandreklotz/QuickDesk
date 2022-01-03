@@ -42,8 +42,22 @@ public class CommentController {
         return ResponseEntity.ok(commentRepository.findAll());
     }
 
+
     @JsonView(CustomJsonView.CommentView.class)
-    @PostMapping("/ticket/{ticketid}/comment/new")
+    @GetMapping("/comments/{commentid}")
+    public ResponseEntity<Comment> getSpecifiedComment (@PathVariable Long commentid){
+
+        Optional<Comment> commentBdd = commentRepository.findById(commentid);
+
+        if(commentBdd.isPresent()){
+            return ResponseEntity.ok(commentBdd.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @JsonView(CustomJsonView.CommentView.class)
+    @PostMapping("/ticket/{ticketid}/comment/new/{userid}")
     public void newComment (@PathVariable Long ticketid,
                             @PathVariable Long userid,
                             @RequestBody Comment comment){

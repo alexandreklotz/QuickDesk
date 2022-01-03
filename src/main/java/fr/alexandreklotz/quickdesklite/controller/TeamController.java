@@ -38,6 +38,19 @@ public class TeamController {
     }
 
     @JsonView(CustomJsonView.TeamView.class)
+    @GetMapping("/team/{teamid}")
+    public ResponseEntity<Team> getSpecifiedTeam(@PathVariable Long teamid){
+
+        Optional<Team> teamBdd = teamRepository.findById(teamid);
+
+        if(teamBdd.isPresent()){
+            return ResponseEntity.ok(teamBdd.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @JsonView(CustomJsonView.TeamView.class)
     @PostMapping("/team/new")
     public void newTeam(@RequestBody Team team){
         

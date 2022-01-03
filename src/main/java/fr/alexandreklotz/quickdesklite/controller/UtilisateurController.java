@@ -42,6 +42,19 @@ public class UtilisateurController {
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
+    @GetMapping("/utilisateur/{utilisateurid}")
+    public ResponseEntity<Utilisateur> getSpecifiedUtilisateur(@PathVariable Long utilisateurid){
+
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurid);
+
+        if(userBdd.isPresent()){
+            return ResponseEntity.ok(userBdd.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @JsonView(CustomJsonView.UtilisateurView.class)
     @PostMapping("/utilisateur/new")
     public void newUtilisateur(@RequestBody Utilisateur utilisateur){
 

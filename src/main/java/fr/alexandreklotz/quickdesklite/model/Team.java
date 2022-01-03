@@ -2,21 +2,15 @@ package fr.alexandreklotz.quickdesklite.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
-import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
 public class Team {
 
     @Id
@@ -38,6 +32,12 @@ public class Team {
     @JsonView(CustomJsonView.TeamView.class)
     private Date teamDateCreated;
 
+    ///////////////
+    //Constructor//
+    ///////////////
+
+    public Team(){}
+
     /////////////
     //Relations//
     /////////////
@@ -45,8 +45,51 @@ public class Team {
     //A team can have multiple users but a user can only be in one team
     @JsonView(CustomJsonView.TeamView.class)
     @OneToMany(mappedBy = "team")
-    private List<Utilisateur> utilisateurs;
+    private Set<Utilisateur> utilisateurs;
 
 
+    /////////////////////
+    //Getters & Setters//
+    /////////////////////
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTeamDesc() {
+        return teamDesc;
+    }
+
+    public void setTeamDesc(String teamDesc) {
+        this.teamDesc = teamDesc;
+    }
+
+    public Date getTeamDateCreated() {
+        return teamDateCreated;
+    }
+
+    public void setTeamDateCreated(Date teamDateCreated) {
+        this.teamDateCreated = teamDateCreated;
+    }
+
+    public Set<Utilisateur> getUtilisateurs() {
+        return utilisateurs;
+    }
+
+    public void setUtilisateurs(Set<Utilisateur> utilisateurs) {
+        this.utilisateurs = utilisateurs;
+    }
 }
