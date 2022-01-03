@@ -1,5 +1,17 @@
 # QuickDesk Lite Development Changelog
 ***
+## 03/01/2022
+
+Not much has been done today, __just a few fixes/changes__. Comments are working fine, they appear in the ticket as wanted.
+__I will start documenting myself about spring security before adding security in my project__.
+Once the security will be properly implemented, i will start developing the front-end. I'll probably use thymeleafs
+for that and i'll use Angular for the "full" version.
+
+* Removal of lombok dependency -> Was causing an error with getters and setters when i would use a Set in a relation
+* All List have been migrated to Set
+* Constructors, Getters and Setters have been created in each class
+* Created GetMappings in all controllers to get a specific object by specifying its id in the link. For example, you only want to retrieve the info about the utilisateur with the id 1 -> /utilisateur/1
+***
 ## 30/12/2021
 * Created a new class : Comment. Users, technicians and admins will be able to add comments in a ticket. I will work on the possibility of adding images or documents in a comment.
 * The controller and the repository have been created for the new "Comment" entity.
