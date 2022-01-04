@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.model.Team;
+import fr.alexandreklotz.quickdesklite.model.Utilisateur;
 import fr.alexandreklotz.quickdesklite.repository.TeamRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
@@ -10,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -53,8 +53,17 @@ public class TeamController {
     @JsonView(CustomJsonView.TeamView.class)
     @PostMapping("/team/new")
     public void newTeam(@RequestBody Team team){
-        
-        team.setTeamDateCreated(Date.from(Instant.now()));
+
+        if(team.getUtilisateurs() != null) {
+            for(Utilisateur utilisateur : team.getUtilisateurs()){
+                Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
+                if(userBdd.isPresent()){
+                    userBdd.get().setTeam(team);
+                }
+            }
+        }
+
+        team.setTeamDateCreated(LocalDateTime.now());
 
         teamRepository.saveAndFlush(team);
     }
@@ -69,18 +78,19 @@ public class TeamController {
             if(team.getTeamName() != null) {
                 teamBdd.get().setTeamName(team.getTeamName());
             }
-
             if(team.getTeamDesc() != null){
                 teamBdd.get().setTeamDesc(team.getTeamDesc());
             }
-
             if(team.getUtilisateurs() != null){
-                teamBdd.get().setUtilisateurs(team.getUtilisateurs());
+                for(Utilisateur utilisateur : team.getUtilisateurs()){
+                    Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
+                    if(userBdd.isPresent()){
+                        userBdd.get().setTeam(team);
+                    }
+                }
             }
-
             teamRepository.save(teamBdd.get());
             return ResponseEntity.ok().build();
-
         } else {
             return ResponseEntity.noContent().build();
         }

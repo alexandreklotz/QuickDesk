@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +67,7 @@ public class CommentController {
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
 
         if(ticketBdd.isPresent() && userBdd.isPresent()){
-            comment.setCommentDate(Date.from(Instant.now()));
+            comment.setCommentDate(LocalDateTime.now());
             comment.setTicket(ticketBdd.get());
             comment.setUtilisateur(userBdd.get());
             commentRepository.saveAndFlush(comment);
@@ -74,7 +75,7 @@ public class CommentController {
 
     }
 
-    //TODO : Implement the functionality to lock a comment if an admin/tech edits it. Or make the comment uneditable.
+    //TODO : Implement the functionality to lock a comment if an admin/tech edits it. Or make the comment uneditable. Also find a way to implement a function to make sure that a comment can't be edited by another user.
     @JsonView(CustomJsonView.CommentView.class)
     @PutMapping("/ticket/{ticketid}/comment/{commentid}/{userid}")
     public ResponseEntity<String> updateComment (@PathVariable Long ticketid,
@@ -89,7 +90,8 @@ public class CommentController {
         if (ticketBdd.isPresent() && commentBdd.isPresent() && userBdd.isPresent()) {
             if(comment.getCommentText() != null) {
                 commentBdd.get().setCommentText(comment.getCommentText());
-                commentBdd.get().setCommentLastModification(Date.from(Instant.now()));
+                //commentBdd.get().setCommentLastModification(Date.from(Instant.now()));
+                commentBdd.get().setCommentLastModification(LocalDateTime.now());
                 commentBdd.get().setUtilisateur(userBdd.get());
             }
             if(comment.getCommentText() == null) {
@@ -99,6 +101,7 @@ public class CommentController {
         else {
             return ResponseEntity.noContent().build();
         }
+        commentRepository.save(commentBdd.get());
         return ResponseEntity.ok("Comment succesfully updated");
     }
 

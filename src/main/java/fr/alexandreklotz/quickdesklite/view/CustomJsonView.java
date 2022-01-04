@@ -9,4 +9,6 @@ public class CustomJsonView {
     public static class TeamView{};
 
     public static class CommentView{};
+
+    public static class DeviceView{};
 }

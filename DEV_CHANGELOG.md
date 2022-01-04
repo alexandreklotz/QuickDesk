@@ -1,7 +1,16 @@
 # QuickDesk Lite Development Changelog
 ***
-## 03/01/2022
+## 04/01/2022
+* README.md update
+* DeleteMapping & PutMapping links in UtilisateurController have been corrected. (previously `/user/...` instead of `/utilisateur/...`)
+* Creation of a new class => Device. Its controller and repository have been created aswell as its relation with "Utilisateur".
+* "DeviceView" added in CustomJsonView
+* "TeamController" PostMapping/PutMapping have been modified. A few other methods have been fixed, there was a few things to correct here and there.
+* Dates have been migrated to LocalDateTime. The JsonFormat property has also been added and dates are now properly formatted.
 
+All the methods in each controller is working as intended. __Security is now the next step__.
+***
+## 03/01/2022
 Not much has been done today, __just a few fixes/changes__. Comments are working fine, they appear in the ticket as wanted.
 __I will start documenting myself about spring security before adding security in my project__.
 Once the security will be properly implemented, i will start developing the front-end. I'll probably use thymeleafs

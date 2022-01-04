@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,7 @@ public class UtilisateurController {
             utilisateur.setTeam(utilisateur.getTeam());
         }
 
-        utilisateur.setCreationDate(Date.from(Instant.now()));
+        utilisateur.setCreationDate(LocalDateTime.now());
 
         if(utilisateur.getUserType() == null){
             utilisateur.setUserType(Utilisateur.UserType.USER);
@@ -75,46 +76,38 @@ public class UtilisateurController {
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @PutMapping("/user/update/{userId}")
+    @PutMapping("/utilisateur/update/{userId}")
     public ResponseEntity<String> updateUtilisateur (@PathVariable Long userId, @RequestBody Utilisateur utilisateur){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
         if(userBdd.isPresent()){
-
             if (utilisateur.getUserType() != null){
                 userBdd.get().setUserType(utilisateur.getUserType());
             }
-
             if (utilisateur.getTeam() != null){
                 userBdd.get().setTeam(utilisateur.getTeam());
             }
-
             if(utilisateur.getUtilFirstName() != null){
                 userBdd.get().setUtilFirstName(utilisateur.getUtilFirstName());
             }
-
             if(utilisateur.getUtilLastName() != null) {
                 userBdd.get().setUtilLastName(utilisateur.getUtilLastName());
             }
-
             if(utilisateur.getUtilPwd() != null){
                 userBdd.get().setUtilPwd(utilisateur.getUtilPwd());
             }
-
             if(utilisateur.getUtilLogin() != null){
                 userBdd.get().setUtilLogin(utilisateur.getUtilLogin());
             }
-
             utilisateurRepository.save(userBdd.get());
             return ResponseEntity.ok().build();
-
         } else {
             return ResponseEntity.noContent().build();
         }
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @DeleteMapping("/user/delete/{userId}")
+    @DeleteMapping("/utilisateur/delete/{userId}")
     public String deleteUtilisateur (@PathVariable Long userId){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);

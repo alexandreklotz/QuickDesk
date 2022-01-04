@@ -3,10 +3,9 @@ package fr.alexandreklotz.quickdesklite.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -27,10 +26,9 @@ public class Team {
     @JsonView(CustomJsonView.TeamView.class)
     private String teamDesc;
 
-    @Column(nullable = false)
-    @DateTimeFormat(pattern = "MM-dd-YYYY")
     @JsonView(CustomJsonView.TeamView.class)
-    private Date teamDateCreated;
+    @Column(nullable = false)
+    private LocalDateTime teamDateCreated;
 
     ///////////////
     //Constructor//
@@ -77,11 +75,11 @@ public class Team {
         this.teamDesc = teamDesc;
     }
 
-    public Date getTeamDateCreated() {
+    public LocalDateTime getTeamDateCreated() {
         return teamDateCreated;
     }
 
-    public void setTeamDateCreated(Date teamDateCreated) {
+    public void setTeamDateCreated(LocalDateTime teamDateCreated) {
         this.teamDateCreated = teamDateCreated;
     }
 

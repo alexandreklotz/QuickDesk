@@ -1,12 +1,13 @@
 package fr.alexandreklotz.quickdesklite.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -18,17 +19,19 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private Long id;
 
-    @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class})
     @Column(nullable = false)
     private String commentText;
 
     @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
-    private Date commentDate;
+    private LocalDateTime commentDate;
 
     @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(nullable = true)
-    private Date commentLastModification;
+    private LocalDateTime commentLastModification;
 
     //TODO : Check if this variable will be useful.
     @Column(nullable = false)
@@ -78,19 +81,19 @@ public class Comment implements Serializable {
         this.commentText = commentText;
     }
 
-    public Date getCommentDate() {
+    public LocalDateTime getCommentDate() {
         return commentDate;
     }
 
-    public void setCommentDate(Date commentDate) {
+    public void setCommentDate(LocalDateTime commentDate) {
         this.commentDate = commentDate;
     }
 
-    public Date getCommentLastModification() {
+    public LocalDateTime getCommentLastModification() {
         return commentLastModification;
     }
 
-    public void setCommentLastModification(Date commentLastModification) {
+    public void setCommentLastModification(LocalDateTime commentLastModification) {
         this.commentLastModification = commentLastModification;
     }
 
@@ -117,4 +120,5 @@ public class Comment implements Serializable {
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
     }
+
 }

@@ -1,12 +1,12 @@
 package fr.alexandreklotz.quickdesklite.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -51,42 +51,42 @@ public class Ticket {
     @JsonView(CustomJsonView.TicketView.class)
     private Long id;
 
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class})
     @Column(nullable = false)
-    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class})
     private String ticketTitle;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private String ticketDescription;
 
-    @Column(nullable = false)
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
     @JsonView(CustomJsonView.TicketView.class)
-    private Date ticketDateCreated;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
+    private LocalDateTime ticketDateCreated;
 
+    @JsonView(CustomJsonView.TicketView.class)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(nullable = true)
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    @JsonView(CustomJsonView.TicketView.class)
-    private Date ticketDateClosed;
+    private LocalDateTime ticketDateClosed;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private TicketType ticketType;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private TicketPriority ticketPriority;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private TicketStatus ticketStatus;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private TicketCategorization ticketCategorization;
 
-    @Column(nullable = false)
     @JsonView(CustomJsonView.TicketView.class)
+    @Column(nullable = false)
     private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin one created ? Need to define this
 
     ///////////////
@@ -139,19 +139,19 @@ public class Ticket {
         this.ticketDescription = ticketDescription;
     }
 
-    public Date getTicketDateCreated() {
+    public LocalDateTime getTicketDateCreated() {
         return ticketDateCreated;
     }
 
-    public void setTicketDateCreated(Date ticketDateCreated) {
+    public void setTicketDateCreated(LocalDateTime ticketDateCreated) {
         this.ticketDateCreated = ticketDateCreated;
     }
 
-    public Date getTicketDateClosed() {
+    public LocalDateTime getTicketDateClosed() {
         return ticketDateClosed;
     }
 
-    public void setTicketDateClosed(Date ticketDateClosed) {
+    public void setTicketDateClosed(LocalDateTime ticketDateClosed) {
         this.ticketDateClosed = ticketDateClosed;
     }
 

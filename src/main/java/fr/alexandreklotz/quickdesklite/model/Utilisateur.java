@@ -1,12 +1,12 @@
 package fr.alexandreklotz.quickdesklite.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -35,7 +35,7 @@ public class Utilisateur {
     private String utilLastName;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.UtilisateurView.class)
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class, CustomJsonView.CommentView.class})
     private String utilLogin;
 
     @Column(nullable = false)
@@ -43,9 +43,9 @@ public class Utilisateur {
     private String utilPwd;
 
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "MM-dd-YYYY")
     @JsonView(CustomJsonView.UtilisateurView.class)
-    private Date creationDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime creationDate;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -76,6 +76,12 @@ public class Utilisateur {
     @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
     private Set<Comment> comments;
+
+    //A user can only be assigned to one device but a device can have multiple users
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private Device device;
 
     /////////////////////
     //Getters & Setters//
@@ -122,11 +128,11 @@ public class Utilisateur {
         this.utilPwd = utilPwd;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -160,5 +166,13 @@ public class Utilisateur {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
 }

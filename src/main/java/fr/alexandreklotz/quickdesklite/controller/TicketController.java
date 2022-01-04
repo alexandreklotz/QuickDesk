@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +55,8 @@ public class TicketController {
     public void newTicket(@RequestBody Ticket ticket){
 
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
-        ticket.setTicketDateCreated(Date.from(Instant.now()));
+        ticket.setEditableTicket(true);
+        ticket.setTicketDateCreated(LocalDateTime.now());
 
 
         ticket.setTicketCategorization(Ticket.TicketCategorization.TOCATEGORIZE);
@@ -67,6 +69,8 @@ public class TicketController {
 
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
         ticket.setTicketPriority(Ticket.TicketPriority.LOW);
+
+        ticketRepository.saveAndFlush(ticket);
 
     }
 
@@ -89,8 +93,12 @@ public class TicketController {
                 ticketBdd.get().setTicketPriority(ticket.getTicketPriority());
             }
 
-            if(ticket.getTicketStatus() != null){
+            if(ticket.getTicketStatus() != null && ticket.getTicketStatus() != Ticket.TicketStatus.CLOSED){
                 ticketBdd.get().setTicketStatus(ticket.getTicketStatus());
+            } else if (ticket.getTicketStatus() != null && ticket.getTicketStatus() == Ticket.TicketStatus.CLOSED) {
+                ticketBdd.get().setTicketStatus(ticket.getTicketStatus());
+                ticketBdd.get().setEditableTicket(false);
+                ticketBdd.get().setTicketDateClosed(LocalDateTime.now());
             }
 
             if(ticket.getTicketCategorization() != null) {
@@ -119,7 +127,7 @@ public class TicketController {
 
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
         if(ticketBdd.isPresent()){
-            String deletedTicket = ticketBdd.get().getTicketTitle() + " has been deleted.";
+            String deletedTicket = "The following ticket : " + ticketBdd.get().getTicketTitle() + " has been deleted.";
             ticketRepository.deleteById(ticketId);
             return deletedTicket;
         } else {
