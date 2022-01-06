@@ -53,11 +53,17 @@ public class Comment implements Serializable {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
-    //A comment can be created by a single user only.
+    //A comment can be created by a single user at a time only.
     @JsonView(CustomJsonView.CommentView.class)
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Utilisateur utilisateur;
+
+    //A comment can be created by a single admin at a time only
+    @JsonView(CustomJsonView.CommentView.class)
+    @ManyToOne
+    @JoinColumn(name = "admn_id")
+    private Admn admn;
 
 
     /////////////////////
@@ -121,4 +127,11 @@ public class Comment implements Serializable {
         this.utilisateur = utilisateur;
     }
 
+    public Admn getAdmn() {
+        return admn;
+    }
+
+    public void setAdmn(Admn admn) {
+        this.admn = admn;
+    }
 }

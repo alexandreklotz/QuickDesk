@@ -1,9 +1,11 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesklite.model.Admn;
 import fr.alexandreklotz.quickdesklite.model.Comment;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
+import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
 import fr.alexandreklotz.quickdesklite.repository.CommentRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
@@ -12,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +25,14 @@ public class CommentController {
     private TicketRepository ticketRepository;
     private CommentRepository commentRepository;
     private UtilisateurRepository utilisateurRepository;
+    private AdmnRepository admnRepository;
 
     @Autowired
-    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository){
+    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository, AdmnRepository admnRepository){
         this.ticketRepository = ticketRepository;
         this.commentRepository = commentRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.admnRepository = admnRepository;
     }
 
     ////////////////
@@ -57,9 +59,10 @@ public class CommentController {
         }
     }
 
+    //TODO : Find a way to manage comments for both entities.
     @JsonView(CustomJsonView.CommentView.class)
     @PostMapping("/ticket/{ticketid}/comment/new/{userid}")
-    public void newComment (@PathVariable Long ticketid,
+    public ResponseEntity<String> newUserComment (@PathVariable Long ticketid,
                             @PathVariable Long userid,
                             @RequestBody Comment comment){
 
@@ -70,12 +73,12 @@ public class CommentController {
             comment.setCommentDate(LocalDateTime.now());
             comment.setTicket(ticketBdd.get());
             comment.setUtilisateur(userBdd.get());
-            commentRepository.saveAndFlush(comment);
         }
 
+        commentRepository.saveAndFlush(comment);
+        return ResponseEntity.ok("Comment successfully added to the ticket.");
     }
 
-    //TODO : Implement the functionality to lock a comment if an admin/tech edits it. Or make the comment uneditable. Also find a way to implement a function to make sure that a comment can't be edited by another user.
     @JsonView(CustomJsonView.CommentView.class)
     @PutMapping("/ticket/{ticketid}/comment/{commentid}/{userid}")
     public ResponseEntity<String> updateComment (@PathVariable Long ticketid,
@@ -90,7 +93,6 @@ public class CommentController {
         if (ticketBdd.isPresent() && commentBdd.isPresent() && userBdd.isPresent()) {
             if(comment.getCommentText() != null) {
                 commentBdd.get().setCommentText(comment.getCommentText());
-                //commentBdd.get().setCommentLastModification(Date.from(Instant.now()));
                 commentBdd.get().setCommentLastModification(LocalDateTime.now());
                 commentBdd.get().setUtilisateur(userBdd.get());
             }

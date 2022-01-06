@@ -16,8 +16,7 @@ public class Utilisateur {
 
     public enum UserType {
         USER,
-        TECHNICIAN,
-        ADMIN
+        VIP
     }
 
     @Id
@@ -27,20 +26,24 @@ public class Utilisateur {
     private Long id;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class})
     private String utilFirstName;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class})
     private String utilLastName;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class, CustomJsonView.CommentView.class})
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class})
     private String utilLogin;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilPwd;
+
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @Column(nullable = false)
+    private String utilMailaddr;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -126,6 +129,14 @@ public class Utilisateur {
 
     public void setUtilPwd(String utilPwd) {
         this.utilPwd = utilPwd;
+    }
+
+    public String getUtilMailaddr() {
+        return utilMailaddr;
+    }
+
+    public void setUtilMailaddr(String utilMailaddr) {
+        this.utilMailaddr = utilMailaddr;
     }
 
     public LocalDateTime getCreationDate() {

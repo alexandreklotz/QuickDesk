@@ -55,6 +55,11 @@ public class Device {
     @OneToMany(mappedBy = "device")
     private Set<Utilisateur> deviceUtilisateurs;
 
+    //A device can be assigned to multiple admins but an admin can only be assigned to one device at a time
+    @JsonView(CustomJsonView.DeviceView.class)
+    @OneToMany(mappedBy = "device")
+    private Set<Admn> deviceAdmnUtilisateurs;
+
     /////////////////////
     //Getters & setters//
     /////////////////////
@@ -114,5 +119,13 @@ public class Device {
 
     public void setDeviceUtilisateurs(Set<Utilisateur> utilisateurs) {
         this.deviceUtilisateurs = utilisateurs;
+    }
+
+    public Set<Admn> getDeviceAdmnUtilisateurs() {
+        return deviceAdmnUtilisateurs;
+    }
+
+    public void setDeviceAdmnUtilisateurs(Set<Admn> deviceAdmnUtilisateurs) {
+        this.deviceAdmnUtilisateurs = deviceAdmnUtilisateurs;
     }
 }

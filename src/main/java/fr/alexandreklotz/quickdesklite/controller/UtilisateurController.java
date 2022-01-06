@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +55,7 @@ public class UtilisateurController {
 
     @JsonView(CustomJsonView.UtilisateurView.class)
     @PostMapping("/utilisateur/new")
-    public void newUtilisateur(@RequestBody Utilisateur utilisateur){
+    public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
 
         Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
         if(teamBdd.isPresent()){
@@ -73,11 +71,13 @@ public class UtilisateurController {
         }
 
         utilisateurRepository.saveAndFlush(utilisateur);
+        return ResponseEntity.ok("User successfully created.");
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
     @PutMapping("/utilisateur/update/{userId}")
-    public ResponseEntity<String> updateUtilisateur (@PathVariable Long userId, @RequestBody Utilisateur utilisateur){
+    public ResponseEntity<String> updateUtilisateur (@PathVariable Long userId,
+                                                     @RequestBody Utilisateur utilisateur){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
         if(userBdd.isPresent()){
@@ -85,7 +85,10 @@ public class UtilisateurController {
                 userBdd.get().setUserType(utilisateur.getUserType());
             }
             if (utilisateur.getTeam() != null){
-                userBdd.get().setTeam(utilisateur.getTeam());
+                Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
+                if(teamBdd.isPresent()){
+                    userBdd.get().setTeam(teamBdd.get());
+                }
             }
             if(utilisateur.getUtilFirstName() != null){
                 userBdd.get().setUtilFirstName(utilisateur.getUtilFirstName());
@@ -98,6 +101,9 @@ public class UtilisateurController {
             }
             if(utilisateur.getUtilLogin() != null){
                 userBdd.get().setUtilLogin(utilisateur.getUtilLogin());
+            }
+            if(utilisateur.getUtilMailaddr() != null){
+                userBdd.get().setUtilMailaddr(utilisateur.getUtilMailaddr());
             }
             utilisateurRepository.save(userBdd.get());
             return ResponseEntity.ok().build();

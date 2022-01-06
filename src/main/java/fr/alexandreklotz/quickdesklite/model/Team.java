@@ -19,7 +19,7 @@ public class Team {
     private Long id;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UtilisateurView.class})
+    @JsonView({CustomJsonView.TeamView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.AdmnView.class})
     private String teamName;
 
     @Column(nullable = false)
@@ -44,6 +44,11 @@ public class Team {
     @JsonView(CustomJsonView.TeamView.class)
     @OneToMany(mappedBy = "team")
     private Set<Utilisateur> utilisateurs;
+
+    //A team can have multiple techs/admins as members but a tech/admin can only be a member of a single team
+    @JsonView(CustomJsonView.TeamView.class)
+    @OneToMany(mappedBy = "team")
+    private Set<Admn> admins;
 
 
     /////////////////////

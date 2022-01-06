@@ -48,10 +48,10 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketView.class)
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.AdmnView.class})
     private Long id;
 
-    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class})
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class, CustomJsonView.AdmnView.class})
     @Column(nullable = false)
     private String ticketTitle;
 
@@ -68,6 +68,11 @@ public class Ticket {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(nullable = true)
     private LocalDateTime ticketDateClosed;
+
+    @JsonView(CustomJsonView.TicketView.class)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = true)
+    private LocalDateTime ticketLastModified;
 
     @JsonView(CustomJsonView.TicketView.class)
     @Column(nullable = false)
@@ -110,6 +115,12 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket")
     private Set<Comment> comments;
 
+    //A ticket can be assigned to only one tech/admin at a time but a tech/admin can be assigned to multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "admn_id", nullable = false)
+    private Admn admn;
+
     /////////////////////
     //Getters & Setters//
     /////////////////////
@@ -145,6 +156,14 @@ public class Ticket {
 
     public void setTicketDateCreated(LocalDateTime ticketDateCreated) {
         this.ticketDateCreated = ticketDateCreated;
+    }
+
+    public LocalDateTime getTicketLastModified() {
+        return ticketLastModified;
+    }
+
+    public void setTicketLastModified(LocalDateTime ticketLastModified) {
+        this.ticketLastModified = ticketLastModified;
     }
 
     public LocalDateTime getTicketDateClosed() {
@@ -209,5 +228,13 @@ public class Ticket {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Admn getAdmn() {
+        return admn;
+    }
+
+    public void setAdmn(Admn admn) {
+        this.admn = admn;
     }
 }
