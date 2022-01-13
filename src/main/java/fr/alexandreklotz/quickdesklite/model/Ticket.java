@@ -70,6 +70,11 @@ public class Ticket {
     private LocalDateTime ticketDateClosed;
 
     @JsonView(CustomJsonView.TicketView.class)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = true)
+    private LocalDateTime ticketLastModified;
+
+    @JsonView(CustomJsonView.TicketView.class)
     @Column(nullable = false)
     private TicketType ticketType;
 
@@ -109,6 +114,12 @@ public class Ticket {
     @JsonView(CustomJsonView.TicketView.class)
     @OneToMany(mappedBy = "ticket")
     private Set<Comment> comments;
+
+    //A ticket can be assigned to only one admin but an admin can be assigned to multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "admn_id", nullable = false)
+    private Admn assignedAdmin;
 
     /////////////////////
     //Getters & Setters//
@@ -153,6 +164,14 @@ public class Ticket {
 
     public void setTicketDateClosed(LocalDateTime ticketDateClosed) {
         this.ticketDateClosed = ticketDateClosed;
+    }
+
+    public LocalDateTime getTicketLastModified() {
+        return ticketLastModified;
+    }
+
+    public void setTicketLastModified(LocalDateTime ticketLastModified) {
+        this.ticketLastModified = ticketLastModified;
     }
 
     public TicketType getTicketType() {
@@ -209,5 +228,13 @@ public class Ticket {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Admn getAssignedAdmin() {
+        return assignedAdmin;
+    }
+
+    public void setAssignedAdmin(Admn assignedAdmin) {
+        this.assignedAdmin = assignedAdmin;
     }
 }

@@ -11,4 +11,6 @@ public class CustomJsonView {
     public static class CommentView{};
 
     public static class DeviceView{};
+
+    public static class AdmnView{};
 }

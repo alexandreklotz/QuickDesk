@@ -55,7 +55,7 @@ public class DeviceController {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @PostMapping("/devices/new")
-    public void newDevice(@RequestBody Device device){
+    public ResponseEntity<String> newDevice(@RequestBody Device device){
         if(device.getDeviceUtilisateurs() != null){
             for(Utilisateur utilisateur : device.getDeviceUtilisateurs()){
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
@@ -66,6 +66,7 @@ public class DeviceController {
         }
         device.setDeviceCreated(LocalDateTime.now());
         deviceRepository.saveAndFlush(device);
+        return ResponseEntity.ok(device.getDeviceName() + " successfully created.");
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
@@ -95,7 +96,7 @@ public class DeviceController {
                 }
             }
             deviceRepository.save(deviceBdd.get());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(deviceBdd.get().getDeviceName() + " has been successfully updated.");
         } else {
             return ResponseEntity.noContent().build();
         }

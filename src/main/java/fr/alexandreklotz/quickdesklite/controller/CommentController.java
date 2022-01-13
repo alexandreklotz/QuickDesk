@@ -1,9 +1,11 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesklite.model.Admn;
 import fr.alexandreklotz.quickdesklite.model.Comment;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
+import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
 import fr.alexandreklotz.quickdesklite.repository.CommentRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
@@ -17,6 +19,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -25,12 +28,14 @@ public class CommentController {
     private TicketRepository ticketRepository;
     private CommentRepository commentRepository;
     private UtilisateurRepository utilisateurRepository;
+    private AdmnRepository admnRepository;
 
     @Autowired
-    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository){
+    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository, AdmnRepository admnRepository){
         this.ticketRepository = ticketRepository;
         this.commentRepository = commentRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.admnRepository = admnRepository;
     }
 
     ////////////////
@@ -58,12 +63,12 @@ public class CommentController {
     }
 
     @JsonView(CustomJsonView.CommentView.class)
-    @PostMapping("/ticket/{ticketid}/comment/new/{userid}")
-    public void newComment (@PathVariable Long ticketid,
-                            @PathVariable Long userid,
+    @PostMapping("/ticket/{ticketId}/comment/new/{userId}")
+    public void newComment (@PathVariable Long ticketId,
+                            @PathVariable UUID userId,
                             @RequestBody Comment comment){
 
-        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
+        /*Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
 
         if(ticketBdd.isPresent() && userBdd.isPresent()){
@@ -71,39 +76,35 @@ public class CommentController {
             comment.setTicket(ticketBdd.get());
             comment.setUtilisateur(userBdd.get());
             commentRepository.saveAndFlush(comment);
+        }*/
+
+        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
+
+        if(ticketBdd.isPresent()){
+
+            Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+
+            if(userBdd.isPresent()){
+                comment.setCommentDate(LocalDateTime.now());
+                comment.setTicket(ticketBdd.get());
+                comment.setUtilisateur(userBdd.get());
+                commentRepository.saveAndFlush(comment);
+
+            } else {
+
+                Optional<Admn> admnBdd = admnRepository.findById(userId);
+
+                if(admnBdd.isPresent()){
+                    comment.setCommentDate(LocalDateTime.now());
+                    comment.setTicket(ticketBdd.get());
+                    comment.setAdmin(admnBdd.get());
+                    commentRepository.saveAndFlush(comment);
+                }
+            }
         }
 
     }
 
-    //TODO : Implement the functionality to lock a comment if an admin/tech edits it. Or make the comment uneditable. Also find a way to implement a function to make sure that a comment can't be edited by another user.
-    @JsonView(CustomJsonView.CommentView.class)
-    @PutMapping("/ticket/{ticketid}/comment/{commentid}/{userid}")
-    public ResponseEntity<String> updateComment (@PathVariable Long ticketid,
-                                                 @PathVariable Long commentid,
-                                                 @PathVariable Long userid,
-                                                 @RequestBody Comment comment){
-
-        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
-        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
-        Optional<Comment> commentBdd = commentRepository.findById(commentid);
-
-        if (ticketBdd.isPresent() && commentBdd.isPresent() && userBdd.isPresent()) {
-            if(comment.getCommentText() != null) {
-                commentBdd.get().setCommentText(comment.getCommentText());
-                //commentBdd.get().setCommentLastModification(Date.from(Instant.now()));
-                commentBdd.get().setCommentLastModification(LocalDateTime.now());
-                commentBdd.get().setUtilisateur(userBdd.get());
-            }
-            if(comment.getCommentText() == null) {
-                return ResponseEntity.badRequest().body("A comment cannot be empty");
-            }
-        }
-        else {
-            return ResponseEntity.noContent().build();
-        }
-        commentRepository.save(commentBdd.get());
-        return ResponseEntity.ok("Comment succesfully updated");
-    }
 
 
     @JsonView(CustomJsonView.CommentView.class)

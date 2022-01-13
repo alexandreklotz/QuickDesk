@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -44,7 +43,7 @@ public class UtilisateurController {
 
     @JsonView(CustomJsonView.UtilisateurView.class)
     @GetMapping("/utilisateur/{utilisateurid}")
-    public ResponseEntity<Utilisateur> getSpecifiedUtilisateur(@PathVariable Long utilisateurid){
+    public ResponseEntity<Utilisateur> getSpecifiedUtilisateur(@PathVariable UUID utilisateurid){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurid);
 
@@ -55,9 +54,11 @@ public class UtilisateurController {
         }
     }
 
+
+
     @JsonView(CustomJsonView.UtilisateurView.class)
     @PostMapping("/utilisateur/new")
-    public void newUtilisateur(@RequestBody Utilisateur utilisateur){
+    public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
 
         Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
         if(teamBdd.isPresent()){
@@ -73,19 +74,24 @@ public class UtilisateurController {
         }
 
         utilisateurRepository.saveAndFlush(utilisateur);
+        return ResponseEntity.ok("User successfully created.");
     }
 
-    @JsonView(CustomJsonView.UtilisateurView.class)
-    @PutMapping("/utilisateur/update/{userId}")
-    public ResponseEntity<String> updateUtilisateur (@PathVariable Long userId, @RequestBody Utilisateur utilisateur){
 
-        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @PutMapping("/utilisateur/update/{utilisateurId}")
+    public ResponseEntity<String> updateUtilisateur (@PathVariable UUID utilisateurId, @RequestBody Utilisateur utilisateur){
+
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);
         if(userBdd.isPresent()){
             if (utilisateur.getUserType() != null){
                 userBdd.get().setUserType(utilisateur.getUserType());
             }
             if (utilisateur.getTeam() != null){
-                userBdd.get().setTeam(utilisateur.getTeam());
+                Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
+                if(teamBdd.isPresent()){
+                    userBdd.get().setTeam(teamBdd.get());
+                }
             }
             if(utilisateur.getUtilFirstName() != null){
                 userBdd.get().setUtilFirstName(utilisateur.getUtilFirstName());
@@ -107,13 +113,13 @@ public class UtilisateurController {
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @DeleteMapping("/utilisateur/delete/{userId}")
-    public String deleteUtilisateur (@PathVariable Long userId){
+    @DeleteMapping("/utilisateur/delete/{utilisateurId}")
+    public String deleteUtilisateur (@PathVariable UUID utilisateurId){
 
-        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);
         if(userBdd.isPresent()){
             String deletedUser = userBdd.get().getUtilFirstName() + " " + userBdd.get().getUtilLastName() + " which was in the " + userBdd.get().getTeam().getTeamName() + " team has been deleted.";
-            utilisateurRepository.deleteById(userId);
+            utilisateurRepository.deleteById(utilisateurId);
             return deletedUser;
         } else {
             return "The specified user doesn't exist or an error occurred.";

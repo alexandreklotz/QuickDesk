@@ -28,14 +28,6 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private LocalDateTime commentDate;
 
-    @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = true)
-    private LocalDateTime commentLastModification;
-
-    //TODO : Check if this variable will be useful.
-    @Column(nullable = false)
-    private boolean editableComment;
 
     ///////////////
     //Constructor//
@@ -59,6 +51,11 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_id")
     private Utilisateur utilisateur;
 
+    //A comment can be created by a single tech/admin only
+    @JsonView(CustomJsonView.CommentView.class)
+    @ManyToOne
+    @JoinColumn(name = "admn_id")
+    private Admn admin;
 
     /////////////////////
     //Getters & Setters//
@@ -89,22 +86,6 @@ public class Comment implements Serializable {
         this.commentDate = commentDate;
     }
 
-    public LocalDateTime getCommentLastModification() {
-        return commentLastModification;
-    }
-
-    public void setCommentLastModification(LocalDateTime commentLastModification) {
-        this.commentLastModification = commentLastModification;
-    }
-
-    public boolean isEditableComment() {
-        return editableComment;
-    }
-
-    public void setEditableComment(boolean editableComment) {
-        this.editableComment = editableComment;
-    }
-
     public Ticket getTicket() {
         return ticket;
     }
@@ -121,4 +102,11 @@ public class Comment implements Serializable {
         this.utilisateur = utilisateur;
     }
 
+    public Admn getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admn admin) {
+        this.admin = admin;
+    }
 }

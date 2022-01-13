@@ -52,7 +52,7 @@ public class TeamController {
 
     @JsonView(CustomJsonView.TeamView.class)
     @PostMapping("/team/new")
-    public void newTeam(@RequestBody Team team){
+    public ResponseEntity<String> newTeam(@RequestBody Team team){
 
         if(team.getUtilisateurs() != null) {
             for(Utilisateur utilisateur : team.getUtilisateurs()){
@@ -66,6 +66,7 @@ public class TeamController {
         team.setTeamDateCreated(LocalDateTime.now());
 
         teamRepository.saveAndFlush(team);
+        return ResponseEntity.ok(team.getTeamName() + " has been successfully created.");
     }
 
     @JsonView(CustomJsonView.TeamView.class)
@@ -90,7 +91,7 @@ public class TeamController {
                 }
             }
             teamRepository.save(teamBdd.get());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(teamBdd.get().getTeamName() + " has been successfully updated.");
         } else {
             return ResponseEntity.noContent().build();
         }

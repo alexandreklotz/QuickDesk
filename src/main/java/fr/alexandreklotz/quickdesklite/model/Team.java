@@ -45,6 +45,11 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private Set<Utilisateur> utilisateurs;
 
+    //A team can have multiple admins/techs but a tech/admin can only be in one team
+    @JsonView(CustomJsonView.TeamView.class)
+    @OneToMany(mappedBy = "team")
+    private Set<Admn> admins;
+
 
     /////////////////////
     //Getters & Setters//
@@ -89,5 +94,13 @@ public class Team {
 
     public void setUtilisateurs(Set<Utilisateur> utilisateurs) {
         this.utilisateurs = utilisateurs;
+    }
+
+    public Set<Admn> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<Admn> admins) {
+        this.admins = admins;
     }
 }

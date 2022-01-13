@@ -3,11 +3,13 @@ package fr.alexandreklotz.quickdesklite.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Entity
@@ -16,15 +18,20 @@ public class Utilisateur {
 
     public enum UserType {
         USER,
-        TECHNICIAN,
-        ADMIN
+        VIP
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @GeneratedValue(
+            strategy = GenerationType.AUTO,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     @JsonView(CustomJsonView.UtilisateurView.class)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false)
     @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
@@ -41,6 +48,10 @@ public class Utilisateur {
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilPwd;
+
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    private String utilMailAddr;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -70,12 +81,12 @@ public class Utilisateur {
     //A user can create multiple tickets but a ticket can only be assigned to one user
     @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
-    private Set<Ticket> tickets;
+    private Set<Ticket> createdTickets;
 
     //A user, whatever his role is, can create multiple comments but a comment can only be created/linked by/to one user.
     @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
-    private Set<Comment> comments;
+    private Set<Comment> postedComments;
 
     //A user can only be assigned to one device but a device can have multiple users
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -88,11 +99,11 @@ public class Utilisateur {
     /////////////////////
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -128,6 +139,14 @@ public class Utilisateur {
         this.utilPwd = utilPwd;
     }
 
+    public String getUtilMailAddr() {
+        return utilMailAddr;
+    }
+
+    public void setUtilMailAddr(String utilMailAddr) {
+        this.utilMailAddr = utilMailAddr;
+    }
+
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
@@ -152,20 +171,20 @@ public class Utilisateur {
         this.team = team;
     }
 
-    public Set<Ticket> getTickets() {
-        return tickets;
+    public Set<Ticket> getCreatedTickets() {
+        return createdTickets;
     }
 
-    public void setTickets(Set<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setCreatedTickets(Set<Ticket> tickets) {
+        this.createdTickets = tickets;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
+    public Set<Comment> getPostedComments() {
+        return postedComments;
     }
 
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
+    public void setPostedComments(Set<Comment> comments) {
+        this.postedComments = comments;
     }
 
     public Device getDevice() {
