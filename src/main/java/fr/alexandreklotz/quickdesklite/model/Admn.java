@@ -33,16 +33,20 @@ public class Admn {
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.AdmnView.class)
+    @JsonView({CustomJsonView.AdmnView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class, CustomJsonView.TeamView.class})
     private String admnFirstName;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.AdmnView.class)
+    @JsonView({CustomJsonView.AdmnView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class, CustomJsonView.TeamView.class})
     private String admnLastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @JsonView(CustomJsonView.AdmnView.class)
     private String admnLogin;
+
+    @Column(nullable = false, unique = true)
+    @JsonView(CustomJsonView.AdmnView.class)
+    private String admnMailAddr;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.AdmnView.class)
@@ -124,6 +128,14 @@ public class Admn {
 
     public void setAdmnLogin(String admnLogin) {
         this.admnLogin = admnLogin;
+    }
+
+    public String getAdmnMailAddr() {
+        return admnMailAddr;
+    }
+
+    public void setAdmnMailAddr(String admnMailAddr) {
+        this.admnMailAddr = admnMailAddr;
     }
 
     public String getAdmnPwd() {

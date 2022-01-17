@@ -1,8 +1,10 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import fr.alexandreklotz.quickdesklite.model.Admn;
 import fr.alexandreklotz.quickdesklite.model.Team;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
+import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
 import fr.alexandreklotz.quickdesklite.repository.TeamRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
@@ -23,12 +25,14 @@ public class UtilisateurController {
     private UtilisateurRepository utilisateurRepository;
     private TeamRepository teamRepository;
     private TicketRepository ticketRepository;
+    private AdmnRepository admnRepository;
 
     @Autowired
-    UtilisateurController (UtilisateurRepository utilisateurRepository, TeamRepository teamRepository, TicketRepository ticketRepository){
+    UtilisateurController (UtilisateurRepository utilisateurRepository, TeamRepository teamRepository, TicketRepository ticketRepository, AdmnRepository admnRepository){
         this.ticketRepository = ticketRepository;
         this.teamRepository = teamRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.admnRepository = admnRepository;
     }
 
     ////////////////
@@ -59,6 +63,11 @@ public class UtilisateurController {
     @JsonView(CustomJsonView.UtilisateurView.class)
     @PostMapping("/utilisateur/new")
     public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
+
+        Optional<Admn> admnBdd = admnRepository.findAdmnWithLogin(utilisateur.getUtilLogin());
+        if(admnBdd.isPresent()){
+            return ResponseEntity.badRequest().body("The specified login is already in use by an admin.");
+        }
 
         Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
         if(teamBdd.isPresent()){

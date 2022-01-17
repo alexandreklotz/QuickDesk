@@ -41,7 +41,7 @@ public class Utilisateur {
     @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
     private String utilLastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class, CustomJsonView.CommentView.class})
     private String utilLogin;
 
@@ -49,7 +49,7 @@ public class Utilisateur {
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilPwd;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilMailAddr;
 

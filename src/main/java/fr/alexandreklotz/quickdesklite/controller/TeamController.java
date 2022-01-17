@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -39,7 +38,7 @@ public class TeamController {
 
     @JsonView(CustomJsonView.TeamView.class)
     @GetMapping("/team/{teamid}")
-    public ResponseEntity<Team> getSpecifiedTeam(@PathVariable Long teamid){
+    public ResponseEntity<Team> getSpecifiedTeam(@PathVariable UUID teamid){
 
         Optional<Team> teamBdd = teamRepository.findById(teamid);
 
@@ -71,7 +70,7 @@ public class TeamController {
 
     @JsonView(CustomJsonView.TeamView.class)
     @PutMapping("/team/update/{teamId}")
-    public ResponseEntity<String> updateTeam(@PathVariable Long teamId, @RequestBody Team team){
+    public ResponseEntity<String> updateTeam(@PathVariable UUID teamId, @RequestBody Team team){
 
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){
@@ -99,7 +98,7 @@ public class TeamController {
 
     @JsonView(CustomJsonView.TeamView.class)
     @DeleteMapping("/team/delete/{teamId}")
-    public String deleteTeam (@PathVariable Long teamId){
+    public String deleteTeam (@PathVariable UUID teamId){
 
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){

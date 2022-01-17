@@ -118,7 +118,7 @@ public class Ticket {
     //A ticket can be assigned to only one admin but an admin can be assigned to multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
     @ManyToOne
-    @JoinColumn(name = "admn_id", nullable = false)
+    @JoinColumn(name = "admn_id")
     private Admn assignedAdmin;
 
     /////////////////////

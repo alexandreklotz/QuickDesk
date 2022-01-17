@@ -3,9 +3,11 @@ package fr.alexandreklotz.quickdesklite.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.model.Admn;
 import fr.alexandreklotz.quickdesklite.model.Team;
+import fr.alexandreklotz.quickdesklite.model.Utilisateur;
 import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
 import fr.alexandreklotz.quickdesklite.repository.TeamRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
+import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +25,14 @@ public class AdmnController {
     private AdmnRepository admnRepository;
     private TeamRepository teamRepository;
     private TicketRepository ticketRepository;
+    private UtilisateurRepository utilisateurRepository;
 
     @Autowired
-    AdmnController (AdmnRepository admnRepository, TeamRepository teamRepository, TicketRepository ticketRepository){
+    AdmnController (AdmnRepository admnRepository, TeamRepository teamRepository, TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository){
         this.admnRepository = admnRepository;
         this.teamRepository = teamRepository;
         this.ticketRepository = ticketRepository;
+        this.utilisateurRepository = utilisateurRepository;
     }
 
     ////////////////
@@ -58,6 +62,11 @@ public class AdmnController {
     @JsonView(CustomJsonView.AdmnView.class)
     @PostMapping("/admin/administrateurs/new")
     public ResponseEntity<String> newAdmin (@RequestBody Admn admn){
+
+        Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(admn.getAdmnLogin());
+        if(userBdd.isPresent()){
+            return ResponseEntity.badRequest().body("The specified login is already in use by a standard user.");
+        }
 
         Optional<Team> teamBdd = teamRepository.findById(admn.getTeam().getId());
         if(teamBdd.isPresent()){

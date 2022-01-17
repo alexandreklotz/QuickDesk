@@ -64,7 +64,7 @@ public class CommentController {
 
     @JsonView(CustomJsonView.CommentView.class)
     @PostMapping("/ticket/{ticketId}/comment/new/{userId}")
-    public void newComment (@PathVariable Long ticketId,
+    public ResponseEntity<String> newComment (@PathVariable Long ticketId,
                             @PathVariable UUID userId,
                             @RequestBody Comment comment){
 
@@ -91,7 +91,6 @@ public class CommentController {
                 commentRepository.saveAndFlush(comment);
 
             } else {
-
                 Optional<Admn> admnBdd = admnRepository.findById(userId);
 
                 if(admnBdd.isPresent()){
@@ -101,8 +100,10 @@ public class CommentController {
                     commentRepository.saveAndFlush(comment);
                 }
             }
+        } else {
+            return ResponseEntity.badRequest().body("The specified ticket cannot be found.");
         }
-
+        return ResponseEntity.ok("Comment added.");
     }
 
 

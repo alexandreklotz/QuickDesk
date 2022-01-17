@@ -54,8 +54,9 @@ public class DeviceController {
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @PostMapping("/devices/new")
+    @PostMapping("/device/new")
     public ResponseEntity<String> newDevice(@RequestBody Device device){
+
         if(device.getDeviceUtilisateurs() != null){
             for(Utilisateur utilisateur : device.getDeviceUtilisateurs()){
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
@@ -64,6 +65,7 @@ public class DeviceController {
                 }
             }
         }
+
         device.setDeviceCreated(LocalDateTime.now());
         deviceRepository.saveAndFlush(device);
         return ResponseEntity.ok(device.getDeviceName() + " successfully created.");

@@ -1,8 +1,16 @@
-# QuickDesk Lite Development Changelog
+# QuickDesk Lite Coding Changelog
+***
+## 17/01/2022
+* The PostMethod in "CommentController" has been slightly modified to return a ResponseEntity depending on the outcome of the request.
+* "admnMailAddr" field added in Admn class. This field and the admnLogin field have been set as unique fields to avoid duplicates.
+* "utilLogin" and "utilMailAddr" have been set as unique fields to avoid duplicates.
+* ID field in "Team" has been migrated from Long to UUID.
+* Created a "findWithLogin" in "AdmnRepository" and "UtilisateurRepository" to verify that the login from the JSON form doesn't already exist. I had to do this since Admn and Utilisateur are two different entities.
+
+All the functionalities are working as intended.
 ***
 ## 13/01/2022
-* The ID field in Utilisateur has been migrated to UUID from Long.
-* The PostMapping in CommentController has been modified accordingly to the latest modifications.
+* The ID field in Utilisateur has been migrated from Long to UUID.
 * The post method in CommentController has been modified. It hasn't been tested yet but it should work. It will now use the UUID to determine if the user creating a comment is either a user or an admin.
 * Other quick fixes and modifications have been done.
 
@@ -11,7 +19,7 @@
 ## 06/01/2022
 * A few modifications in the TicketController have been done. The user which owns the ticket is now verified by the repository findById method before assigning it to the ticket. If it doesn't exist, it will return an error. The method type has been modified from "void" to "ResponseEntity".
 * The same modification has been done in other controllers aswell. The "void" method type for Post requests have been modified to ResponseEntity to keep the user/admin updated if everything worked properly or not.
-* New String value has been created in the "Utilisateur" entity => utilMailaddr. This String will be used to store the user's mail address to send him notifications.
+* New String value has been created in the "Utilisateur" entity => utilMailAddr. This String will be used to store the user's mail address to send him notifications.
 * Creation of a new class : "Admn" (Model, Controller & Repository). This class has been created because assigning a technician/admin to a ticket was impossible before unless we would change the ticket owner. Now, the ticket can be owned by the user and it can be assigned to a tech/admin __at the same time__.
 * Creation of a new LocalDateTime variable in the "Ticket" model => ticketLastModified. Everytime a ticket will be modified, the lastModified variable will be updated to the time at which the update has been made.
 * The Post method in TicketController was generating an HTTP error following the implementation of the Admn object. It has been corrected.
