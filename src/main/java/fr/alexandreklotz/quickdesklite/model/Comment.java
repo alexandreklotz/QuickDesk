@@ -51,12 +51,6 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_id")
     private Utilisateur utilisateur;
 
-    //A comment can be created by a single tech/admin only
-    @JsonView(CustomJsonView.CommentView.class)
-    @ManyToOne
-    @JoinColumn(name = "admn_id")
-    private Admn admin;
-
     /////////////////////
     //Getters & Setters//
     /////////////////////
@@ -102,11 +96,4 @@ public class Comment implements Serializable {
         this.utilisateur = utilisateur;
     }
 
-    public Admn getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admn admin) {
-        this.admin = admin;
-    }
 }

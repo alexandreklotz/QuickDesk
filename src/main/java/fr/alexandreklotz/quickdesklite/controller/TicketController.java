@@ -1,10 +1,10 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import fr.alexandreklotz.quickdesklite.model.Admn;
+import fr.alexandreklotz.quickdesklite.model.Roles;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
+import fr.alexandreklotz.quickdesklite.repository.RolesRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -24,13 +24,13 @@ public class TicketController {
 
     private TicketRepository ticketRepository;
     private UtilisateurRepository utilisateurRepository;
-    private AdmnRepository admnRepository;
+    private RolesRepository rolesRepository;
 
     @Autowired
-    TicketController (TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, AdmnRepository admnRepository){
+    TicketController (TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, RolesRepository rolesRepository){
         this.utilisateurRepository = utilisateurRepository;
         this.ticketRepository = ticketRepository;
-        this.admnRepository = admnRepository;
+        this.rolesRepository = rolesRepository;
     }
 
     ////////////////
@@ -56,7 +56,6 @@ public class TicketController {
     }
 
 
-
     @JsonView(CustomJsonView.TicketView.class)
     @PostMapping("/ticket/new")
     public ResponseEntity<String> newTicket(@RequestBody Ticket ticket){
@@ -69,12 +68,13 @@ public class TicketController {
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
 
         if(ticket.getUtilisateur() != null){
-            Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
-            if(userBdd.isPresent()){
-                ticket.setUtilisateur(userBdd.get());
-            } else {
-                return ResponseEntity.badRequest().body("The user trying to create this ticket doesn't exist.");
-            }
+                Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
+                if(userBdd.isPresent()){
+                    ticket.setUtilisateur(userBdd.get());
+                    return ResponseEntity.ok(userBdd.get().getUtilLogin() + " has been added to the ticket.");
+                } else {
+                    return ResponseEntity.badRequest().body("One of the specified users doesn't exist.");
+                }
         }
 
         if(ticket.getTicketPriority() != null){
@@ -86,11 +86,16 @@ public class TicketController {
         }
 
         if(ticket.getAssignedAdmin() != null){
-            Optional<Admn> admnBdd = admnRepository.findById(ticket.getAssignedAdmin().getId());
-            if(admnBdd.isPresent()){
-                ticket.setAssignedAdmin(admnBdd.get());
+            Optional<Utilisateur> adminBdd = utilisateurRepository.findById(ticket.getAssignedAdmin());
+            if (adminBdd.isPresent()) {
+                Optional<Roles> roleAdmin = rolesRepository.findById(adminBdd.get().getRole().getId());
+                if(roleAdmin.get().getRoleName() == "ADMIN") {
+                    ticket.setAssignedAdmin(adminBdd.get().getId());
+                } else {
+                    return ResponseEntity.badRequest().body("The user you're trying to assign this ticket to isn't an admin.");
+                }
             } else {
-                return ResponseEntity.badRequest().body("The specified admin doesn't exist.");
+                return ResponseEntity.badRequest().body("The admin you're trying to assign this ticket to doesn't exist.");
             }
         }
 
@@ -139,22 +144,31 @@ public class TicketController {
             }
 
             if(ticket.getUtilisateur() != null) {
-                Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
-                if(userBdd.isPresent()){
-                    ticketBdd.get().setUtilisateur(userBdd.get());
-                }
+                    Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
+                    if(userBdd.isPresent()){
+                        ticketBdd.get().setUtilisateur(userBdd.get());
+                    }
             }
 
-            if(ticket.getAssignedAdmin() != null){
-                Optional<Admn> admnBdd = admnRepository.findById(ticket.getAssignedAdmin().getId());
-                if(admnBdd.isPresent()){
-                    ticketBdd.get().setAssignedAdmin(admnBdd.get());
+            if(ticket.getAssignedAdmin() != null) {
+                Optional<Utilisateur> adminBdd = utilisateurRepository.findById(ticket.getAssignedAdmin());
+                if (adminBdd.isPresent()) {
+                    Optional<Roles> roleAdmin = rolesRepository.findById(adminBdd.get().getRole().getId());
+                    if(roleAdmin.get().getRoleName() == "ADMIN") {
+                        ticket.setAssignedAdmin(adminBdd.get().getId());
+                    } else {
+                        return ResponseEntity.badRequest().body("The user you're trying to assign this ticket to isn't an admin.");
+                    }
+                } else {
+                    return ResponseEntity.badRequest().body("The admin you're trying to assign this ticket to doesn't exist.");
                 }
+            } else if (ticket.getAssignedAdmin() == null) {
+                ticketBdd.get().setAssignedAdmin(null);
             }
 
             ticketRepository.save(ticketBdd.get());
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(ticketBdd.get().getTicketTitle() + " has been updated.");
         } else {
             return ResponseEntity.noContent().build();
         }

@@ -38,6 +38,10 @@ public class Team {
     @Column(nullable = false)
     private LocalDateTime teamDateCreated;
 
+    @JsonView(CustomJsonView.TeamView.class)
+    @Column
+    private boolean techTeam;
+
     ///////////////
     //Constructor//
     ///////////////
@@ -52,11 +56,6 @@ public class Team {
     @JsonView(CustomJsonView.TeamView.class)
     @OneToMany(mappedBy = "team")
     private Set<Utilisateur> utilisateurs;
-
-    //A team can have multiple admins/techs but a tech/admin can only be in one team
-    @JsonView(CustomJsonView.TeamView.class)
-    @OneToMany(mappedBy = "team")
-    private Set<Admn> admins;
 
 
     /////////////////////
@@ -96,6 +95,14 @@ public class Team {
         this.teamDateCreated = teamDateCreated;
     }
 
+    public boolean isTechTeam() {
+        return techTeam;
+    }
+
+    public void setTechTeam(boolean techTeam) {
+        this.techTeam = techTeam;
+    }
+
     public Set<Utilisateur> getUtilisateurs() {
         return utilisateurs;
     }
@@ -104,11 +111,4 @@ public class Team {
         this.utilisateurs = utilisateurs;
     }
 
-    public Set<Admn> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(Set<Admn> admins) {
-        this.admins = admins;
-    }
 }

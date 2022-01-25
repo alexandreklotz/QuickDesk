@@ -1,16 +1,17 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import fr.alexandreklotz.quickdesklite.model.Admn;
+import fr.alexandreklotz.quickdesklite.model.Roles;
 import fr.alexandreklotz.quickdesklite.model.Team;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
+import fr.alexandreklotz.quickdesklite.repository.RolesRepository;
 import fr.alexandreklotz.quickdesklite.repository.TeamRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,14 +26,16 @@ public class UtilisateurController {
     private UtilisateurRepository utilisateurRepository;
     private TeamRepository teamRepository;
     private TicketRepository ticketRepository;
-    private AdmnRepository admnRepository;
+    private PasswordEncoder passwordEncoder;
+    private RolesRepository rolesRepository;
 
     @Autowired
-    UtilisateurController (UtilisateurRepository utilisateurRepository, TeamRepository teamRepository, TicketRepository ticketRepository, AdmnRepository admnRepository){
+    UtilisateurController (UtilisateurRepository utilisateurRepository, TeamRepository teamRepository, TicketRepository ticketRepository, PasswordEncoder passwordEncoder, RolesRepository rolesRepository){
         this.ticketRepository = ticketRepository;
         this.teamRepository = teamRepository;
         this.utilisateurRepository = utilisateurRepository;
-        this.admnRepository = admnRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.rolesRepository = rolesRepository;
     }
 
     ////////////////
@@ -64,9 +67,9 @@ public class UtilisateurController {
     @PostMapping("/utilisateur/new")
     public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
 
-        Optional<Admn> admnBdd = admnRepository.findAdmnWithLogin(utilisateur.getUtilLogin());
-        if(admnBdd.isPresent()){
-            return ResponseEntity.badRequest().body("The specified login is already in use by an admin.");
+        Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(utilisateur.getUtilLogin());
+        if(userBdd.isPresent()){
+            return ResponseEntity.badRequest().body("The specified login is already in use.");
         }
 
         Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
@@ -74,12 +77,19 @@ public class UtilisateurController {
             utilisateur.setTeam(utilisateur.getTeam());
         }
 
+        utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
         utilisateur.setCreationDate(LocalDateTime.now());
+        utilisateur.setUtilEnabled(true);
 
-        if(utilisateur.getUserType() == null){
-            utilisateur.setUserType(Utilisateur.UserType.USER);
-        } else {
-            utilisateur.setUserType(utilisateur.getUserType());
+
+        if(utilisateur.getRole() == null){
+            Roles roleBdd = rolesRepository.getById(4L);
+            utilisateur.setRole(roleBdd);
+        } else if (utilisateur.getRole() != null){
+            Optional<Roles> roleBdd = rolesRepository.findById(utilisateur.getRole().getId());
+            if(roleBdd.isPresent()){
+                utilisateur.setRole(roleBdd.get());
+            }
         }
 
         utilisateurRepository.saveAndFlush(utilisateur);
@@ -93,9 +103,14 @@ public class UtilisateurController {
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);
         if(userBdd.isPresent()){
-            if (utilisateur.getUserType() != null){
-                userBdd.get().setUserType(utilisateur.getUserType());
+
+            if (utilisateur.getRole() != null){
+                Optional<Roles> roleBdd = rolesRepository.findById(utilisateur.getRole().getId());
+                if(roleBdd.isPresent()){
+                    utilisateur.setRole(roleBdd.get());
+                }
             }
+
             if (utilisateur.getTeam() != null){
                 Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
                 if(teamBdd.isPresent()){
@@ -109,7 +124,7 @@ public class UtilisateurController {
                 userBdd.get().setUtilLastName(utilisateur.getUtilLastName());
             }
             if(utilisateur.getUtilPwd() != null){
-                userBdd.get().setUtilPwd(utilisateur.getUtilPwd());
+                userBdd.get().setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
             }
             if(utilisateur.getUtilLogin() != null){
                 userBdd.get().setUtilLogin(utilisateur.getUtilLogin());

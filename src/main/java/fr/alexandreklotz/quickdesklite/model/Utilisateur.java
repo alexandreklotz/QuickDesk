@@ -16,11 +16,6 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class Utilisateur {
 
-    public enum UserType {
-        USER,
-        VIP
-    }
-
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO,
@@ -53,14 +48,14 @@ public class Utilisateur {
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilMailAddr;
 
-    @Column(nullable = false)
+    @Column()
     @JsonView(CustomJsonView.UtilisateurView.class)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
-    private UserType userType;
+    private boolean utilEnabled;
 
     ///////////////
     //Constructor//
@@ -72,6 +67,12 @@ public class Utilisateur {
     //Relations//
     /////////////
 
+    //A user can only have one role but a role can be assigned to multiple users
+    @JsonView(CustomJsonView.UtilisateurView.class)
+    @ManyToOne
+    @JoinColumn(name = "roles_id")
+    private Roles role;
+
     //A user can be part of only one team but a team can have multiple users
     @JsonView(CustomJsonView.UtilisateurView.class)
     @ManyToOne
@@ -81,12 +82,12 @@ public class Utilisateur {
     //A user can create multiple tickets but a ticket can only be assigned to one user
     @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
-    private Set<Ticket> createdTickets;
+    private Set<Ticket> tickets;
 
     //A user, whatever his role is, can create multiple comments but a comment can only be created/linked by/to one user.
     @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
-    private Set<Comment> postedComments;
+    private Set<Comment> comments;
 
     //A user can only be assigned to one device but a device can have multiple users
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -155,12 +156,20 @@ public class Utilisateur {
         this.creationDate = creationDate;
     }
 
-    public UserType getUserType() {
-        return userType;
+    public boolean isUtilEnabled() {
+        return utilEnabled;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setUtilEnabled(boolean utilEnabled) {
+        this.utilEnabled = utilEnabled;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     public Team getTeam() {
@@ -171,20 +180,20 @@ public class Utilisateur {
         this.team = team;
     }
 
-    public Set<Ticket> getCreatedTickets() {
-        return createdTickets;
+    public Set<Ticket> getTickets() {
+        return tickets;
     }
 
-    public void setCreatedTickets(Set<Ticket> tickets) {
-        this.createdTickets = tickets;
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
-    public Set<Comment> getPostedComments() {
-        return postedComments;
+    public Set<Comment> getComments() {
+        return comments;
     }
 
-    public void setPostedComments(Set<Comment> comments) {
-        this.postedComments = comments;
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public Device getDevice() {

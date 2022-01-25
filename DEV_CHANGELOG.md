@@ -1,5 +1,41 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 25/01/2022
+`Security implementation still ongoing.`
+* The "UserType" management in the Post and Put Mappings in "UtilisateurController" have been updated -> The usertype has been replaced by the new Roles entity
+* Some variables have been refactored.
+* New boolean has been created in the "Team" entity -> techTeam. This boolean will allow the admins to create specific technical teams. This boolean will also be used to filter teams that can handle tickets.
+* New UUID value "assignedAdmin" has been created in the "Ticket" entity. This variable will contain the assigned admin's UUID.
+* The "TECH" role has been removed. There will only be admins.
+* The "ManyToMany" between "Utilisateur" and "Ticket" has been modified to a "ManyToOne / OneToMany". The "assignedAdmin" value is the main reason for this change.
+
+I decided to finally push my work to github since i will not rollback these changes. Security should be working fine but i can't authenticate
+on my API through postman for some reason. I therefore can't send JSON forms to my API with this tool. Once i will have found a way to get postman to work,
+i'll finish my testing and finalize some requests. I will then finalize security and start developing the front-end.
+***
+## 22/01/2022
+`Security implementation is ongoing. Most of the modifications below have been done as a consequence of that.`<br>
+* "Admn" and its controller/repository/relations have been deleted, it will definitely generate issues with security.
+* The relation between "Ticket" and "Utilisateur" will be modified to a ManyToMany.
+* "utilEnabled" boolean has been created in the "Utilisateur" entity. The PostMapping to create a new user has been modified accordingly.
+* Creation of a new entity "Roles". It will be required to retrieve the role of each user to get the security to work properly. The UserType enum and AdmnType enum have been deleted, this Roles entity will contain the 4 user types : vip, user, tech and admin.
+* "AdmnView" in CustomJsonView has been replaced by "RolesView"
+* Creation of "import.sql". It will allow me to populate the database with default users etc. The "application.properties" file has been modified to generate the schema.
+* The "creationDate" property in "Utilisateur" is now nullable. The frontend and PostMapping will be setup in a way to automatically add the creation date in this field.
+* The Post and Put Mappings in the "TicketController" have been updated accordingly to the ManyToMany relation between "Utilisateur" and "Ticket".
+***
+## 18/01/2022
+`Implementation of spring security has been started on this day.`
+* Security dependencies have been added in the pom.xml file.
+* Creation of a new package : `Configuration`. This package will contain all the config files for the security dependencies.
+* A passwordencoder bean has been created in the SpringSecurityConfig file. All users/admins passwords will be encrypted when created.
+
+Today's work hasn't been pushed to github since i'm still experimenting. I don't want to rollback the repo if anything goes wrong.
+A few things are still unclear to me regarding security and stuff, i need to see how i can use JDBC users to login.
+I might need to delete the "Admn" entity and its controller/repository, it may cause trouble regarding security implementation. It would also simplify
+the way this software will work. A few methods will need to be modified if i delete this entity but nothing impossible.
+I think that i'll also keep using UUIDs for "Utilisateur" and "Team".
+***
 ## 17/01/2022
 * The PostMethod in "CommentController" has been slightly modified to return a ResponseEntity depending on the outcome of the request.
 * "admnMailAddr" field added in Admn class. This field and the admnLogin field have been set as unique fields to avoid duplicates.

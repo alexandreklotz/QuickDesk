@@ -1,11 +1,9 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import fr.alexandreklotz.quickdesklite.model.Admn;
 import fr.alexandreklotz.quickdesklite.model.Comment;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.AdmnRepository;
 import fr.alexandreklotz.quickdesklite.repository.CommentRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +24,12 @@ public class CommentController {
     private TicketRepository ticketRepository;
     private CommentRepository commentRepository;
     private UtilisateurRepository utilisateurRepository;
-    private AdmnRepository admnRepository;
 
     @Autowired
-    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository, AdmnRepository admnRepository){
+    CommentController(TicketRepository ticketRepository, CommentRepository commentRepository, UtilisateurRepository utilisateurRepository){
         this.ticketRepository = ticketRepository;
         this.commentRepository = commentRepository;
         this.utilisateurRepository = utilisateurRepository;
-        this.admnRepository = admnRepository;
     }
 
     ////////////////
@@ -68,42 +62,17 @@ public class CommentController {
                             @PathVariable UUID userId,
                             @RequestBody Comment comment){
 
-        /*Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
-        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
+        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
 
         if(ticketBdd.isPresent() && userBdd.isPresent()){
             comment.setCommentDate(LocalDateTime.now());
             comment.setTicket(ticketBdd.get());
             comment.setUtilisateur(userBdd.get());
             commentRepository.saveAndFlush(comment);
-        }*/
-
-        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
-
-        if(ticketBdd.isPresent()){
-
-            Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
-
-            if(userBdd.isPresent()){
-                comment.setCommentDate(LocalDateTime.now());
-                comment.setTicket(ticketBdd.get());
-                comment.setUtilisateur(userBdd.get());
-                commentRepository.saveAndFlush(comment);
-
-            } else {
-                Optional<Admn> admnBdd = admnRepository.findById(userId);
-
-                if(admnBdd.isPresent()){
-                    comment.setCommentDate(LocalDateTime.now());
-                    comment.setTicket(ticketBdd.get());
-                    comment.setAdmin(admnBdd.get());
-                    commentRepository.saveAndFlush(comment);
-                }
-            }
-        } else {
-            return ResponseEntity.badRequest().body("The specified ticket cannot be found.");
+            return ResponseEntity.ok("Comment created");
         }
-        return ResponseEntity.ok("Comment added.");
+        return ResponseEntity.badRequest().body("Comment couldn't be created");
     }
 
 

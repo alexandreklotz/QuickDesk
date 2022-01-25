@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -94,6 +95,10 @@ public class Ticket {
     @Column(nullable = false)
     private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin one created ? Need to define this
 
+    @JsonView(CustomJsonView.TicketView.class)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID assignedAdmin;
+
     ///////////////
     //Constructor//
     ///////////////
@@ -115,16 +120,10 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket")
     private Set<Comment> comments;
 
-    //A ticket can be assigned to only one admin but an admin can be assigned to multiple tickets
-    @JsonView(CustomJsonView.TicketView.class)
-    @ManyToOne
-    @JoinColumn(name = "admn_id")
-    private Admn assignedAdmin;
 
     /////////////////////
     //Getters & Setters//
     /////////////////////
-
 
     public Long getId() {
         return id;
@@ -214,6 +213,14 @@ public class Ticket {
         this.editableTicket = editableTicket;
     }
 
+    public UUID getAssignedAdmin() {
+        return assignedAdmin;
+    }
+
+    public void setAssignedAdmin(UUID assignedAdmin) {
+        this.assignedAdmin = assignedAdmin;
+    }
+
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
@@ -230,11 +237,4 @@ public class Ticket {
         this.comments = comments;
     }
 
-    public Admn getAssignedAdmin() {
-        return assignedAdmin;
-    }
-
-    public void setAssignedAdmin(Admn assignedAdmin) {
-        this.assignedAdmin = assignedAdmin;
-    }
 }
