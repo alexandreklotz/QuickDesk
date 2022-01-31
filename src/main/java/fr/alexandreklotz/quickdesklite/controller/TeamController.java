@@ -85,7 +85,7 @@ public class TeamController {
                 for(Utilisateur utilisateur : team.getUtilisateurs()){
                     Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
                     if(userBdd.isPresent()){
-                        userBdd.get().setTeam(team);
+                        userBdd.get().setTeam(teamBdd.get());
                     }
                 }
             }

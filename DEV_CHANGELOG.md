@@ -1,5 +1,29 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 31/01/2022
+* Creation of `UserDetailsServiceCustom` -> Security implementation
+* Creation of `UserDetailsCustom` -> Security implementation
+* "service" package has been deleted.
+
+The next step is the implementation of JWTs. The methods on each controller will be modified accordingly.
+Each PostMapping link will be modified aswell in order to restrict some requests to admins only and others to users.
+***
+## 28/01/2022
+* An antMatcher has been added in the security config
+Haven't done anything else, next modifications will be linked to the implementation of the security module.
+I'm still documenting myself about it since there are a few things that i don't know well.
+***
+## 27/01/2022
+`Security implementation still ongoing and i'm also reading my previous classes again in order to solve the
+minor issues i'm facing and get the whole thing working as intended.`
+* The SQL query in "SpringSecurityConfig" to retrieve users from the database has been updated following the implementation of "Roles".
+* A quick fix has been done in "TeamController" within the PutMapping to update an existing team.
+
+Have tried a few things but i can't send any kind of request with Postman since i implemented security. It works totally fine
+when i access my API from my browser but postman apparently refuses to authenticate and it keeps returning me the
+login page html code.
+__Today's work will not be pushed since only minor changes have been done.__
+***
 ## 25/01/2022
 `Security implementation still ongoing.`
 * The "UserType" management in the Post and Put Mappings in "UtilisateurController" have been updated -> The usertype has been replaced by the new Roles entity

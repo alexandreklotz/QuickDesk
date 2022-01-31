@@ -19,6 +19,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    UserDetailsServiceCustom userDetailsServiceCustom;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsServiceCustom)
+                .and()
+                .inMemoryAuthentication()
+                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+    }
+
     /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -27,23 +38,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("springadmin").password(passwordEncoder().encode("springadm")).roles("ADMIN");
     }*/
 
-    @Override
+    /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .usersByUsernameQuery("SELECT util_login, util_pwd, util_enabled FROM Utilisateur WHERE util_login = ?")
-                .authoritiesByUsernameQuery("SELECT user_type FROM Utilisateur WHERE util_login = ?")
+                .authoritiesByUsernameQuery("SELECT roles_id FROM Utilisateur WHERE util_login = ?")
                 .and()
                 .inMemoryAuthentication()
                 .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
-    }
+    }*/
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasRole("USER, VIP")
+                .antMatchers("/").hasRole("USER, VIP, ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin();
