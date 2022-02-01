@@ -37,14 +37,14 @@ public class CommentController {
     ////////////////
 
     @JsonView(CustomJsonView.CommentView.class)
-    @GetMapping("/comments/all")
+    @GetMapping("/admin/comments/all")
     public ResponseEntity<List<Comment>> getAllComments(){
         return ResponseEntity.ok(commentRepository.findAll());
     }
 
 
     @JsonView(CustomJsonView.CommentView.class)
-    @GetMapping("/comments/{commentid}")
+    @GetMapping("/admin/comments/{commentid}")
     public ResponseEntity<Comment> getSpecifiedComment (@PathVariable Long commentid){
 
         Optional<Comment> commentBdd = commentRepository.findById(commentid);
@@ -72,24 +72,29 @@ public class CommentController {
             commentRepository.saveAndFlush(comment);
             return ResponseEntity.ok("Comment created");
         }
-        return ResponseEntity.badRequest().body("Comment couldn't be created");
+        return ResponseEntity.badRequest().body("Comment couldn't be created.");
     }
 
 
-
     @JsonView(CustomJsonView.CommentView.class)
-    @DeleteMapping("/ticket/{ticketid}/comment/{commentid}/delete")
+    @DeleteMapping("/{userid}/ticket/{ticketid}/comment/{commentid}/delete")
     public String deleteComment(@PathVariable Long ticketid,
-                                @PathVariable Long commentid){
+                                @PathVariable Long commentid,
+                                @PathVariable UUID userid){
 
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
         Optional<Comment> commentBdd = commentRepository.findById(commentid);
+        Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
 
         if(ticketBdd.isPresent() && commentBdd.isPresent()){
-            commentRepository.deleteById(commentid);
-            return "This comment has been successfully deleted.";
+            if(commentBdd.get().getUtilisateur() == userBdd.get()){
+                commentRepository.deleteById(commentid);
+                return "This comment has been successfully deleted.";
+            } else {
+                return "Either the specified ticket or comment doesn't exist.";
+            }
         } else {
-            return "The comment you're trying to delete doesn't exist.";
+            return "You're trying to delete a comment that wasn't created by you or that doesn't exist.";
         }
     }
 }

@@ -31,13 +31,13 @@ public class TeamController {
     ////////////////
 
     @JsonView(CustomJsonView.TeamView.class)
-    @GetMapping("/team/all")
+    @GetMapping("/admin/team/all")
     public ResponseEntity<List<Team>> getAllTeams(){
         return ResponseEntity.ok(teamRepository.findAll());
     }
 
     @JsonView(CustomJsonView.TeamView.class)
-    @GetMapping("/team/{teamid}")
+    @GetMapping("/admin/team/{teamid}")
     public ResponseEntity<Team> getSpecifiedTeam(@PathVariable UUID teamid){
 
         Optional<Team> teamBdd = teamRepository.findById(teamid);
@@ -50,7 +50,7 @@ public class TeamController {
     }
 
     @JsonView(CustomJsonView.TeamView.class)
-    @PostMapping("/team/new")
+    @PostMapping("/admin/team/new")
     public ResponseEntity<String> newTeam(@RequestBody Team team){
 
         if(team.getUtilisateurs() != null) {
@@ -69,7 +69,7 @@ public class TeamController {
     }
 
     @JsonView(CustomJsonView.TeamView.class)
-    @PutMapping("/team/update/{teamId}")
+    @PutMapping("/admin/team/update/{teamId}")
     public ResponseEntity<String> updateTeam(@PathVariable UUID teamId, @RequestBody Team team){
 
         Optional<Team> teamBdd = teamRepository.findById(teamId);
@@ -97,7 +97,7 @@ public class TeamController {
     }
 
     @JsonView(CustomJsonView.TeamView.class)
-    @DeleteMapping("/team/delete/{teamId}")
+    @DeleteMapping("/admin/team/delete/{teamId}")
     public String deleteTeam (@PathVariable UUID teamId){
 
         Optional<Team> teamBdd = teamRepository.findById(teamId);

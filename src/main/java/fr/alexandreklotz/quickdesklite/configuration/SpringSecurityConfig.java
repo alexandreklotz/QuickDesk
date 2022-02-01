@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -19,8 +21,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    UserDetailsServiceCustom userDetailsServiceCustom;
+
+    final UserDetailsServiceCustom userDetailsServiceCustom;
+
+    public SpringSecurityConfig(UserDetailsServiceCustom userDetailsServiceCustom){
+        this.userDetailsServiceCustom = userDetailsServiceCustom;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,35 +36,29 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
     }
 
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("springuser").password(passwordEncoder().encode("spring123")).roles("USER")
-                .and()
-                .withUser("springadmin").password(passwordEncoder().encode("springadm")).roles("ADMIN");
-    }*/
-
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .usersByUsernameQuery("SELECT util_login, util_pwd, util_enabled FROM Utilisateur WHERE util_login = ?")
-                .authoritiesByUsernameQuery("SELECT roles_id FROM Utilisateur WHERE util_login = ?")
-                .and()
-                .inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
-    }*/
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/user").hasRole("USER, VIP")
-                .antMatchers("/").hasRole("USER, VIP, ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin();
+        http
+                .cors().configurationSource(httpServletRequest -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.applyPermitDefaultValues();
+                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
+                    corsConfiguration.setAllowedHeaders(
+                            Arrays.asList("X-Requested-With", "Origin", "Content-Type",
+                                    "Accept", "Authorization","Access-Control-Allow-Origin"));
+                    return corsConfiguration;
+                })
+
+                .and().csrf().disable()
+//TODO : Check if httpBasic can be removed.
+                .httpBasic()
+                    .and().authorizeRequests()
+                    .antMatchers("/admin").hasRole("ADMIN")
+                    .antMatchers("/user").hasRole("USER, VIP")
+                    .antMatchers("/").hasRole("USER, VIP, ADMIN")
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin();
     }
 
     @Bean

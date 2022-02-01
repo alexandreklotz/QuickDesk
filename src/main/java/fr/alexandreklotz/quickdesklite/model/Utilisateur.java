@@ -44,7 +44,7 @@ public class Utilisateur {
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilPwd;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilMailAddr;
 

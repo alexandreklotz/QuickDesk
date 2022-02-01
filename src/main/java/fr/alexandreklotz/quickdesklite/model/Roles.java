@@ -18,7 +18,7 @@ public class Roles {
     private Long id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.RolesView.class)
+    @JsonView({CustomJsonView.RolesView.class, CustomJsonView.UtilisateurView.class})
     private String roleName;
 
     ///////////////

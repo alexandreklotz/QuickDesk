@@ -34,13 +34,13 @@ public class DeviceController {
     ////////////////
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @GetMapping("/devices/all")
+    @GetMapping("/admin/devices/all")
     public ResponseEntity<List<Device>> getAllDevices(){
         return ResponseEntity.ok(deviceRepository.findAll());
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @GetMapping("/devices/{deviceid}")
+    @GetMapping("/admin/devices/{deviceid}")
     public ResponseEntity<Device> getSpecifiedDevice(@PathVariable Long deviceid){
 
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);
@@ -54,7 +54,7 @@ public class DeviceController {
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @PostMapping("/device/new")
+    @PostMapping("/admin/device/new")
     public ResponseEntity<String> newDevice(@RequestBody Device device){
 
         if(device.getDeviceUtilisateurs() != null){
@@ -72,7 +72,7 @@ public class DeviceController {
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @PutMapping("/device/{deviceid}/update")
+    @PutMapping("/admin/device/{deviceid}/update")
     public ResponseEntity<String> updateDevice(@PathVariable Long deviceid,
                                                @RequestBody Device device){
 
@@ -105,7 +105,7 @@ public class DeviceController {
     }
 
     @JsonView(CustomJsonView.DeviceView.class)
-    @DeleteMapping("/devices/{deviceid}/delete")
+    @DeleteMapping("/admin/devices/{deviceid}/delete")
     public String deleteDevice(@PathVariable Long deviceid){
 
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);

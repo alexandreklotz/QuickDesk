@@ -43,13 +43,13 @@ public class UtilisateurController {
     ////////////////
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @GetMapping("/utilisateur/all")
+    @GetMapping("/admin/utilisateur/all")
     public ResponseEntity<List<Utilisateur>> getAllUtilisateurs(){
         return ResponseEntity.ok(utilisateurRepository.findAll());
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @GetMapping("/utilisateur/{utilisateurid}")
+    @GetMapping("/admin/utilisateur/{utilisateurid}")
     public ResponseEntity<Utilisateur> getSpecifiedUtilisateur(@PathVariable UUID utilisateurid){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurid);
@@ -64,7 +64,7 @@ public class UtilisateurController {
 
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @PostMapping("/utilisateur/new")
+    @PostMapping("/admin/utilisateur/new")
     public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(utilisateur.getUtilLogin());
@@ -83,7 +83,7 @@ public class UtilisateurController {
 
 
         if(utilisateur.getRole() == null){
-            Roles roleBdd = rolesRepository.getById(4L);
+            Roles roleBdd = rolesRepository.getById(3L);
             utilisateur.setRole(roleBdd);
         } else if (utilisateur.getRole() != null){
             Optional<Roles> roleBdd = rolesRepository.findById(utilisateur.getRole().getId());
@@ -98,7 +98,7 @@ public class UtilisateurController {
 
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @PutMapping("/utilisateur/update/{utilisateurId}")
+    @PutMapping("/admin/utilisateur/update/{utilisateurId}")
     public ResponseEntity<String> updateUtilisateur (@PathVariable UUID utilisateurId, @RequestBody Utilisateur utilisateur){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);
@@ -137,7 +137,7 @@ public class UtilisateurController {
     }
 
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @DeleteMapping("/utilisateur/delete/{utilisateurId}")
+    @DeleteMapping("/admin/utilisateur/delete/{utilisateurId}")
     public String deleteUtilisateur (@PathVariable UUID utilisateurId){
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);

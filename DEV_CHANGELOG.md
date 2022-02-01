@@ -1,5 +1,20 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 01/02/2022
+`Security implementation is nearly finished even though it remains quite basic.`
+* SpringSecurityConfig has been modified -> CorsConfiguration has been created.
+* Quick modification in "UtilisateurController" at Line 86. Update of the default role assignment when a user is created without a role.
+* CustomJsonView.Utilisateur.class has been added to "roleName" in "Roles".
+* OAuth2.0 has been removed in pom.xml. This dependency wasn't supposed to be added and it wont be used for the "Lite" version.
+* "utilMailAddr" in the "Utilisateur" model is now a nullable variable.
+* Links in controllers have been updated. "/admin" has been added to admin restricted methods, "/user" to user restricted methods.
+* The "DeleteMapping" in "CommentController" has been modified to allow the user who wrote this comment to delete it. The user won't be able to delete comment that he didn't write. Admins can delete all comments.
+<br>
+
+Controllers will be reorganized. There will be a front controller that will retrieve infos/tickets or specific things depending
+of the user's role. Some methods such as ticket and comment creation will be copied in a controller accessible to users with slightly
+different code in order to define what users can do and what they can't do (users can't close or delete tickets for example).
+***
 ## 31/01/2022
 * Creation of `UserDetailsServiceCustom` -> Security implementation
 * Creation of `UserDetailsCustom` -> Security implementation

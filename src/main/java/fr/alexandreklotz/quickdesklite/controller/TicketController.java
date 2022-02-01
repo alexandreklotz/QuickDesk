@@ -38,13 +38,13 @@ public class TicketController {
     ////////////////
 
     @JsonView(CustomJsonView.TicketView.class)
-    @GetMapping("/ticket/all")
+    @GetMapping("/admin/ticket/all")
     public ResponseEntity<List<Ticket>> getAllTickets(){
         return ResponseEntity.ok(ticketRepository.findAll());
     }
 
     @JsonView(CustomJsonView.TicketView.class)
-    @GetMapping("/ticket/{ticketid}")
+    @GetMapping("/admin/ticket/{ticketid}")
     public ResponseEntity<Ticket> getSpecifiedTicket(@PathVariable Long ticketid){
 
        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
@@ -106,7 +106,7 @@ public class TicketController {
 
 
     @JsonView(CustomJsonView.TicketView.class)
-    @PutMapping("/ticket/update/{ticketid}")
+    @PutMapping("/admin/ticket/update/{ticketid}")
     public ResponseEntity<String> updateTicket (@PathVariable Long ticketid,
                                                 @RequestBody Ticket ticket){
 
@@ -176,7 +176,7 @@ public class TicketController {
 
 
     @JsonView(CustomJsonView.TicketView.class)
-    @DeleteMapping("/ticket/delete/{ticketId}")
+    @DeleteMapping("/admin/ticket/delete/{ticketId}")
     public String deleteTicket (@PathVariable Long ticketId) {
 
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);

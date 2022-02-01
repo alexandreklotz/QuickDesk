@@ -39,7 +39,7 @@ public class Team {
     private LocalDateTime teamDateCreated;
 
     @JsonView(CustomJsonView.TeamView.class)
-    @Column
+    @Column(nullable = false)
     private boolean techTeam;
 
     ///////////////
