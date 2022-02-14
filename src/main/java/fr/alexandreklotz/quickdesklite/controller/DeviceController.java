@@ -11,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -57,13 +55,11 @@ public class DeviceController {
     @PostMapping("/admin/device/new")
     public ResponseEntity<String> newDevice(@RequestBody Device device){
 
-        if(device.getDeviceUtilisateurs() != null){
-            for(Utilisateur utilisateur : device.getDeviceUtilisateurs()){
-                Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
+        if(device.getDeviceUtilisateur() != null){
+                Optional<Utilisateur> userBdd = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
                 if(userBdd.isPresent()){
                     userBdd.get().setDevice(device);
                 }
-            }
         }
 
         device.setDeviceCreated(LocalDateTime.now());
@@ -89,13 +85,11 @@ public class DeviceController {
             if(device.getDeviceManufacturer() != null){
                 deviceBdd.get().setDeviceManufacturer(device.getDeviceManufacturer());
             }
-            if(device.getDeviceUtilisateurs() != null){
-                for(Utilisateur utilisateur : device.getDeviceUtilisateurs()){
-                    Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
+            if(device.getDeviceUtilisateur() != null){
+                    Optional<Utilisateur> userBdd = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
                     if(userBdd.isPresent()){
                         userBdd.get().setDevice(deviceBdd.get());
                     }
-                }
             }
             deviceRepository.save(deviceBdd.get());
             return ResponseEntity.ok().body(deviceBdd.get().getDeviceName() + " has been successfully updated.");

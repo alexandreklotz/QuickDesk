@@ -1,5 +1,24 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 07/02/2022
+* Modification of the relation between "Device" and "Utilisateur". It was a OneToMany and it now is a OneToOne.
+* @Override toString method created in "Utilisateur".
+* "QueueView" has been deleted in "CustomJsonView".
+* The URL to retrieve a specific ticket was previously restricted to admins only. It has been modified and will now be accessible by all users for functionality purposes.
+***
+## 04/02/2022
+* Creation of a new method in "TicketRepository" : findTicketsAssigned. This method will find tickets assigned to the specified UUID (admins).
+* Creation of a new method in "TicketRepository" : findTicketsOpened. Used to find tickets created by each user.
+* The POST Method in "TicketController" has been modified -> A responseentity.ok in an if was preventing the whole method to execute. It would stop at the responseentity.ok.
+
+Not much progress today again, tried to mess around with thymeleaf. No push.
+***
+## 03/02/2022
+`Thymeleaf dependency has been added.`
+* Creation of "HomeController'. This controller will be used to retrieve basic user info such as his name, team, and tickets. If the user is an admin, it will retrieve all the tickets he's assigned to.
+
+Not much have been done therefore i won't push the code today.
+***
 ## 01/02/2022
 `Security implementation is nearly finished even though it remains quite basic.`
 * SpringSecurityConfig has been modified -> CorsConfiguration has been created.

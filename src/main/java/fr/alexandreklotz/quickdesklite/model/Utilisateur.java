@@ -89,10 +89,10 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur")
     private Set<Comment> comments;
 
-    //A user can only be assigned to one device but a device can have multiple users
+    //A user can only be assigned to one device and a device can only be used by one user at a time
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @ManyToOne
-    @JoinColumn(name = "device_id")
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "device_id", referencedColumnName = "id")
     private Device device;
 
     /////////////////////
@@ -202,5 +202,10 @@ public class Utilisateur {
 
     public void setDevice(Device device) {
         this.device = device;
+    }
+
+    @Override
+    public String toString(){
+        return utilFirstName + " " + utilLastName;
     }
 }

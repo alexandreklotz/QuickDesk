@@ -13,6 +13,4 @@ public class CustomJsonView {
     public static class DeviceView{};
 
     public static class RolesView{};
-
-    public static class QueueView{};
 }

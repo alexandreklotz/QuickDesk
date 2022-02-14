@@ -52,8 +52,8 @@ public class Device {
 
     //A device can be assigned to multiple users but a user can only be assigned to one device
     @JsonView(CustomJsonView.DeviceView.class)
-    @OneToMany(mappedBy = "device")
-    private Set<Utilisateur> deviceUtilisateurs;
+    @OneToOne(mappedBy = "device")
+    private Utilisateur deviceUtilisateur;
 
 
     /////////////////////
@@ -109,12 +109,12 @@ public class Device {
         this.deviceCreated = deviceCreated;
     }
 
-    public Set<Utilisateur> getDeviceUtilisateurs() {
-        return deviceUtilisateurs;
+    public Utilisateur getDeviceUtilisateur() {
+        return deviceUtilisateur;
     }
 
-    public void setDeviceUtilisateurs(Set<Utilisateur> utilisateurs) {
-        this.deviceUtilisateurs = utilisateurs;
+    public void setDeviceUtilisateur(Utilisateur utilisateurs) {
+        this.deviceUtilisateur = utilisateurs;
     }
 
 }

@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -44,7 +41,7 @@ public class TicketController {
     }
 
     @JsonView(CustomJsonView.TicketView.class)
-    @GetMapping("/admin/ticket/{ticketid}")
+    @GetMapping("/ticket/{ticketid}")
     public ResponseEntity<Ticket> getSpecifiedTicket(@PathVariable Long ticketid){
 
        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
@@ -71,7 +68,6 @@ public class TicketController {
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
                 if(userBdd.isPresent()){
                     ticket.setUtilisateur(userBdd.get());
-                    return ResponseEntity.ok(userBdd.get().getUtilLogin() + " has been added to the ticket.");
                 } else {
                     return ResponseEntity.badRequest().body("One of the specified users doesn't exist.");
                 }
@@ -89,13 +85,13 @@ public class TicketController {
             Optional<Utilisateur> adminBdd = utilisateurRepository.findById(ticket.getAssignedAdmin());
             if (adminBdd.isPresent()) {
                 Optional<Roles> roleAdmin = rolesRepository.findById(adminBdd.get().getRole().getId());
-                if(roleAdmin.get().getRoleName() == "ADMIN") {
+                if(Objects.equals(roleAdmin.get().getRoleName(), "ADMIN")) {
                     ticket.setAssignedAdmin(adminBdd.get().getId());
                 } else {
                     return ResponseEntity.badRequest().body("The user you're trying to assign this ticket to isn't an admin.");
                 }
             } else {
-                return ResponseEntity.badRequest().body("The admin you're trying to assign this ticket to doesn't exist.");
+                return ResponseEntity.badRequest().body("The admin you're trying to assign to this ticket to doesn't exist.");
             }
         }
 

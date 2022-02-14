@@ -30,10 +30,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceCustom)
-                .and()
-                .inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+        auth.userDetailsService(userDetailsServiceCustom);
     }
 
     @Override
@@ -54,7 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                     .and().authorizeRequests()
                     .antMatchers("/admin").hasRole("ADMIN")
-                    .antMatchers("/user").hasRole("USER, VIP")
+                    .antMatchers("/user").hasRole("USER, VIP, ADMIN")
                     .antMatchers("/").hasRole("USER, VIP, ADMIN")
                     .anyRequest().authenticated()
                     .and()
