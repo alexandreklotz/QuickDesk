@@ -62,9 +62,11 @@ public class CommentController {
                             @PathVariable UUID userId,
                             @RequestBody Comment comment){
 
+        //Creation of two optionals, one for ticket and one for utilisateur. I will use them to create a condition.
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(userId);
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
 
+        //If the ticket and the user exist, then we create the comment.
         if(ticketBdd.isPresent() && userBdd.isPresent()){
             comment.setCommentDate(LocalDateTime.now());
             comment.setTicket(ticketBdd.get());
@@ -82,11 +84,13 @@ public class CommentController {
                                 @PathVariable Long commentid,
                                 @PathVariable UUID userid){
 
+        //Creation of an optional for each element required to create a ticket.
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
         Optional<Comment> commentBdd = commentRepository.findById(commentid);
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(userid);
 
-        if(ticketBdd.isPresent() && commentBdd.isPresent()){
+        //If the ticket + comment + user exists, we then delete the specified comment.
+        if(ticketBdd.isPresent() && commentBdd.isPresent() && userBdd.isPresent()){
             if(commentBdd.get().getUtilisateur() == userBdd.get()){
                 commentRepository.deleteById(commentid);
                 return "This comment has been successfully deleted.";

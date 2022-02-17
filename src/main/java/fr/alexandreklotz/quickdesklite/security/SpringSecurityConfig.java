@@ -1,4 +1,4 @@
-package fr.alexandreklotz.quickdesklite.configuration;
+package fr.alexandreklotz.quickdesklite.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

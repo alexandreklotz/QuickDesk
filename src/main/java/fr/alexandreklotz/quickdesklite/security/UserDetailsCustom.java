@@ -1,4 +1,4 @@
-package fr.alexandreklotz.quickdesklite.configuration;
+package fr.alexandreklotz.quickdesklite.security;
 
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
 import org.springframework.security.core.GrantedAuthority;

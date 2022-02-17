@@ -57,6 +57,7 @@ public class TicketController {
     @PostMapping("/ticket/new")
     public ResponseEntity<String> newTicket(@RequestBody Ticket ticket){
 
+        //We first set some values automatically to avoid any user interference. The admin team will then proceed to the assignment of the ticket.
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
         ticket.setEditableTicket(true);
         ticket.setTicketDateCreated(LocalDateTime.now());
@@ -64,15 +65,19 @@ public class TicketController {
         ticket.setTicketType(Ticket.TicketType.REQUEST);
         ticket.setTicketStatus(Ticket.TicketStatus.OPEN);
 
+        //We check if the ticket being created has a user assigned to it. If yes, we then check if it exists and if it does we assign the ticket to the user
+        //using the utilisateurRepository. If it doesn't exist, we then stop the creation process and send an error. We also send an error if this field is blank.
         if(ticket.getUtilisateur() != null){
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
                 if(userBdd.isPresent()){
                     ticket.setUtilisateur(userBdd.get());
                 } else {
-                    return ResponseEntity.badRequest().body("One of the specified users doesn't exist.");
+                    return ResponseEntity.badRequest().body("The specified user doesn't exist.");
                 }
+                return ResponseEntity.badRequest().body("The ticket has no user currently creating it. This field has been left blank.");
         }
 
+        //The user can specify the priority of his request. However, if he doesn't specify it we then automatically set it to LOW.
         if(ticket.getTicketPriority() != null){
             ticket.setTicketPriority(ticket.getTicketPriority());
         } else if (ticket.getTicketPriority() == null){
@@ -81,6 +86,9 @@ public class TicketController {
             return ResponseEntity.badRequest().body("Invalid ticket priority.");
         }
 
+        //This field is optional. It can be left blank since a user only creates a ticket but is forbidden to specify the admin he wants assigned to his ticket.
+        //If this field isn't blank, we check if the specified admin exists by using the repository and if it does we check his role. If he has the admin role,
+        //he then can be assigned to the ticket. Only admins will be able to assign tickets to admins. Maybe VIPs will.
         if(ticket.getAssignedAdmin() != null){
             Optional<Utilisateur> adminBdd = utilisateurRepository.findById(ticket.getAssignedAdmin());
             if (adminBdd.isPresent()) {
@@ -106,6 +114,7 @@ public class TicketController {
     public ResponseEntity<String> updateTicket (@PathVariable Long ticketid,
                                                 @RequestBody Ticket ticket){
 
+        //We first check that the ticket exists and if it does we update the specified fields.
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
         if(ticketBdd.isPresent()){
 
@@ -123,6 +132,8 @@ public class TicketController {
                 ticketBdd.get().setTicketPriority(ticket.getTicketPriority());
             }
 
+            //We check if the ticket's status isn't null and if it's equal to CLOSED. If it isn't, we modify its status by replacing it with the one specified in the request.
+            //If it isn't null and equal to CLOSED, we set the ClosedDate to this exact moment and set the Editable boolean to false to prevent this ticket from being edited after being closed.
             if(ticket.getTicketStatus() != null && ticket.getTicketStatus() != Ticket.TicketStatus.CLOSED){
                 ticketBdd.get().setTicketStatus(ticket.getTicketStatus());
             } else if (ticket.getTicketStatus() != null && ticket.getTicketStatus() == Ticket.TicketStatus.CLOSED) {
@@ -139,13 +150,17 @@ public class TicketController {
                 ticketBdd.get().setTicketDescription(ticket.getTicketDescription());
             }
 
+            //For whatever reason, if the user who created this ticket has to be modified, we check if the field is empty. If it isn't, we update it.
             if(ticket.getUtilisateur() != null) {
                     Optional<Utilisateur> userBdd = utilisateurRepository.findById(ticket.getUtilisateur().getId());
                     if(userBdd.isPresent()){
                         ticketBdd.get().setUtilisateur(userBdd.get());
+                    } else {
+                        return ResponseEntity.badRequest().body("The specified user doesn't exist.");
                     }
             }
 
+            //Same than with getUtilisateur, if the ticket needs to be assigned to another admin, we check if it exists and if it does we update it.
             if(ticket.getAssignedAdmin() != null) {
                 Optional<Utilisateur> adminBdd = utilisateurRepository.findById(ticket.getAssignedAdmin());
                 if (adminBdd.isPresent()) {
@@ -175,6 +190,7 @@ public class TicketController {
     @DeleteMapping("/admin/ticket/delete/{ticketId}")
     public String deleteTicket (@PathVariable Long ticketId) {
 
+        //We verify that the specified ticket exists and if it does we then proceed with its deletion.
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
         if(ticketBdd.isPresent()){
             String deletedTicket = "The following ticket : " + ticketBdd.get().getTicketTitle() + " has been deleted.";

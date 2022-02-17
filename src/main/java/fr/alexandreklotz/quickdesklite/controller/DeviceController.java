@@ -55,6 +55,7 @@ public class DeviceController {
     @PostMapping("/admin/device/new")
     public ResponseEntity<String> newDevice(@RequestBody Device device){
 
+        //We check if a value is specified in the DeviceUtilisateur value. We check if it exists by using the repository linked to this entity. If it does, we assign it to the device.
         if(device.getDeviceUtilisateur() != null){
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
                 if(userBdd.isPresent()){
@@ -72,7 +73,7 @@ public class DeviceController {
     public ResponseEntity<String> updateDevice(@PathVariable Long deviceid,
                                                @RequestBody Device device){
 
-
+    //We create an optional to check if the specified device exists. If it does, we will check each field of the put request and update them if they need to.
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);
         if(deviceBdd.isPresent()){
 
@@ -102,6 +103,7 @@ public class DeviceController {
     @DeleteMapping("/admin/devices/{deviceid}/delete")
     public String deleteDevice(@PathVariable Long deviceid){
 
+        //We check if the specified device exists by using DeviceRepository, and if it does we then proceed with the deletion.
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);
         if(deviceBdd.isPresent()){
             String devDel = deviceBdd.get().getDeviceName() + " has been deleted.";

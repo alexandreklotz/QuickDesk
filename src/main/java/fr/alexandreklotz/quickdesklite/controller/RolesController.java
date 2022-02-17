@@ -28,6 +28,8 @@ public class RolesController {
     //Rest Methods//
     ////////////////
 
+    //There won't be any Post/Put/Delete mappings in this controller. There will only be three roles which are USER, VIP and ADMIN. They can't be deleted nor modified.
+
     @JsonView(CustomJsonView.RolesView.class)
     @GetMapping("/admin/roles/all")
     public ResponseEntity<List<Roles>> getAllRoles(){

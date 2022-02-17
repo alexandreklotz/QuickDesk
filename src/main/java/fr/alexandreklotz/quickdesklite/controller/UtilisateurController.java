@@ -67,11 +67,13 @@ public class UtilisateurController {
     @PostMapping("/admin/utilisateur/new")
     public ResponseEntity<String> newUtilisateur(@RequestBody Utilisateur utilisateur){
 
+        //Before processing the creation request, we verify if another user already uses the login specified in this request.
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(utilisateur.getUtilLogin());
         if(userBdd.isPresent()){
             return ResponseEntity.badRequest().body("The specified login is already in use.");
         }
 
+        //We verify that the specified team exists before assigning it to the user.
         Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
         if(teamBdd.isPresent()){
             utilisateur.setTeam(utilisateur.getTeam());
@@ -82,10 +84,12 @@ public class UtilisateurController {
         utilisateur.setUtilEnabled(true);
 
 
+        //If the new user's role is null, we automatically give him the USER role.
         if(utilisateur.getRole() == null){
             Roles roleBdd = rolesRepository.getById(3L);
             utilisateur.setRole(roleBdd);
         } else if (utilisateur.getRole() != null){
+            //If it isn't null, we check that the specified role exists before assigning it to the user.
             Optional<Roles> roleBdd = rolesRepository.findById(utilisateur.getRole().getId());
             if(roleBdd.isPresent()){
                 utilisateur.setRole(roleBdd.get());
@@ -101,6 +105,7 @@ public class UtilisateurController {
     @PutMapping("/admin/utilisateur/update/{utilisateurId}")
     public ResponseEntity<String> updateUtilisateur (@PathVariable UUID utilisateurId, @RequestBody Utilisateur utilisateur){
 
+        //We verify that the user exists before proceeding with the update process.
         Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateurId);
         if(userBdd.isPresent()){
 

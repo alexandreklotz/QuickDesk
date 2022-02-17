@@ -1,18 +1,15 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
 import fr.alexandreklotz.quickdesklite.model.Roles;
+import fr.alexandreklotz.quickdesklite.model.Team;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.RolesRepository;
-import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
-import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
+import fr.alexandreklotz.quickdesklite.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,5 +34,17 @@ public class HomeController {
     //Rest Methods//
     ////////////////
 
+    /*
+    @RequestMapping("/testpanel")
+    @RolesAllowed("ADMIN")
+    public ModelAndView homepage(){
+        ModelAndView modelAndView = new ModelAndView("testpanel");
+        List<Ticket> tickets = ticketRepository.findAll();
+        List<Utilisateur> users = utilisateurRepository.findAll();
 
+        modelAndView.addObject("tickets", tickets);
+        modelAndView.addObject("users", users);
+
+        return modelAndView;
+    }*/
 }

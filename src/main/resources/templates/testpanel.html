@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Test</title>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro de ticket</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket: ${tickets}">
+                <td th:text="${ticket.getId()}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Login</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="utilisateur: ${users}">
+                <td th:text="${utilisateur.getUtilLogin()}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

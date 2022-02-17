@@ -53,6 +53,7 @@ public class TeamController {
     @PostMapping("/admin/team/new")
     public ResponseEntity<String> newTeam(@RequestBody Team team){
 
+        //We check if the utilisateurs list is null, if it isn't then we check if every user in the list exists by using the utilisateurrepository. If it does, he will be assigned to the team.
         if(team.getUtilisateurs() != null) {
             for(Utilisateur utilisateur : team.getUtilisateurs()){
                 Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
@@ -72,6 +73,8 @@ public class TeamController {
     @PutMapping("/admin/team/update/{teamId}")
     public ResponseEntity<String> updateTeam(@PathVariable UUID teamId, @RequestBody Team team){
 
+        //We first checj if the team exists, if it does we can then update the desired fields.
+        //The process with the users list is the same that the one in the Post request/creation process.
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){
 
@@ -100,6 +103,7 @@ public class TeamController {
     @DeleteMapping("/admin/team/delete/{teamId}")
     public String deleteTeam (@PathVariable UUID teamId){
 
+        //We check if the team exists, if it does we can then process with its deletion.
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){
             String deletedTeam = teamBdd.get().getTeamName() + " has been deleted.";

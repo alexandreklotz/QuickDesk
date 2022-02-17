@@ -1,5 +1,20 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 17/02/2022
+`Have been pretty much playing around to try and find a way to redirect the logged in user to his personal homepage (/home/user login) but haven't figured it out yet.
+I therefore played around a bit with basic authentication and retrieved basic elements and displayed them in a raw html page (testpanel in homecontroller).`
+* Deletion of `LoginController`.
+* `configuration` package has been renamed to `security`.
+* Added comments in the controllers.
+
+I struggle with security. Login works fine but i would like to redirect each user to a custom page. For example, if i'm a user with the login "aklotz", i want to
+be redirected to "ip_address/aklotz" or "ip_address/panel/aklotz". And if i would be an admin with the login "admklotz", i want to be redirected to
+"ip_address/admin/aklotz" or just /admin. Maybe i don't need to specify the user/admin's login after the /home or /panel url to access his created/assigned
+tickets. I tried to create a AuthenticationSuccessHandler but it didn't work therefore i deleted it.
+I'm not working on my project a lot recently, mainly because i pretty much "lost" myself in this security thing and i also need to do other IT things on the side.
+
+Quick note : I need to see if i can implement a device history in which all its previous users would be stored with the date at which they used the device.
+***
 ## 07/02/2022
 * Modification of the relation between "Device" and "Utilisateur". It was a OneToMany and it now is a OneToOne.
 * @Override toString method created in "Utilisateur".
