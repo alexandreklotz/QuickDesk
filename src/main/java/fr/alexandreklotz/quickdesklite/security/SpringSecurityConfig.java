@@ -47,15 +47,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 })
 
                 .and().csrf().disable()
-//TODO : Check if httpBasic can be removed.
                 .httpBasic()
                     .and().authorizeRequests()
                     .antMatchers("/admin").hasRole("ADMIN")
                     .antMatchers("/user").hasRole("USER, VIP, ADMIN")
-                    .antMatchers("/").hasRole("USER, VIP, ADMIN")
+                    .antMatchers("/homepage").hasRole("USER, VIP")
+                    .antMatchers("/login").hasAnyRole()
+                    //.antMatchers("/").hasRole("USER, VIP, ADMIN")
                     .anyRequest().authenticated()
                     .and()
-                    .formLogin();
+                    .formLogin()
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/redirection", true);
     }
 
     @Bean

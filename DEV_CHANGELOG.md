@@ -1,5 +1,19 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 22/02/2022
+`Login redirection currently in development`
+* `HomeController` has been refactored -> It is now called `UserPanelController`.
+* A new method has been created in `UtilisateurRepository` -> `findUserRoleWithLogin`, this method will be used to find the logged in user's role and redirect him accordingly.
+* A new controller has been created : `AdminPanelController`. It will be identical to "UserPanelController" but it will be dedicated to admins with specific methods.
+* Creation of a new method in `LoginController` -> loggedUserRedirection.  This method allows us to redirect the logged in user to the page matching his role by using the new method created in UtilisateurRepository as mentioned above.
+* Interfaces in `TicketRepository` have been corrected -> They were returning only one ticket. They will now return a List of tickets.
+* `toString` method has been corrected in the `Utilisateur` entity and it has been created in the `Roles`, `Device` and `Team` entities aswell. (will probably be useless but still coded them in just in case. can still remove them later).
+* `SpringSecurityConfig` has been modified in order to implement redirection.
+
+Redirection is working. Next step, front end.
+UUIDs need to be migrated to Strings. UUIDs are causing errors when i try to retrieve tickets opened by specific users through the interfaces i coded in the ticketrepository for example.
+It works fine if i use the Getter linked to the tickets/utilisateur entity but i want to use the interface, i can't use the findTicketsAssigned interface and i have no other way to retrieve them.
+***
 ## 17/02/2022
 `Have been pretty much playing around to try and find a way to redirect the logged in user to his personal homepage (/home/user login) but haven't figured it out yet.
 I therefore played around a bit with basic authentication and retrieved basic elements and displayed them in a raw html page (testpanel in homecontroller).`

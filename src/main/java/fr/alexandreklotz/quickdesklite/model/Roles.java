@@ -65,4 +65,9 @@ public class Roles {
         this.utilisateurs = utilisateurs;
     }
 
+    @Override
+    public String toString(){
+        return this.roleName;
+    }
+
 }
