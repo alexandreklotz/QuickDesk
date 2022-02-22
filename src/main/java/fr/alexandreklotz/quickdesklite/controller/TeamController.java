@@ -106,6 +106,13 @@ public class TeamController {
         //We check if the team exists, if it does we can then process with its deletion.
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){
+            Set<Utilisateur> teamUsers = teamBdd.get().getUtilisateurs();
+            for(Utilisateur utilisateur : teamUsers) {
+                Optional<Utilisateur> userBdd = utilisateurRepository.findById(utilisateur.getId());
+                if(userBdd.isPresent()){
+                    userBdd.get().setTeam(null);
+                }
+            }
             String deletedTeam = teamBdd.get().getTeamName() + " has been deleted.";
             teamRepository.deleteById(teamId);
             return deletedTeam;

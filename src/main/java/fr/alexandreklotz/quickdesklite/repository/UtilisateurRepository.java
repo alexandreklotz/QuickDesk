@@ -16,9 +16,4 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, UUID> 
     @Query("FROM Utilisateur u WHERE u.utilLogin = :login")
     Optional<Utilisateur> findUserWithLogin (String login);
 
-    /*@Query("FROM Ticket t WHERE t.assignedAdmin = :userid")
-    Optional<List<Ticket>> findTicketsAssigned (UUID userid);
-
-    @Query("FROM Ticket t WHERE t.utilisateur = :userid")
-    Optional<List<Ticket>> findTicketsOpened (UUID userid);*/
 }

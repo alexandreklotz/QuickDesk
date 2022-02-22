@@ -36,7 +36,8 @@ public class AdminPanelController {
     //Rest Methods//
     ////////////////
 
-    //TODO : Update the code once the UUID to String migration for the users' ID has been done.
+    //TODO : In order to avoid the "Parameter value [cf642830-9414-11ec-817a-0a0027000005] did not match expected type" error, create a service package
+    // with a UserTicketService or TicketService class which will iterate through all the tickets and retrieve those assigned/created by the specified UUID (could create a bean).
 
     @GetMapping("/admin/{userlogin}")
     public ModelAndView adminPanel(@PathVariable String userlogin){

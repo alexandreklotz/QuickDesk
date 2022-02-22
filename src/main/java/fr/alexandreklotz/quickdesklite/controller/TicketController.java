@@ -74,7 +74,8 @@ public class TicketController {
                 } else {
                     return ResponseEntity.badRequest().body("The specified user doesn't exist.");
                 }
-                return ResponseEntity.badRequest().body("The ticket has no user currently creating it. This field has been left blank.");
+        } else {
+            return ResponseEntity.badRequest().body("The ticket has no user currently creating it. This field has been left blank.");
         }
 
         //The user can specify the priority of his request. However, if he doesn't specify it we then automatically set it to LOW.

@@ -74,10 +74,18 @@ public class UtilisateurController {
         }
 
         //We verify that the specified team exists before assigning it to the user.
-        Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
-        if(teamBdd.isPresent()){
-            utilisateur.setTeam(utilisateur.getTeam());
+        //If there isn't any team specified, we leave the field blank.
+        if(utilisateur.getTeam() != null){
+            Optional<Team> teamBdd = teamRepository.findById(utilisateur.getTeam().getId());
+            if(teamBdd.isPresent()){
+                utilisateur.setTeam(utilisateur.getTeam());
+            } else {
+                return ResponseEntity.badRequest().body("The specified team doesn't exist.");
+            }
+        } else if (utilisateur.getTeam() == null) {
+            utilisateur.setTeam(null);
         }
+
 
         utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
         utilisateur.setCreationDate(LocalDateTime.now());

@@ -1,5 +1,14 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 22/02/2022 - 2
+*Quick modifications, had to check other things again and discovered some things i had forgot to correct/modify*
+
+* The DeleteMapping in the TeamController has been corrected. It wasn't programmed properly, if you tried to delete a team which had users in it it would return an error and wouldn't do anything else. Now the method iterates with a for each in the team's users list and set their team to null through the setTeam setter.
+* The PostMapping in UtilisateurController has been corrected. You can now create a user without assigning him in a team. You can assign him when you create the team or later if you just forgot.
+* The PostMapping in TicketController has been corrected.
+
+Some other things have been removed, for example some comments in UtilisateurRepository and TicketRepository.
+***
 ## 22/02/2022
 `Login redirection currently in development`
 * `HomeController` has been refactored -> It is now called `UserPanelController`.
