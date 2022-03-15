@@ -1,5 +1,10 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 15/03/2022
+__Quick fix has been done in `UtilisateurController`. The PostRequest couldn't update the role because of a coding error. It has been corrected.
+Currently doing some research to fix the "parameter value did not match expected type" error when i use the interfaces from TicketRepository to find
+tickets linked to users/admins. No changes will be made until i find a way to make them work as intended.__
+***
 ## 22/02/2022 - 2
 *Quick modifications, had to check other things again and discovered some things i had forgot to correct/modify*
 

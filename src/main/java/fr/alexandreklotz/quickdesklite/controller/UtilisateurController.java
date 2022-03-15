@@ -120,7 +120,7 @@ public class UtilisateurController {
             if (utilisateur.getRole() != null){
                 Optional<Roles> roleBdd = rolesRepository.findById(utilisateur.getRole().getId());
                 if(roleBdd.isPresent()){
-                    utilisateur.setRole(roleBdd.get());
+                    userBdd.get().setRole(roleBdd.get());
                 }
             }
 
