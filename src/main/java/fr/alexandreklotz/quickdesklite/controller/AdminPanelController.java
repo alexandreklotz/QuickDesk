@@ -24,20 +24,19 @@ public class AdminPanelController {
     private UtilisateurRepository utilisateurRepository;
     private TicketRepository ticketRepository;
     private TeamRepository teamRepository;
+    private TicketServiceController ticketServiceController;
 
     @Autowired
-    AdminPanelController(UtilisateurRepository utilisateurRepository, TicketRepository ticketRepository, TeamRepository teamRepository){
+    AdminPanelController(UtilisateurRepository utilisateurRepository, TicketRepository ticketRepository, TeamRepository teamRepository, TicketServiceController ticketServiceController){
         this.utilisateurRepository = utilisateurRepository;
         this.ticketRepository = ticketRepository;
         this.teamRepository = teamRepository;
+        this.ticketServiceController = ticketServiceController;
     }
 
     ////////////////
     //Rest Methods//
     ////////////////
-
-    //TODO : In order to avoid the "Parameter value [cf642830-9414-11ec-817a-0a0027000005] did not match expected type" error, create a service package
-    // with a UserTicketService or TicketService class which will iterate through all the tickets and retrieve those assigned/created by the specified UUID (could create a bean).
 
     @GetMapping("/admin/{userlogin}")
     public ModelAndView adminPanel(@PathVariable String userlogin){
@@ -46,9 +45,8 @@ public class AdminPanelController {
         if(userBdd.isPresent()){
             Optional<Team> teamBdd = teamRepository.findById(userBdd.get().getTeam().getId());
             if(teamBdd.isPresent()){
-                UUID adminid = userBdd.get().getId();
-                Optional<List<Ticket>> ticketsOpened = ticketRepository.findTicketsOpened(adminid);
-                Optional<List<Ticket>> ticketsAssigned = ticketRepository.findTicketsAssigned(adminid);
+                List<Ticket> ticketsOpened = ticketServiceController.getUserTickets(userlogin);
+                List<Ticket> ticketsAssigned = ticketServiceController.getAdminTickets(userlogin);
                 String adminname = userBdd.get().toString();
                 String adminteamname = teamBdd.get().toString();
                 adminpanel.addObject("ticketsOpened", ticketsOpened);

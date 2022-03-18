@@ -1,5 +1,17 @@
 # QuickDesk Lite Coding Changelog
 ***
+## 18/03/2022
+__Tickets are finally retrieved when a user connects !__
+
+Haven't done much today but still reached my main objective. Now that the tickets are retrieved when a user/admin connects, i can focus on the front end and other methods that will need to be developed to make the front end as functional as possible.
+
+* I created `TicketServiceController` which iterates through all the existing tickets and retrieves the tickets for both users and admins in two separate methods.
+* The `findOpenedTickets` and `findAssignedTickets` methods in `TicketRepository` have been removed (they are now replaced by the TicketServiceController).
+* The methods for the admins' and users' homepage have been modified accordingly (`UserPanelController` and `AdminPanelController`)
+* `homepage.html` and `adminpanel.html` are currently being developed. It's only retrieving the user's/admin's name, team and tickets(opened for users, assigned and opened for admins).
+
+*I have a security flaw to check, once a user is logged in he can access the /admin links which displays raw data (JSON). I will focus on this in priority.*
+***
 ## 15/03/2022
 __Quick fix has been done in `UtilisateurController`. The PostRequest couldn't update the role because of a coding error. It has been corrected.
 Currently doing some research to fix the "parameter value did not match expected type" error when i use the interfaces from TicketRepository to find

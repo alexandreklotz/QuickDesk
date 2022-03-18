@@ -5,6 +5,35 @@
     <title>QuickDesk - User Homepage</title>
 </head>
 <body>
-    <h1>User basic homepage</h1>
+    <p th:text="${username}"></p>
+    <p th:text="${userteam}"></p>
+
+    <h3>My tickets</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticket number</th>
+                <th>Ticket title</th>
+                <th>Date created</th>
+                <th>Category</th>
+                <th>Assigned technician</th>
+                <th>Status</th>
+                <th>Last modification</th>
+                <th>Date closed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket: ${usertickets}">
+                <td th:text="${ticket.getId()}"></td>
+                <td th:text="${ticket.getTicketTitle()}"></td>
+                <td th:text="${ticket.getTicketDateCreated()}"></td>
+                <td th:text="${ticket.getTicketCategorization()}"></td>
+                <td th:text="${ticket.getAssignedAdmin()}"></td> <!-- Needs to be corrected, it will return the admin's UUID instead of his name -->
+                <td th:text="${ticket.getTicketStatus()}"></td>
+                <td th:text="${ticket.getTicketLastModified()}"></td>
+                <td th:text="${ticket.getTicketDateClosed()}"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

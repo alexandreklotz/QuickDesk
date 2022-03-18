@@ -20,12 +20,14 @@ public class UserPanelController {
     private UtilisateurRepository utilisateurRepository;
     private TicketRepository ticketRepository;
     private TeamRepository teamRepository;
+    private TicketServiceController ticketServiceController;
 
     @Autowired
-    UserPanelController(UtilisateurRepository utilisateurRepository, TicketRepository ticketRepository, TeamRepository teamRepository){
+    UserPanelController(UtilisateurRepository utilisateurRepository, TicketRepository ticketRepository, TeamRepository teamRepository, TicketServiceController ticketServiceController){
         this.utilisateurRepository = utilisateurRepository;
         this.ticketRepository = ticketRepository;
         this.teamRepository = teamRepository;
+        this.ticketServiceController = ticketServiceController;
     }
 
     ////////////////
@@ -39,9 +41,7 @@ public class UserPanelController {
         if(userBdd.isPresent()){
             Optional<Team> teamBdd = teamRepository.findById(userBdd.get().getTeam().getId());
             if(teamBdd.isPresent()) {
-                UUID userid = userBdd.get().getId();
-                //Set<Ticket> tickets = userBdd.get().getTickets();
-                Optional<List<Ticket>> ticketsOpened = ticketRepository.findTicketsOpened(userid);
+                List<Ticket> ticketsOpened = ticketServiceController.getUserTickets(userlogin);
                 String username = userBdd.get().toString();
                 String userteamname = teamBdd.get().toString();
                 homepage.addObject("usertickets", ticketsOpened);

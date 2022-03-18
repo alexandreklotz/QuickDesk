@@ -12,9 +12,4 @@ import java.util.UUID;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query("FROM Ticket t WHERE t.assignedAdmin = :userid")
-    Optional<List<Ticket>> findTicketsAssigned (UUID userid);
-
-    @Query("FROM Ticket t WHERE t.utilisateur = :userid")
-    Optional<List<Ticket>> findTicketsOpened (UUID userid);
 }

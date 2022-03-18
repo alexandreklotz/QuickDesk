@@ -73,7 +73,7 @@ public class TeamController {
     @PutMapping("/admin/team/update/{teamId}")
     public ResponseEntity<String> updateTeam(@PathVariable UUID teamId, @RequestBody Team team){
 
-        //We first checj if the team exists, if it does we can then update the desired fields.
+        //We first check if the team exists, if it does we can then update the desired fields.
         //The process with the users list is the same that the one in the Post request/creation process.
         Optional<Team> teamBdd = teamRepository.findById(teamId);
         if(teamBdd.isPresent()){
