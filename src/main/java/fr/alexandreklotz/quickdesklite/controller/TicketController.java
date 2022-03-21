@@ -96,6 +96,7 @@ public class TicketController {
                 Optional<Roles> roleAdmin = rolesRepository.findById(adminBdd.get().getRole().getId());
                 if(Objects.equals(roleAdmin.get().getRoleName(), "ADMIN")) {
                     ticket.setAssignedAdmin(adminBdd.get().getId());
+                    ticket.setAssignedAdminName(adminBdd.get().getUtilFirstName() + " " + adminBdd.get().getUtilLastName());
                 } else {
                     return ResponseEntity.badRequest().body("The user you're trying to assign this ticket to isn't an admin.");
                 }
@@ -168,6 +169,7 @@ public class TicketController {
                     Optional<Roles> roleAdmin = rolesRepository.findById(adminBdd.get().getRole().getId());
                     if(roleAdmin.get().getRoleName() == "ADMIN") {
                         ticket.setAssignedAdmin(adminBdd.get().getId());
+                        ticket.setAssignedAdminName(adminBdd.get().getUtilFirstName() + " " + adminBdd.get().getUtilLastName());
                     } else {
                         return ResponseEntity.badRequest().body("The user you're trying to assign this ticket to isn't an admin.");
                     }

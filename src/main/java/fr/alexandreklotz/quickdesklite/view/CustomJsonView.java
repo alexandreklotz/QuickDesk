@@ -13,4 +13,14 @@ public class CustomJsonView {
     public static class DeviceView{};
 
     public static class RolesView{};
+
+    public static class SoftwareView{};
+
+    public static class LicenseKeyView{};
+
+    public static class ContractView{};
+
+    public static class ContractorView{};
+
+    public static class TicketQueueView{};
 }

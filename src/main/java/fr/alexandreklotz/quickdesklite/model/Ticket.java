@@ -99,6 +99,10 @@ public class Ticket {
     @Column(columnDefinition = "BINARY(16)")
     private UUID assignedAdmin;
 
+    @JsonView(CustomJsonView.TicketView.class)
+    @Column
+    private String assignedAdminName;
+
     ///////////////
     //Constructor//
     ///////////////
@@ -120,6 +124,11 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket")
     private Set<Comment> comments;
 
+    //A ticket can be assigned to only one queue but a queue can contain multiple tickets
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "ticketQueue_id")
+    private TicketQueue ticketQueue;
 
     /////////////////////
     //Getters & Setters//
@@ -221,6 +230,14 @@ public class Ticket {
         this.assignedAdmin = assignedAdmin;
     }
 
+    public String getAssignedAdminName() {
+        return assignedAdminName;
+    }
+
+    public void setAssignedAdminName(String assignedAdminName) {
+        this.assignedAdminName = assignedAdminName;
+    }
+
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
@@ -237,4 +254,11 @@ public class Ticket {
         this.comments = comments;
     }
 
+    public TicketQueue getTicketQueue() {
+        return ticketQueue;
+    }
+
+    public void setTicketQueue(TicketQueue ticketQueue) {
+        this.ticketQueue = ticketQueue;
+    }
 }

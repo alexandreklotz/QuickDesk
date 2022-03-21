@@ -1,5 +1,30 @@
 # QuickDesk Lite Coding Changelog
 ***
+##21/03/2022
+*Focusing on security but still made some minor changes.
+Decided to push the modifications to the repo since i want the new entities to be in the software.*
+
+* Repositories for every new entity has been created
+* Creation of `TicketQueue` entity.
+* New relations have been created between `Team -> TicketQueue and Ticket -> TicketQueue`.
+* Controllers have been created for new entities. Only GetMappings have been coded for the meantime.
+* Added a variable in `Ticket` -> AssignedAdminName. This variable is a string and it will store the assigned admin's name which will be then displayed in the tickets list on the web page.
+
+*Following the previous changelog notes, i'll need to add a functionality to attach images to a ticket/comment and even a profile picture for each user or something.
+It would also be useful for contracts, you'd be able to attach a scanned version of it on the software. I may create new packages aswell to organize a few things better.*
+***
+##20/03/2022
+*New entities have been created. It was really poor in terms of what it had to offer (only tickets/users/teams/devices)...
+These modifications won't be pushed until everything is functional. I'm adding these entities and also looking at the security flaw
+which turns out to be worse than i thought. Once logged in, no matter what your role is, you can access the homepage of ANY user/admin.
+I suspect the login/redirection process to be the cause of this flaw. It could be the security config aswell.*
+
+* Following entities have been created : `Software`, `Contract`, `Contractor` and `LicenseKey`. Relations have been created aswell. A few fields will need to be created aswell such as dates.
+* New JsonViews have been created for each new entity.
+
+*A few fields still need to be created such as Date fields in Contract to indicate the dates/interval/period during which the contract will be in effect.
+I need to see how it needs to be formatted through JSON and a web form.*
+***
 ## 18/03/2022
 __Tickets are finally retrieved when a user connects !__
 
