@@ -1,6 +1,6 @@
 # QuickDesk Lite Coding Changelog
 ***
-##21/03/2022
+## 21/03/2022
 *Focusing on security but still made some minor changes.
 Decided to push the modifications to the repo since i want the new entities to be in the software.*
 
@@ -13,7 +13,7 @@ Decided to push the modifications to the repo since i want the new entities to b
 *Following the previous changelog notes, i'll need to add a functionality to attach images to a ticket/comment and even a profile picture for each user or something.
 It would also be useful for contracts, you'd be able to attach a scanned version of it on the software. I may create new packages aswell to organize a few things better.*
 ***
-##20/03/2022
+## 20/03/2022
 *New entities have been created. It was really poor in terms of what it had to offer (only tickets/users/teams/devices)...
 These modifications won't be pushed until everything is functional. I'm adding these entities and also looking at the security flaw
 which turns out to be worse than i thought. Once logged in, no matter what your role is, you can access the homepage of ANY user/admin.
