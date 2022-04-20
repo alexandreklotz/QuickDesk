@@ -36,7 +36,8 @@ public class Ticket {
         SOFTWARE,
         SECURITY,
         LICENSE,
-        CONTRACT
+        CONTRACT,
+        CONTRACTOR
     }
 
     public enum TicketPriority {
@@ -93,7 +94,7 @@ public class Ticket {
 
     @JsonView(CustomJsonView.TicketView.class)
     @Column(nullable = false)
-    private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin one created ? Need to define this
+    private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin once created ? Need to define this
 
     @JsonView(CustomJsonView.TicketView.class)
     @Column(columnDefinition = "BINARY(16)")

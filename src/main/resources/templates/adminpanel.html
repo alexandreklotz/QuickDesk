@@ -30,7 +30,7 @@
             <td th:text="${ticket.getTicketTitle()}"></td>
             <td th:text="${ticket.getTicketDateCreated()}"></td>
             <td th:text="${ticket.getTicketCategorization()}"></td>
-            <td th:text="${ticket.getAssignedAdmin()}"></td> <!-- Needs to be corrected, it will return the admin's UUID instead of his name -->
+            <td th:text="${ticket.getAssignedAdminName()}"></td>
             <td th:text="${ticket.getTicketStatus()}"></td>
             <td th:text="${ticket.getTicketLastModified()}"></td>
             <td th:text="${ticket.getTicketDateClosed()}"></td>

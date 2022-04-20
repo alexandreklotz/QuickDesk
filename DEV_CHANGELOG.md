@@ -1,5 +1,11 @@
 # QuickDesk Lite Coding Changelog
 ***
+*Working on the security flaw. Will probably delete the whole security config and start again from scratch. Will probably implement JWT aswell.
+I'm currently doing some research about @service. I think that coding the whole logical process in the controllers themselves might not be the best option.
+Having services retrieving info instead of controllers might allow me to have more control about how things are supposed to work.*
+
+*This push doesn't update anything except for the changelog and the two HTML templates.*
+***
 ## 21/03/2022
 *Focusing on security but still made some minor changes.
 Decided to push the modifications to the repo since i want the new entities to be in the software.*
