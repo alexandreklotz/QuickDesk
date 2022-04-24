@@ -7,8 +7,8 @@
 <body>
     <h1>QuickDesk - Admin Panel</h1>
 
-    <p th:text="${adminname}"></p>
-    <p th:text="${adminteam}"></p>
+    <p th:text="${username}"></p>
+    <!-- <p th:text="${adminteam}"></p> -->
 
     <h3>My tickets</h3>
     <table>
@@ -25,7 +25,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="ticket: ${ticketsOpened}">
+        <tr th:each="ticket: ${openedTickets}">
             <td th:text="${ticket.getId()}"></td>
             <td th:text="${ticket.getTicketTitle()}"></td>
             <td th:text="${ticket.getTicketDateCreated()}"></td>
@@ -54,7 +54,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="ticket: ${ticketsAssigned}">
+        <tr th:each="ticket: ${assignedTickets}">
             <td th:text="${ticket.getId()}"></td>
             <td th:text="${ticket.getUtilisateur()}"></td>
             <td th:text="${ticket.getTicketTitle()}"></td>

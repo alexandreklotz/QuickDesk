@@ -1,5 +1,24 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 24/04/2022
+
+*Working on HttpSession management and stuff, trying to get something as clean as possible. I'll do some research about cookies to see if they can be of any help
+to manage sessions/accesses. I'm currently looking into JWT but it might not be needed. Security now works.*
+
+*Services have been created to externalize some logic and i'll do the same for other controllers in order to simplify them as much as possible.
+It will also allow me to have cleaner code and something that works better overall. (i think...)*
+
+*The whole redirection process will be modified, so will be the /mypanel/{login} link. I'd like to find a way to not indicate a user's login in the url
+and i'm pretty sure that it's possible.*
+
+* Deletion of `LoginController` -> change of approach regarding the redirection of the users after login. I think it's messing up with the roles and there's cleaner/better ways to do it. The way it was handled wasn't so good.
+* __The whole security package has been deleted. It has been redone and it now works as intended. User can't access admin links anymore.__
+* Creation of `MyPanelService`. This service will be used to prevent a user to access to another user's panel and redirect him if so, it will also be used to retrieve his panel (tickets etc) and return a modelandview.
+* Creation of `TicketService`. This service will replace `TicketServiceController` which has therefore been deleted.
+* `AdminPanelController` and `UserPanelController` have been deleted.
+* Minor modifications in `UtilisateurRepository`.
+***
+## 20/04/2022
 *Working on the security flaw. Will probably delete the whole security config and start again from scratch. Will probably implement JWT aswell.
 I'm currently doing some research about @service. I think that coding the whole logical process in the controllers themselves might not be the best option.
 Having services retrieving info instead of controllers might allow me to have more control about how things are supposed to work.*

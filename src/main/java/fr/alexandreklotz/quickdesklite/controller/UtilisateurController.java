@@ -87,7 +87,7 @@ public class UtilisateurController {
         }
 
 
-        utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
+        utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd())); //TODO : passwordEncoder is NOT OK !! Should use the BCrypt bean...
         utilisateur.setCreationDate(LocalDateTime.now());
         utilisateur.setUtilEnabled(true);
 

@@ -10,25 +10,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class UserDetailsCustom implements UserDetails {
+
+public class SecurityUserDetails implements UserDetails {
 
     private UUID id;
     private String username;
     private String password;
     private boolean active;
-    private List<GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorities = new ArrayList<>();
 
-    public UserDetailsCustom(Utilisateur utilisateur){
+    public SecurityUserDetails(Utilisateur utilisateur){
         this.id = utilisateur.getId();
         this.username = utilisateur.getUtilLogin();
         this.password = utilisateur.getUtilPwd();
         this.active = utilisateur.isUtilEnabled();
 
-        authorities = new ArrayList<>();
-
         authorities.add(new SimpleGrantedAuthority(utilisateur.getRole().getRoleName()));
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
