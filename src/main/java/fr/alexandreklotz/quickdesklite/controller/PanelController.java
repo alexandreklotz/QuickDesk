@@ -1,9 +1,7 @@
 package fr.alexandreklotz.quickdesklite.controller;
 
-import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
-import fr.alexandreklotz.quickdesklite.service.MyPanelService;
 import fr.alexandreklotz.quickdesklite.service.TicketService;
+import fr.alexandreklotz.quickdesklite.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,48 +10,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
 public class PanelController {
 
-    private MyPanelService myPanelService;
     private TicketService ticketService;
+    private UtilisateurService utilisateurService;
 
     @Autowired
-    PanelController(MyPanelService myPanelService,TicketService ticketService){
-        this.myPanelService = myPanelService;
+    PanelController(TicketService ticketService, UtilisateurService utilisateurService){
         this.ticketService = ticketService;
+        this.utilisateurService = utilisateurService;
     }
 
-    /* This request uses the myPanelService to verify that the user trying to access the specified panel is his. If not, he's redirected. If yes, we generate
-    a modelandview. Mainly used to prevent unauthorized access. There's probably a better way to do that such as something linked to the HttpSession
-     or to the cookie, maybe JWT aswell... I'll improve it if i find something better which i'm sure i will */
-    @GetMapping("/mypanel/{login}")
-    public ModelAndView userPanel(@PathVariable String login, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //TODO : should the user be redirected if he would get an error instead of getting his panel ?
+    @GetMapping("/mypanel")
+    public ModelAndView userPanel (HttpServletRequest request, HttpServletResponse response) throws IOException {
         ModelAndView panel = new ModelAndView("adminpanel");
         Principal principal = request.getUserPrincipal();
-        String userRealLogin = principal.getName();
-        boolean panelCheck = myPanelService.userPanelVerification(login, userRealLogin);
+        String userLogin = principal.getName();
+        boolean existingUser = utilisateurService.isUserExisting(userLogin);
 
-        if (panelCheck){
-            boolean isAdmin = myPanelService.isUserAdmin(userRealLogin);
-            if(isAdmin){
-                panel.addObject("username", myPanelService.getUserFullName(userRealLogin));
-                panel.addObject("userdevice", myPanelService.getUserDevice(userRealLogin));
-                panel.addObject("openedTickets", ticketService.getOpenedTickets(userRealLogin));
-                panel.addObject("assignedTickets", ticketService.getAssignedTickets(userRealLogin));
+        if(existingUser) {
+            boolean isAdmin = utilisateurService.isUserAdmin(userLogin);
+            if (isAdmin) {
+                panel.addObject("username", utilisateurService.getUserFullName(userLogin));
+                panel.addObject("userdevice", utilisateurService.getUserDevice(userLogin));
+                panel.addObject("openedTickets", ticketService.getOpenedTickets(userLogin));
+                panel.addObject("assignedTickets", ticketService.getAssignedTickets(userLogin));
             } else {
-                panel.addObject("username", myPanelService.getUserFullName(userRealLogin));
-                panel.addObject("userdevice", myPanelService.getUserDevice(userRealLogin));
-                panel.addObject("openedTickets", ticketService.getOpenedTickets(userRealLogin));
+                panel.addObject("username", utilisateurService.getUserFullName(userLogin));
+                panel.addObject("userdevice", utilisateurService.getUserDevice(userLogin));
+                panel.addObject("openedTickets", ticketService.getOpenedTickets(userLogin));
             }
-
-        } else {
-            response.sendRedirect("/mypanel/" + userRealLogin);
         }
+
         return panel;
     }
-
 }

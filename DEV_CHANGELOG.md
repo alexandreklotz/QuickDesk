@@ -1,5 +1,14 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 25/04/2022
+* `MyPanelService` has been deleted (read line 6). Its methods used to retrieve users' info and roles have been moved to a new Service : `UtilisateurService`.
+* `RedirectionController` has been deleted.
+* The toString method in `Device` has been deleted.
+* The `/mypanel/{login}` URL has been deleted. The controller now retrieves the user's login from the httprequest and uses the UtilisateurService and TicketService to retrieve his info. I'll do some research about httprequests, for example if a httprequest can be altered to access someone else's panel etc. I need to prevent such exploits.
+
+*I may modify controllers heavily in the next pushes. I think that i'll create/read/update/delete objects through services. For example, if i want to create a ticket, i'll just call the ticketService.createTicket()
+from my TicketController PostRequest. I need to do some research to see how this is doable and if it's actually a good practice.*
+***
 ### 24/04/2022
 
 *Working on HttpSession management and stuff, trying to get something as clean as possible. I'll do some research about cookies to see if they can be of any help

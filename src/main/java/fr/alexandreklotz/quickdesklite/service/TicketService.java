@@ -5,8 +5,10 @@ import fr.alexandreklotz.quickdesklite.model.Utilisateur;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +19,13 @@ public class TicketService {
 
     private TicketRepository ticketRepository;
     private UtilisateurRepository utilisateurRepository;
+    private UtilisateurService utilisateurService;
 
     @Autowired
-    TicketService(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository){
+    TicketService(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, UtilisateurService utilisateurService){
         this.ticketRepository = ticketRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.utilisateurService = utilisateurService;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
@@ -63,4 +67,11 @@ public class TicketService {
         }
         return assignedTickets;
     }
+
+    /////////////////////////////////
+    //The methods below are for CRUD//
+    /////////////////////////////////
+
+    //Create createTicket, updateTicket, getTicket (all and only one), deleteTicket.
+
 }

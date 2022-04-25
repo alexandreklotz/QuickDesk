@@ -117,8 +117,4 @@ public class Device {
         this.deviceUtilisateur = utilisateurs;
     }
 
-    @Override
-    public String toString(){
-        return this.deviceName + " " + this.deviceDescription + " " + this.deviceSerialNbr + " " + this.deviceUtilisateur;
-    }
 }
