@@ -53,7 +53,7 @@ public class TicketController {
     }
 
 
-    @JsonView(CustomJsonView.TicketView.class)
+    /*@JsonView(CustomJsonView.TicketView.class)
     @PostMapping("/ticket/new")
     public ResponseEntity<String> newTicket(@RequestBody Ticket ticket){
 
@@ -107,11 +107,11 @@ public class TicketController {
 
         ticketRepository.saveAndFlush(ticket);
         return ResponseEntity.ok("Ticket successfully created.");
-    }
+    }*/
 
 
 
-    @JsonView(CustomJsonView.TicketView.class)
+    /*@JsonView(CustomJsonView.TicketView.class)
     @PutMapping("/admin/ticket/update/{ticketid}")
     public ResponseEntity<String> updateTicket (@PathVariable Long ticketid,
                                                 @RequestBody Ticket ticket){
@@ -186,7 +186,7 @@ public class TicketController {
         } else {
             return ResponseEntity.noContent().build();
         }
-    }
+    }*/
 
 
     @JsonView(CustomJsonView.TicketView.class)

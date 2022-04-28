@@ -1,5 +1,11 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 28/04/2022
+* Priority, Type, Status and Category enums in `Ticket` have been deleted and have been replaced by entities which will have the same purpose except that they will make customization possible (custom status, types, etc...)
+* Repositories have been created for each new entity mentioned above.
+* PostMapping and PutMapping have been disabled in `TicketController`. New mappings will be created using `TicketService`. The Get and Delete Mappings will be deleted and recoded aswell.
+* A new package has been created : `defaultvalues`. This package contains entities which will contain the preferred default values for tickets' type, category, status and priority.
+***
 ### 25/04/2022
 * `MyPanelService` has been deleted (read line 6). Its methods used to retrieve users' info and roles have been moved to a new Service : `UtilisateurService`.
 * `RedirectionController` has been deleted.

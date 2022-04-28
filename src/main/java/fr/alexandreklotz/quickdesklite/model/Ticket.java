@@ -14,39 +14,6 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
-    public enum TicketStatus {
-        OPEN,
-        ONHOLD,
-        ONGOING,
-        REVIEW,
-        CLOSED
-    }
-
-    public enum TicketType {
-        REQUEST,
-        INCIDENT,
-        CHANGE,
-        ISSUE
-    }
-
-    public enum TicketCategorization {
-        TOCATEGORIZE,
-        NETWORK,
-        HARDWARE,
-        SOFTWARE,
-        SECURITY,
-        LICENSE,
-        CONTRACT,
-        CONTRACTOR
-    }
-
-    public enum TicketPriority {
-        LOW,
-        MEDIUM,
-        HIGH,
-        CRITICAL
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -78,22 +45,6 @@ public class Ticket {
 
     @JsonView(CustomJsonView.TicketView.class)
     @Column(nullable = false)
-    private TicketType ticketType;
-
-    @JsonView(CustomJsonView.TicketView.class)
-    @Column(nullable = false)
-    private TicketPriority ticketPriority;
-
-    @JsonView(CustomJsonView.TicketView.class)
-    @Column(nullable = false)
-    private TicketStatus ticketStatus;
-
-    @JsonView(CustomJsonView.TicketView.class)
-    @Column(nullable = false)
-    private TicketCategorization ticketCategorization;
-
-    @JsonView(CustomJsonView.TicketView.class)
-    @Column(nullable = false)
     private boolean editableTicket; //TODO : How can it be implemented ? Can the ticket only be edited by a tech/admin once created ? Need to define this
 
     @JsonView(CustomJsonView.TicketView.class)
@@ -113,6 +64,30 @@ public class Ticket {
     /////////////
     //Relations//
     /////////////
+
+    //A ticket has one category but multiple tickets can be categorized identically
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "ticketcategory_id", nullable = false)
+    private TicketCategory ticketCategory;
+
+    //A ticket has one type but multiple tickets can have the same type
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "tickettype_id", nullable = false)
+    private TicketType ticketType;
+
+    //A ticket has one status but multiple tickets can have the same status
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name ="ticketstatus_id", nullable = false)
+    private TicketStatus ticketStatus;
+
+    //A ticket has one priority but multiple tickets can have the same priority
+    @JsonView(CustomJsonView.TicketView.class)
+    @ManyToOne
+    @JoinColumn(name = "ticketpriority_id", nullable = false)
+    private TicketPriority ticketPriority;
 
     //A ticket can only be assigned to one user but a user can create multiple tickets
     @JsonView(CustomJsonView.TicketView.class)
@@ -183,38 +158,6 @@ public class Ticket {
         this.ticketLastModified = ticketLastModified;
     }
 
-    public TicketType getTicketType() {
-        return ticketType;
-    }
-
-    public void setTicketType(TicketType ticketType) {
-        this.ticketType = ticketType;
-    }
-
-    public TicketPriority getTicketPriority() {
-        return ticketPriority;
-    }
-
-    public void setTicketPriority(TicketPriority ticketPriority) {
-        this.ticketPriority = ticketPriority;
-    }
-
-    public TicketStatus getTicketStatus() {
-        return ticketStatus;
-    }
-
-    public void setTicketStatus(TicketStatus ticketStatus) {
-        this.ticketStatus = ticketStatus;
-    }
-
-    public TicketCategorization getTicketCategorization() {
-        return ticketCategorization;
-    }
-
-    public void setTicketCategorization(TicketCategorization ticketCategorization) {
-        this.ticketCategorization = ticketCategorization;
-    }
-
     public boolean isEditableTicket() {
         return editableTicket;
     }
@@ -261,5 +204,37 @@ public class Ticket {
 
     public void setTicketQueue(TicketQueue ticketQueue) {
         this.ticketQueue = ticketQueue;
+    }
+
+    public TicketCategory getTicketCategory() {
+        return ticketCategory;
+    }
+
+    public void setTicketCategory(TicketCategory ticketCategory) {
+        this.ticketCategory = ticketCategory;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(TicketType ticketType) {
+        this.ticketType = ticketType;
+    }
+
+    public TicketStatus getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(TicketStatus ticketStatus) {
+        this.ticketStatus = ticketStatus;
+    }
+
+    public TicketPriority getTicketPriority() {
+        return ticketPriority;
+    }
+
+    public void setTicketPriority(TicketPriority ticketPriority) {
+        this.ticketPriority = ticketPriority;
     }
 }

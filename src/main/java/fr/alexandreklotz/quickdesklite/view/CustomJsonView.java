@@ -23,4 +23,20 @@ public class CustomJsonView {
     public static class ContractorView{};
 
     public static class TicketQueueView{};
+
+    public static class TicketCategoryView{}
+
+    public static class TicketPriorityView{}
+
+    public static class TicketStatusView{}
+
+    public static class TicketTypeView{}
+
+    public static class TicketTypeDefaultValueView{}
+
+    public static class TicketStatusDefaultValueView{}
+
+    public static class TicketCategoryDefaultValueView{}
+
+    public static class TicketPriorityDefaultValueView{}
 }
