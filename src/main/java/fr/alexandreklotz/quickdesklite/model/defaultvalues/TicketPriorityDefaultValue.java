@@ -11,6 +11,11 @@ import javax.persistence.*;
 public class TicketPriorityDefaultValue {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketPriorityDefaultValueView.class)
+    private Long id;
+
     @Column(nullable = false)
     @JsonView(CustomJsonView.TicketPriorityDefaultValueView.class)
     private String name;
@@ -24,6 +29,14 @@ public class TicketPriorityDefaultValue {
     ///////////////////////
     //Getters and setters//
     ///////////////////////
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

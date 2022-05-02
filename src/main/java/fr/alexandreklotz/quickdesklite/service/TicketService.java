@@ -68,10 +68,14 @@ public class TicketService {
         return assignedTickets;
     }
 
-    /////////////////////////////////
+    //////////////////////////////////
     //The methods below are for CRUD//
-    /////////////////////////////////
+    //////////////////////////////////
 
     //Create createTicket, updateTicket, getTicket (all and only one), deleteTicket.
 
+    //Method to retrieve all tickets
+    public List<Ticket> getAllTickets(){
+        return ticketRepository.findAll();
+    }
 }

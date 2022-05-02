@@ -7,8 +7,10 @@ import fr.alexandreklotz.quickdesklite.repository.DeviceRepository;
 import fr.alexandreklotz.quickdesklite.repository.RolesRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +29,7 @@ public class UtilisateurService {
 
     /////////////////////////////////////////////////////////////////////////////////////
     //This service will be used to retrieve the users' info such as roles, name, etc...//
+    //It will also be used to create, delete, update and retrieve users                //
     /////////////////////////////////////////////////////////////////////////////////////
 
     //This method is used to verify that the specified user exists and if so it returns a boolean
@@ -77,4 +80,17 @@ public class UtilisateurService {
         }
         return deviceName;
     }
+
+    ////////
+    //CRUD//
+    ////////
+
+    //5 methods, create user, delete user, update user, retrieve all users, retrieve requested user
+
+    //Method to retrieve all users.
+    public List<Utilisateur> getAllUsers(){
+        return utilisateurRepository.findAll();
+    }
+
+
 }

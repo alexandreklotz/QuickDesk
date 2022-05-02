@@ -1,5 +1,22 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 02/05/2022
+* Long IDs have been added in each defaultvalue model.
+* Small corrections have been made in `TicketPriorityRepository, TicketStatusRepository, TicketCategoryRepository and TicketTypeRepository`.
+* The `Id` variable has been migrated from Long to UUID in the `Ticket` entity. A new variable `TicketNumber` has been created.
+* A new method has been created in TicketRepository : `findTicketWithTicketNumber`. It will be used by the front end, but will be deleted if not necessary.
+* Creation of `TeamService`.
+* New packages in `Controller` have been created : `admin, front,  user`. As indicated by their name, one package will contain controllers which will communicate with
+the front end, for example sending booleans to the JS script which will modify the HTML/CSS templates depending on the roles. It's just an idea at the time being,
+i'll see how it works out as development progresses. Services might be separated identically, with services in the `services.admin` package containing methods restricted to admins.
+
+*The remaining services will be created. TeamService has been created in advance but i'll finish UtilisateurService and TicketService first.
+Once these three will be created, i'll create the SetupController which will allow me to feed the database from there like (read the other comment below).*
+
+*A new HTML template has been created : `setup`. A controller and its logic will be created to allow the default admin to access a setup page to create teams, 
+queues, admins from a specific link right after the installation process (like a first launch wizard for example).
+At the time being, only the template has been created. The rest will be done later. I need to finish services first.*
+***
 ### 28/04/2022
 * Priority, Type, Status and Category enums in `Ticket` have been deleted and have been replaced by entities which will have the same purpose except that they will make customization possible (custom status, types, etc...)
 * Repositories have been created for each new entity mentioned above.

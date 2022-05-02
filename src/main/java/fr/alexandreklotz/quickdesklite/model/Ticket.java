@@ -3,6 +3,7 @@ package fr.alexandreklotz.quickdesklite.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -15,10 +16,21 @@ import java.util.UUID;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @GeneratedValue(
+            strategy = GenerationType.AUTO,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     @JsonView(CustomJsonView.TicketView.class)
-    private Long id;
+    private UUID id;
+
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO) //Can .IDENTITY be used ?
+    @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class})
+    private Long ticketNumber;
 
     @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class})
     @Column(nullable = false)
@@ -110,12 +122,20 @@ public class Ticket {
     //Getters & Setters//
     /////////////////////
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Long getTicketNumber() {
+        return ticketNumber;
+    }
+
+    public void setTicketNumber(Long ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
     public String getTicketTitle() {
