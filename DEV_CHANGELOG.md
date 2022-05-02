@@ -11,7 +11,7 @@ the front end, for example sending booleans to the JS script which will modify t
 i'll see how it works out as development progresses. Services might be separated identically, with services in the `services.admin` package containing methods restricted to admins.
 
 *The remaining services will be created. TeamService has been created in advance but i'll finish UtilisateurService and TicketService first.
-Once these three will be created, i'll create the SetupController which will allow me to feed the database from there like (read the other comment below).*
+Once these three will be created, i'll create the SetupController which will allow me to feed the database from there (read the other comment below).*
 
 *A new HTML template has been created : `setup`. A controller and its logic will be created to allow the default admin to access a setup page to create teams, 
 queues, admins from a specific link right after the installation process (like a first launch wizard for example).
