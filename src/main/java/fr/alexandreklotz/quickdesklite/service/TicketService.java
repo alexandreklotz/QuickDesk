@@ -78,4 +78,15 @@ public class TicketService {
     public List<Ticket> getAllTickets(){
         return ticketRepository.findAll();
     }
+
+    //Method to retrieve a specific ticket
+    public Ticket getSpecifiedTicket(Long number){
+        Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(number);
+        if(searchedTicket.isPresent()){
+            return searchedTicket.get();
+        } else {
+            return null; //Need to find a way to manage this.
+        }
+    }
+
 }

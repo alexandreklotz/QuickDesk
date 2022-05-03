@@ -17,7 +17,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO,
+            strategy = GenerationType.IDENTITY,
             generator = "UUID")
     @GenericGenerator(
             name = "UUID",

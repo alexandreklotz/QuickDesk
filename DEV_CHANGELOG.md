@@ -1,5 +1,13 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 03/05/2022
+* Creation of `RolesService`. This service will be used to retrieve the roles and their assigned users, like a @GetMapping. It wont serve another purpose (atleast for now). Will be deleted if useless.
+* CRUD Methods and other useful methods `UtilisateurService` have been created. They still need to be tested and will be corrected accordingly if needed.
+* @Query method has been created in `RolesRepository` : `findRoleWithName`.
+* getAllTickets and getSpecifiedTicket methods have been created in `TicketService`.
+
+*Once TicketService will be finalized, i'll run some tests and see if everything works as intended.*
+***
 ### 02/05/2022
 * Long IDs have been added in each defaultvalue model.
 * Small corrections have been made in `TicketPriorityRepository, TicketStatusRepository, TicketCategoryRepository and TicketTypeRepository`.
