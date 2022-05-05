@@ -38,15 +38,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-                .csrf().disable()
+                .csrf().disable().httpBasic().and()
                 .authorizeRequests()
                 .antMatchers("/mypanel/").hasAnyRole("USER", "VIP", "ADMIN")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER", "VIP", "ADMIN")
-                .antMatchers("/ticket/**").hasAnyRole("USER", "VIP", "ADMIN")
+                .antMatchers("/admin/").hasRole("ADMIN")
+                .antMatchers("/admin**").hasRole("ADMIN")
+                .antMatchers("/user**").hasAnyRole("USER", "VIP", "ADMIN")
+                .antMatchers("/ticket**").hasAnyRole("USER", "VIP", "ADMIN")
                 .antMatchers("**/delete/").hasRole("ADMIN")
-                .antMatchers("/queue/**").hasRole("ADMIN")
+                .antMatchers("/queue**").hasRole("ADMIN")
                 .antMatchers("/login").hasAnyRole()
+                .antMatchers("/test/").hasRole("ADMIN")
+                .antMatchers("/test**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginProcessingUrl("/login")

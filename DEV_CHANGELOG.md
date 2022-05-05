@@ -1,5 +1,11 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 05/05/2022
+* Deletion of `defaultvalues` package and its content. It will be replaced by `DefaultValuesService` and a boolean value will be added in each "TicketValue" entity. A service will retrieve the objects of each entity and use the boolean to determine if a default value is set etc.
+* Deletion of `RolesService`. This service is useless and the necessary methods will be coded in the controller.
+* `UtilisateurController` has been heaviliy modified. All its logic is now in the `UtilisateurService`. The controller only redirects the request to the service and returns a message about request's outcome.
+* The .httpBasic() option has been added in `ApplicationSecurityConfig`. (PostMan requests weren't working, had to add this option)
+***
 ### 03/05/2022
 * Creation of `RolesService`. This service will be used to retrieve the roles and their assigned users, like a @GetMapping. It wont serve another purpose (atleast for now). Will be deleted if useless.
 * CRUD Methods and other useful methods `UtilisateurService` have been created. They still need to be tested and will be corrected accordingly if needed.

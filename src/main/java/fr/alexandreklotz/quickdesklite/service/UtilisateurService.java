@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -128,10 +129,13 @@ public class UtilisateurService {
             return "This login is already assigned to an existing user.";
         } else {
 
+            utilisateur.setUtilEnabled(true);
+            utilisateur.setCreationDate(LocalDateTime.now());
+
             if(utilisateur.getUtilPwd() != null) {
                 utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
             } else {
-                return "Password can't be empty.";
+                return "Password cannot be empty.";
             }
 
             if(utilisateur.getRole() == null){
@@ -147,7 +151,7 @@ public class UtilisateurService {
                 utilisateurRepository.saveAndFlush(utilisateur);
             }
         }
-        return "User hasn't been created.";
+        return "User has been successfully created.";
     }
 
     //Method to update a user's role
@@ -194,10 +198,20 @@ public class UtilisateurService {
         if(updatedUser.isPresent()){
 
             if(utilisateur.getRole() != null){
-                updateUserRole(utilisateur);
+                Optional<Roles> newRole = rolesRepository.findById(utilisateur.getRole().getId());
+                if(newRole.isPresent()){
+                    updatedUser.get().setRole(newRole.get());
+                } else {
+                    return "The specified role doesn't exist.";
+                }
             }
             if(utilisateur.getTeam() != null){
-                updateUserTeam(utilisateur);
+                Optional<Team> newTeam = teamRepository.findById(utilisateur.getTeam().getId());
+                if(newTeam.isPresent()){
+                    updatedUser.get().setTeam(newTeam.get());
+                } else {
+                    return "The specified team doesn't exist.";
+                }
             }
             if(utilisateur.getUtilFirstName() != null){
                 updatedUser.get().setUtilFirstName(utilisateur.getUtilFirstName());
@@ -218,15 +232,17 @@ public class UtilisateurService {
             }
 
             utilisateurRepository.saveAndFlush(updatedUser.get());
-            return "The user has been successfully updated.";
+            //return "The user has been successfully updated.";
 
+        } else {
+            return "The user hasn't been found or couldn't be updated.";
         }
-        return "Specified user doesn't exist.";
+        return "The specified user has been successfully updated.";
     }
 
     //Method to delete users
-    public String deleteUser(Utilisateur utilisateur){
-        Optional<Utilisateur> deletedUser = utilisateurRepository.findById(utilisateur.getId());
+    public String deleteUser(UUID userid){
+        Optional<Utilisateur> deletedUser = utilisateurRepository.findById(userid);
         if(deletedUser.isPresent()){
             utilisateurRepository.deleteById(deletedUser.get().getId());
             return "The user has been deleted.";
