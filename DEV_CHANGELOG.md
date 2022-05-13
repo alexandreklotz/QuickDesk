@@ -1,9 +1,39 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 13/05/2022
+
+*The other `ServiceImpl` classes will be created. Those existing will be modified if needed, for example adding methods for the front end to retrieve elements, facilitate
+the modification of objects, etc...*
+
+* Small changes in `TeamService and TeamServiceImpl, UtilisateurService and UtilisateurServiceImpl`. Removed useless code from a few methods.
+* Creation of a new @Query in `TicketStatusRepository, TicketTypeRepository, TicketCategoryRepository, TicketPriorityRepository and TicketQueueRepository` : __findDefaultTicketValueXXX__. It will find the default value by looking for the isDefault value. If positive, it returns it.
+* Creation of a new @Modifying query in `TicketStatusRepository, TicketTypeRepository, TicketCategoryRepository, TicketPriorityRepository and TicketQueueRepository` : __setDefaultTicketXXX__. It will find the specified value with its id and set its `isDefault` value to true.
+* `DefaultValueServiceImpl` has been finalized and now needs to be tested.
+* An issue with `getUserDevice` from `UtilisateurService` has been solved. When logging in, an error would be returned saying that there was no device assigned to the user. It now works regardless if the user has a device assigned or not.
+* Creation of a new role : `SETUP`. It will be used to configure the API at its first start. antMatchers have been added in `ApplicationSecurityConfig` : /setup/ and /setup**.
+* Creation of a `CorsConfiguration` in `ApplicationSecurityConfig`.
+* Services have been created for all the remaining entities. Basic methods have been created in every service, but some may need more methods with more specificity.
+* Type migration in `Comment` : Id is now an UUID.
+* Type migration in `Device` : Id is now an UUID.
+***
+### 11/05/2022
+*No push today. Just making some changes*
+*Following today's changes, controllers will need to be modified* 
+
+* Creation of `isDefault` boolean value in `TicketType, TicketStatus, TicketCategory, TicketPriority and TicketQueue`. It will be used to set default values through `DefaultValueServicesImpl`.
+* Creation of a service for each entity => Each entity will have a service and a serviceimpl class, for example : `Utilisateur` will have `UtilisateurService` which will contain abstract methods and `UtilisateurServiceImpl` implements these methods will contain their logic.
+* Methods have been created in `DefaultValueService` and have been implemented in `DefaultValueServiceImpl`. Logic will be done.
+* `TicketServiceImpl` will be finalized. Some logic has already been coded btw.
+* Creation of `TeamService`.
+
+*This log is short because i spent a lot of time doing and undoing things (as usual since i started this project, nothing new here lol). The way i was managing
+my "services" before wasn't optimal, which is why i decided to start again. Controllers will need to be modified as mentioned above, links will change and most of 
+them will be deleted and replaced by controllers dedicated to user and admins, and some to the front end such as the panel for example.*
+***
 ### 05/05/2022
 * Deletion of `defaultvalues` package and its content. It will be replaced by `DefaultValuesService` and a boolean value will be added in each "TicketValue" entity. A service will retrieve the objects of each entity and use the boolean to determine if a default value is set etc.
 * Deletion of `RolesService`. This service is useless and the necessary methods will be coded in the controller.
-* `UtilisateurController` has been heaviliy modified. All its logic is now in the `UtilisateurService`. The controller only redirects the request to the service and returns a message about request's outcome.
+* `UtilisateurController` has been heavily modified. All its logic is now in the `UtilisateurService`. The controller only redirects the request to the service and returns a message about request's outcome.
 * The .httpBasic() option has been added in `ApplicationSecurityConfig`. (PostMan requests weren't working, had to add this option)
 ***
 ### 03/05/2022

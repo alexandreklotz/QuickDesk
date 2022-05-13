@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket, Long> {
+public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
     @Query("FROM Ticket t WHERE t.ticketNumber = :number")
     Optional<Ticket> findTicketWithTicketNumber (@Param("number") Long number);

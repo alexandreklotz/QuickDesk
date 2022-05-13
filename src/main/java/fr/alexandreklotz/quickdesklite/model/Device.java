@@ -3,11 +3,12 @@ package fr.alexandreklotz.quickdesklite.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -15,9 +16,15 @@ public class Device {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.UtilisateurView.class})
     @Column(nullable = false)
@@ -61,11 +68,11 @@ public class Device {
     /////////////////////
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -1,7 +1,9 @@
-package fr.alexandreklotz.quickdesklite.controller;
+package fr.alexandreklotz.quickdesklite.controller.front.panel;
 
 import fr.alexandreklotz.quickdesklite.service.TicketService;
 import fr.alexandreklotz.quickdesklite.service.UtilisateurService;
+import fr.alexandreklotz.quickdesklite.service.implementation.TicketServiceImpl;
+import fr.alexandreklotz.quickdesklite.service.implementation.UtilisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,6 +17,7 @@ import java.security.Principal;
 @CrossOrigin
 public class PanelController {
 
+
     private TicketService ticketService;
     private UtilisateurService utilisateurService;
 
@@ -25,6 +28,7 @@ public class PanelController {
     }
 
     //TODO : should the user be redirected if he would get an error instead of getting his panel ?
+    //HttpResponse might be useless since it is not used.
     @GetMapping("/mypanel")
     public ModelAndView userPanel (HttpServletRequest request, HttpServletResponse response) throws IOException {
         ModelAndView panel = new ModelAndView("adminpanel");

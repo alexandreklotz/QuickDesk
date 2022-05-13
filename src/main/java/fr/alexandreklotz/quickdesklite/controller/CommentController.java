@@ -58,7 +58,7 @@ public class CommentController {
 
     @JsonView(CustomJsonView.CommentView.class)
     @PostMapping("/ticket/{ticketId}/comment/new/{userId}")
-    public ResponseEntity<String> newComment (@PathVariable Long ticketId,
+    public ResponseEntity<String> newComment (@PathVariable UUID ticketId,
                             @PathVariable UUID userId,
                             @RequestBody Comment comment){
 
@@ -80,7 +80,7 @@ public class CommentController {
 
     @JsonView(CustomJsonView.CommentView.class)
     @DeleteMapping("/{userid}/ticket/{ticketid}/comment/{commentid}/delete")
-    public String deleteComment(@PathVariable Long ticketid,
+    public String deleteComment(@PathVariable UUID ticketid,
                                 @PathVariable Long commentid,
                                 @PathVariable UUID userid){
 

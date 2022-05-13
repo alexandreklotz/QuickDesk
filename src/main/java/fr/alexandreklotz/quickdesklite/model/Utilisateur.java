@@ -70,7 +70,7 @@ public class Utilisateur {
     //A user can only have one role but a role can be assigned to multiple users
     @JsonView(CustomJsonView.UtilisateurView.class)
     @ManyToOne
-    @JoinColumn(name = "roles_id")
+    @JoinColumn(name = "roles_id", nullable = false)
     private Roles role;
 
     //A user can be part of only one team but a team can have multiple users

@@ -21,6 +21,10 @@ public class TicketCategory {
     @JsonView(CustomJsonView.TicketCategoryView.class)
     private String name;
 
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketCategoryView.class)
+    private boolean isDefault;
+
     ///////////////
     //Constructor//
     ///////////////
@@ -53,6 +57,14 @@ public class TicketCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public Set<Ticket> getTickets() {

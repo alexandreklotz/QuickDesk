@@ -21,6 +21,10 @@ public class TicketPriority {
     @JsonView(CustomJsonView.TicketPriorityView.class)
     private String name;
 
+    @Column(nullable = false)
+    @JsonView(CustomJsonView.TicketPriorityView.class)
+    private boolean isDefault;
+
     ///////////////
     //Constructor//
     ///////////////
@@ -53,6 +57,14 @@ public class TicketPriority {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public Set<Ticket> getTickets() {

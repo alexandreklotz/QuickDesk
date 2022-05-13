@@ -1,31 +1,24 @@
 package fr.alexandreklotz.quickdesklite.service;
 
 import fr.alexandreklotz.quickdesklite.model.Team;
-import fr.alexandreklotz.quickdesklite.repository.TeamRepository;
-import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import fr.alexandreklotz.quickdesklite.model.Utilisateur;
+import org.apache.catalina.User;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
-@Service
-public class TeamService {
+public interface TeamService {
 
-    private TeamRepository teamRepository;
-    private UtilisateurRepository utilisateurRepository;
+    public List<Team> getAllTeams();
 
-    @Autowired
-    TeamService(TeamRepository teamRepository, UtilisateurRepository utilisateurRepository){
-        this.teamRepository = teamRepository;
-        this.utilisateurRepository = utilisateurRepository;
-    }
+    public Team getSpecifiedTeam(UUID teamid);
 
-    ////////
-    //CRUD//
-    ////////
+    public Team createNewTeam(Team team);
 
-    //Method to retrieve all teams
-    public List<Team> getAllTeams(){
-        return teamRepository.findAll();
-    }
+    public Team updateTeam(Team team);
+
+    public Team updateTeamUsers(Team team, Set<Utilisateur> users);
+
+    public void deleteTeam (Team team);
 }

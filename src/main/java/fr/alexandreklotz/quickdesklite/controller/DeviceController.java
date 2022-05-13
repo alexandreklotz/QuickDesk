@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -39,7 +40,7 @@ public class DeviceController {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @GetMapping("/admin/devices/{deviceid}")
-    public ResponseEntity<Device> getSpecifiedDevice(@PathVariable Long deviceid){
+    public ResponseEntity<Device> getSpecifiedDevice(@PathVariable UUID deviceid){
 
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);
 
@@ -70,7 +71,7 @@ public class DeviceController {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @PutMapping("/admin/device/{deviceid}/update")
-    public ResponseEntity<String> updateDevice(@PathVariable Long deviceid,
+    public ResponseEntity<String> updateDevice(@PathVariable UUID deviceid,
                                                @RequestBody Device device){
 
     //We create an optional to check if the specified device exists. If it does, we will check each field of the put request and update them if they need to.
@@ -101,7 +102,7 @@ public class DeviceController {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @DeleteMapping("/admin/devices/{deviceid}/delete")
-    public String deleteDevice(@PathVariable Long deviceid){
+    public String deleteDevice(@PathVariable UUID deviceid){
 
         //We check if the specified device exists by using DeviceRepository, and if it does we then proceed with the deletion.
         Optional<Device> deviceBdd = deviceRepository.findById(deviceid);

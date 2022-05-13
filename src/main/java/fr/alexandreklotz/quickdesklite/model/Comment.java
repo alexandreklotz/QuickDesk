@@ -3,11 +3,13 @@ package fr.alexandreklotz.quickdesklite.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -15,9 +17,15 @@ public class Comment implements Serializable {
 
     @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+    @GeneratedValue(
+            strategy = GenerationType.AUTO,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class})
     @Column(nullable = false)
@@ -56,11 +64,11 @@ public class Comment implements Serializable {
     /////////////////////
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

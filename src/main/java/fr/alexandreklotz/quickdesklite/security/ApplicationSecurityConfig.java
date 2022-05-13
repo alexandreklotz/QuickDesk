@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +40,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
+                .cors().configurationSource(httpServletRequest -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.applyPermitDefaultValues();
+                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
+                    corsConfiguration.setAllowedHeaders(
+                            Arrays.asList("X-Requested-With", "Origin", "Content-Type",
+                                    "Accept", "Authorization","Access-Control-Allow-Origin"));
+                    return corsConfiguration;
+                })
+
+                .and()
                 .csrf().disable().httpBasic().and()
                 .authorizeRequests()
                 .antMatchers("/mypanel/").hasAnyRole("USER", "VIP", "ADMIN")
@@ -50,6 +63,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").hasAnyRole()
                 .antMatchers("/test/").hasRole("ADMIN")
                 .antMatchers("/test**").hasRole("ADMIN")
+                .antMatchers("/setup/").hasRole("SETUP")
+                .antMatchers("/setup**").hasRole("SETUP")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginProcessingUrl("/login")

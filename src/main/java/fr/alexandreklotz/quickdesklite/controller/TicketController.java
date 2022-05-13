@@ -42,7 +42,7 @@ public class TicketController {
 
     @JsonView(CustomJsonView.TicketView.class)
     @GetMapping("/ticket/{ticketid}")
-    public ResponseEntity<Ticket> getSpecifiedTicket(@PathVariable Long ticketid){
+    public ResponseEntity<Ticket> getSpecifiedTicket(@PathVariable UUID ticketid){
 
        Optional<Ticket> ticketBdd = ticketRepository.findById(ticketid);
        if(ticketBdd.isPresent()){
@@ -191,7 +191,7 @@ public class TicketController {
 
     @JsonView(CustomJsonView.TicketView.class)
     @DeleteMapping("/admin/ticket/delete/{ticketId}")
-    public String deleteTicket (@PathVariable Long ticketId) {
+    public String deleteTicket (@PathVariable UUID ticketId) {
 
         //We verify that the specified ticket exists and if it does we then proceed with its deletion.
         Optional<Ticket> ticketBdd = ticketRepository.findById(ticketId);
