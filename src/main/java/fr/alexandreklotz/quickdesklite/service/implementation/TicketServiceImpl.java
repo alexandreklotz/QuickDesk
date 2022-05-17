@@ -34,6 +34,7 @@ public class TicketServiceImpl implements TicketService {
     //The two methods below are used to retrieve the tickets linked to the calling user.//
     //////////////////////////////////////////////////////////////////////////////////////
 
+    @Override
     public List<Ticket> getOpenedTickets(String login){
         UUID userId = null;
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(login);
@@ -53,6 +54,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
 
+    @Override
     public List<Ticket> getAssignedTickets(String login){
         UUID adminId = null;
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(login);
@@ -77,11 +79,13 @@ public class TicketServiceImpl implements TicketService {
     //Create createTicket, updateTicket, getTicket (all and only one), deleteTicket.
 
     //Method to retrieve all tickets
+    @Override
     public List<Ticket> getAllTickets(){
         return ticketRepository.findAll();
     }
 
     //Method to retrieve a specific ticket
+    @Override
     public Ticket getSpecifiedTicket(Long number){
         Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(number);
         if(searchedTicket.isPresent()){

@@ -53,6 +53,11 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
     @Override
     public TicketStatus setDefaultStatusValue(TicketStatus ticketStatus) {
+        Optional<TicketStatus> currentDefault = ticketStatusRepository.findDefaultTicketStatusValue(true);
+        if(currentDefault.isPresent()){
+            currentDefault.get().setDefault(false);
+            ticketStatusRepository.saveAndFlush(currentDefault.get());
+        }
         Optional<TicketStatus> newDefaultStatusValue = ticketStatusRepository.findById(ticketStatus.getId());
         if(newDefaultStatusValue.isPresent()){
             ticketStatusRepository.setDefaultTicketStatus(newDefaultStatusValue.get().getId());
@@ -73,6 +78,11 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
     @Override
     public TicketCategory setDefaultCategoryValue(TicketCategory ticketCategory) {
+        Optional<TicketCategory> currentDefault = ticketCategoryRepository.findDefaultTicketCategory(true);
+        if(currentDefault.isPresent()){
+            currentDefault.get().setDefault(false);
+            ticketCategoryRepository.saveAndFlush(currentDefault.get());
+        }
         Optional<TicketCategory> newDefaultCategory = ticketCategoryRepository.findById(ticketCategory.getId());
         if(newDefaultCategory.isPresent()){
             ticketCategoryRepository.setDefaultTicketCategory(newDefaultCategory.get().getId());
@@ -93,6 +103,11 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
     @Override
     public TicketType setDefaultTypeValue(TicketType ticketType) {
+        Optional<TicketType> currentDefault = ticketTypeRepository.findDefaultTicketTypeValue(true);
+        if(currentDefault.isPresent()){
+            currentDefault.get().setDefault(false);
+            ticketTypeRepository.saveAndFlush(currentDefault.get());
+        }
         Optional<TicketType> newDefaultType = ticketTypeRepository.findById(ticketType.getId());
         if(newDefaultType.isPresent()){
             ticketTypeRepository.setDefaultTicketType(newDefaultType.get().getId());
@@ -113,6 +128,11 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
     @Override
     public TicketPriority setDefaultPriorityValue(TicketPriority ticketPriority) {
+        Optional<TicketPriority> currentDefault = ticketPriorityRepository.findDefaultTicketPriorityValue(true);
+        if(currentDefault.isPresent()){
+            currentDefault.get().setDefault(false);
+            ticketPriorityRepository.saveAndFlush(currentDefault.get());
+        }
         Optional<TicketPriority> newDefaultPriority = ticketPriorityRepository.findById(ticketPriority.getId());
         if(newDefaultPriority.isPresent()){
             ticketPriorityRepository.setDefaultTicketPriority(newDefaultPriority.get().getId());
@@ -133,6 +153,11 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
     @Override
     public TicketQueue setDefaultTicketQueue(TicketQueue ticketQueue) {
+        Optional<TicketQueue> currentDefault = ticketQueueRepository.findDefaultTicketQueueValue(true);
+        if(currentDefault.isPresent()){
+            currentDefault.get().setDefault(false);
+            ticketQueueRepository.saveAndFlush(currentDefault.get());
+        }
         Optional<TicketQueue> newDefaultQueue = ticketQueueRepository.findById(ticketQueue.getId());
         if(newDefaultQueue.isPresent()){
             ticketQueueRepository.setDefaultTicketQueue(newDefaultQueue.get().getId());

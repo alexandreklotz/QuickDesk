@@ -1,5 +1,8 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 17/05/2022
+*Quick changes. The @Override bean was missing at some places, completed the "SetDefaultValue" in `DefaultValueServiceImpl` aswell as in the other services impl.*
+***
 ### 13/05/2022
 
 *The other `ServiceImpl` classes will be created. Those existing will be modified if needed, for example adding methods for the front end to retrieve elements, facilitate
