@@ -1,5 +1,19 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 25/05/2022
+
+__NOTE__ : Some returns in the ServiceImpl classes need to be checked. Some may return an object when a null/error should be returned. Error management will be coded next =>
+an `ErrorService` and `ErrorServiceImpl` or something along those lines will be created. It will be used by methods in other services to return errors/messages.
+
+* Implementation of methods in `TicketQueueServiceImpl`. Some methods seem wrong, needs testing.
+* Creation of `ContractServiceImpl, DeviceServiceImpl`. A few methods need to be tested/corrected and some need to be finalized.
+
+***
+### 23/05/2022
+*Minor modifications in preparation for the next changes to come. No push*
+
+* Creation of `TicketQueueServiceImpl`.
+***
 ### 17/05/2022
 *Quick changes. The @Override bean was missing at some places, completed the "SetDefaultValue" in `DefaultValueServiceImpl` aswell as in the other services impl.*
 ***

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class DefaultValueServiceImpl implements DefaultValueService {
 
-    /* This service will contain methods to retrieve default values for ticket type, category, status and priority.
+    /* This service will contain methods to retrieve default values for ticket type, category, status, priority and queue.
     *
     * For the "Set" methods, it will first verify that the new default value sent to the API exists. If yes, then it will
     * create a list, retrieve all objects from this entity through the repository. If the list is empty, we set the requested value
