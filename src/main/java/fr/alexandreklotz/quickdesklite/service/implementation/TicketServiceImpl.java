@@ -86,7 +86,7 @@ public class TicketServiceImpl implements TicketService {
 
     //Method to retrieve a specific ticket
     @Override
-    public Ticket getSpecifiedTicket(Long number){
+    public Ticket getTicketByNumber(Long number){
         Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(number);
         if(searchedTicket.isPresent()){
             return searchedTicket.get();

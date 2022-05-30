@@ -3,6 +3,7 @@ package fr.alexandreklotz.quickdesklite.service;
 import fr.alexandreklotz.quickdesklite.model.LicenseKey;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface LicenseKeyService {
 
@@ -14,5 +15,5 @@ public interface LicenseKeyService {
 
     public LicenseKey updateLicenseKey(LicenseKey licenseKey);
 
-    public void deleteLicenseKey(LicenseKey licenseKey);
+    public void deleteLicenseKey(UUID licenseId);
 }

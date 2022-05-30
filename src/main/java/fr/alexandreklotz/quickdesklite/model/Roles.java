@@ -31,7 +31,7 @@ public class Roles {
     //Relations//
     /////////////
 
-    //A user has only one role but a the same role can be assigned to multiple users
+    //A user has only one role but the same role can be assigned to multiple users
     @JsonView(CustomJsonView.RolesView.class)
     @OneToMany(mappedBy = "role")
     private Set<Utilisateur> utilisateurs;

@@ -26,7 +26,7 @@ public interface UtilisateurService {
 
     public Utilisateur updateUser(Utilisateur utilisateur);
 
-    public String deleteUser(UUID userid);
+    public void deleteUser(UUID userid);
 
     public Utilisateur updateUserRole(Utilisateur utilisateur);
 

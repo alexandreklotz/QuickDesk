@@ -4,6 +4,8 @@ import fr.alexandreklotz.quickdesklite.model.LicenseKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface LicenseKeyRepository extends JpaRepository<LicenseKey, Long> {
+public interface LicenseKeyRepository extends JpaRepository<LicenseKey, UUID> {
 }

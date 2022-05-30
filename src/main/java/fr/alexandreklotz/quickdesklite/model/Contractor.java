@@ -2,20 +2,29 @@ package fr.alexandreklotz.quickdesklite.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Contractor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     @JsonView(CustomJsonView.ContractorView.class)
-    @Column(nullable = false)
-    private Long id;
+    private UUID id;
 
     @JsonView(CustomJsonView.ContractorView.class)
     @Column(nullable = false)
@@ -24,6 +33,10 @@ public class Contractor {
     @JsonView(CustomJsonView.ContractorView.class)
     @Column
     private String contractorcomment;
+
+    @JsonView(CustomJsonView.ContractorView.class)
+    @Column(nullable = false)
+    private LocalDateTime contractorDateCreated;
 
     ///////////////
     //Constructor//
@@ -44,11 +57,11 @@ public class Contractor {
     //Getters & setters//
     /////////////////////
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -66,6 +79,14 @@ public class Contractor {
 
     public void setContractorcomment(String contractorcomment) {
         this.contractorcomment = contractorcomment;
+    }
+
+    public LocalDateTime getContractorDateCreated() {
+        return contractorDateCreated;
+    }
+
+    public void setContractorDateCreated(LocalDateTime contractorDateCreated) {
+        this.contractorDateCreated = contractorDateCreated;
     }
 
     public Set<Contract> getContracts() {

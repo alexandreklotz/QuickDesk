@@ -15,7 +15,7 @@ public interface TicketService {
 
     public Ticket getTicketById(UUID ticketid);
 
-    public Ticket getSpecifiedTicket(Long ticketnbr);
+    public Ticket getTicketByNumber(Long ticketnbr);
 
     public Ticket createUserTicket(Ticket ticket);
 

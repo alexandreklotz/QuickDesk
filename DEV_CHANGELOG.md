@@ -1,5 +1,25 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 30/05/2022
+
+*The delete methods in the Services need to be checked, corrected/modified and tested. I hesitate between sending the object's ID through the URL and use the deleteById method or to send the
+full object and retrieve its id by using the getter but i think it'll be easier using the ID through the URL unless sending the full object from the front end can be done easily.
+If so, then the required changes will be made if this method is more efficient.
+Same with the `getSpecifiedXXX` methods, i'm retrieving the whole object and using the getter in the method to find it in the database. I may use the id through the URL which would
+be much simpler. Some impl classes are a bit messy atm because of that. I need to decide which method is the best option.*
+
+* Creation of a new boolean in `Comment` : `hasBeenEdited`. It will be used to display on the ticket's page if the comment has been edited and when.
+* Refactor of `getSpecifiedTicket` method in `TicketServiceImpl` => It is now named `getTicketByNumber`.
+* The `createNewComment` method in `CommentServiceImpl` has been modified, it now needs a Ticket to work and it retrieves the ticket's ID to attach the sent comment to it. It now only needs to be tested.
+* The `updateComment` method in `CommentServiceImpl` has been modified aswell.
+* Creation of a LocalDateTime variable in `Contractor` => `contractorDateCreated`.
+* `Id` in `LicenseKey` has been migrated from __Long__ to __UUID__. The same change has been done to all other entities that didn't have an UUID as their id.
+* Creation of a new variable in `Contract` : `ctrNumber`. Other variables have been refactored to correct typos. Their names haven't been changed but they weren't written in camel toe.
+* `setup.html` has been deleted. The whole concept of a setup page will be put aside for the moment.
+* A few refactors have been done to correct typos.
+* Creation of `SoftwareServiceImpl, ContractorServiceImpl and LicenseKeyImpl` and implementation of methods.
+
+***
 ### 25/05/2022
 
 __NOTE__ : Some returns in the ServiceImpl classes need to be checked. Some may return an object when a null/error should be returned. Error management will be coded next =>

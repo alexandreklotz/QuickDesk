@@ -8,14 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface TicketQueueRepository extends JpaRepository<TicketQueue, Long> {
+public interface TicketQueueRepository extends JpaRepository<TicketQueue, UUID> {
 
     @Query("FROM TicketQueue t WHERE t.isDefault = :defvalue")
     Optional<TicketQueue> findDefaultTicketQueueValue(@Param("defvalue")boolean defvalue);
 
     @Modifying
     @Query("UPDATE TicketQueue t SET t.isDefault = true WHERE t.id = :queueid")
-    void setDefaultTicketQueue(@Param("queueid")Long queueid);
+    void setDefaultTicketQueue(@Param("queueid") UUID queueid);
 }

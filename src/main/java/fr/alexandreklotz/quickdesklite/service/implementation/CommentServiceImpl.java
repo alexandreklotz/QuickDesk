@@ -1,6 +1,7 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
 import fr.alexandreklotz.quickdesklite.model.Comment;
+import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.repository.CommentRepository;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.service.CommentService;
@@ -25,23 +26,31 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public Comment createNewComment(Comment comment) {
+    public Comment createNewComment(Ticket ticket, Comment comment) {
 
-        //We save the time at which the comment has been created as it will be displayed on the ticket's page.
-        comment.setCommentDate(LocalDateTime.now());
+        Optional<Ticket> currentTicket = ticketRepository.findById(ticket.getId());
+        if(currentTicket.isPresent()){
 
-        //Find a way to retrieve the ticket in order to assign the comment to the ticket.
+            //We save the time at which the comment has been created as it will be displayed on the ticket's page.
+            comment.setCommentDate(LocalDateTime.now());
+            comment.setTicket(currentTicket.get());
 
-        commentRepository.saveAndFlush(comment);
+            commentRepository.saveAndFlush(comment);
+        }
+
         return comment;
     }
 
     @Override
     public Comment updateComment(Comment comment) {
-        //Find a way to retrieve the ticket in order to assign the comment to the ticket.
 
         Optional<Comment> updatedComment = commentRepository.findById(comment.getId());
         if(updatedComment.isPresent()){
+            if(comment.getTicket().getId() != updatedComment.get().getTicket().getId()){
+                //return an error. make sure that this if has a purpose.
+            }
+            updatedComment.get().setHasBeenEdited(true);
+            updatedComment.get().setCommentDate(LocalDateTime.now());
             commentRepository.saveAndFlush(updatedComment.get());
         }
         return updatedComment.get();

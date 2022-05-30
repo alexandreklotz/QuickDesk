@@ -58,10 +58,12 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurServiceImpl.updateUser(utilisateur));
     }
 
+    //TODO : Fix the delete method.
     @JsonView(CustomJsonView.UtilisateurView.class)
     @DeleteMapping("/admin/utilisateur/delete/{utilisateurId}")
-    public ResponseEntity<String> deleteUtilisateur (@PathVariable UUID utilisateurId){
-        return ResponseEntity.ok(utilisateurServiceImpl.deleteUser(utilisateurId));
+    public ResponseEntity deleteUtilisateur (@PathVariable UUID utilisateurId){
+        utilisateurServiceImpl.deleteUser(utilisateurId);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -2,28 +2,40 @@ package fr.alexandreklotz.quickdesklite.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Contract {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY,
+            generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     @JsonView(CustomJsonView.ContractView.class)
-    @Column(nullable = false)
-    private Long id;
+    private UUID id;
 
     @JsonView(CustomJsonView.ContractView.class)
     @Column
-    private String ctrname;
+    private String ctrName;
 
     @JsonView(CustomJsonView.ContractView.class)
     @Column
-    private String ctrcomment;
+    private String ctrComment;
+
+    @JsonView(CustomJsonView.ContractView.class)
+    @Column
+    private String ctrNumber;
 
     // TODO : Add date variables
 
@@ -57,28 +69,36 @@ public class Contract {
     //Getters & setters//
     /////////////////////
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getCtrname() {
-        return ctrname;
+    public String getCtrName() {
+        return ctrName;
     }
 
-    public void setCtrname(String ctrname) {
-        this.ctrname = ctrname;
+    public void setCtrName(String ctrname) {
+        this.ctrName = ctrname;
     }
 
-    public String getCtrcomment() {
-        return ctrcomment;
+    public String getCtrComment() {
+        return ctrComment;
     }
 
-    public void setCtrcomment(String ctrcomment) {
-        this.ctrcomment = ctrcomment;
+    public void setCtrComment(String ctrcomment) {
+        this.ctrComment = ctrcomment;
+    }
+
+    public String getCtrNumber() {
+        return ctrNumber;
+    }
+
+    public void setCtrNumber(String ctrNumber) {
+        this.ctrNumber = ctrNumber;
     }
 
     public Set<Software> getCtrsoftware() {

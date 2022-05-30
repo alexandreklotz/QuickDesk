@@ -36,6 +36,9 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private LocalDateTime commentDate;
 
+    @JsonView({CustomJsonView.CommentView.class, CustomJsonView.TicketView.class})
+    @Column
+    private boolean hasBeenEdited;
 
     ///////////////
     //Constructor//
@@ -104,4 +107,11 @@ public class Comment implements Serializable {
         this.utilisateur = utilisateur;
     }
 
+    public boolean isHasBeenEdited() {
+        return hasBeenEdited;
+    }
+
+    public void setHasBeenEdited(boolean hasBeenEdited) {
+        this.hasBeenEdited = hasBeenEdited;
+    }
 }

@@ -1,12 +1,12 @@
 package fr.alexandreklotz.quickdesklite.service;
 
 import fr.alexandreklotz.quickdesklite.model.Comment;
+import fr.alexandreklotz.quickdesklite.model.Ticket;
 
-import java.util.List;
 
 public interface CommentService {
 
-    public Comment createNewComment(Comment comment);
+    public Comment createNewComment(Ticket ticket, Comment comment);
 
     public Comment updateComment(Comment comment);
 
