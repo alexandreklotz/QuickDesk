@@ -86,12 +86,23 @@ public class TicketServiceImpl implements TicketService {
 
     //Method to retrieve a specific ticket
     @Override
-    public Ticket getTicketByNumber(Long number){
-        Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(number);
+    public Ticket getTicketByNumber(Long ticketNbr, String login){
+        Utilisateur callingUser = utilisateurServiceImpl.getUserByLogin(login);
+        Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
         if(searchedTicket.isPresent()){
-            return searchedTicket.get();
+            boolean userRole = utilisateurServiceImpl.isUserAdmin(login);
+            if(userRole){
+                return searchedTicket.get();
+            } else {
+                Utilisateur ticketAssignedUser = searchedTicket.get().getUtilisateur();
+                if(ticketAssignedUser.equals(callingUser)){
+                    return searchedTicket.get();
+                } else {
+                    return null; //return an error, forbidden
+                }
+            }
         } else {
-            return null; //Need to find a way to manage this.
+            return null; //might break the code. should return an error saying "ticket doesn't exist".
         }
     }
 
@@ -112,14 +123,14 @@ public class TicketServiceImpl implements TicketService {
         ticket.setTicketStatus(defaultValueServiceImpl.getDefaultStatusValue());
         ticket.setTicketCategory(defaultValueServiceImpl.getDefaultCategoryValue());
 
+        //We assign the ticket to the default queue
+        ticket.setTicketQueue(defaultValueServiceImpl.getDefaultTicketQueue());
+
         //Ticket will be editable
         ticket.setEditableTicket(true);
 
         //We set the creation date to now()
         ticket.setTicketDateCreated(LocalDateTime.now());
-
-        //We assign the ticket to the default queue
-        ticket.setTicketQueue(defaultValueServiceImpl.getDefaultTicketQueue());
 
         ticketRepository.saveAndFlush(ticket);
         return ticket;
@@ -200,7 +211,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteTicket(UUID ticketid) {
-        ticketRepository.deleteById(ticketid);
+    public void deleteTicket(Ticket ticket) {
+        ticketRepository.delete(ticket);
     }
 }

@@ -60,9 +60,9 @@ public class UtilisateurController {
 
     //TODO : Fix the delete method.
     @JsonView(CustomJsonView.UtilisateurView.class)
-    @DeleteMapping("/admin/utilisateur/delete/{utilisateurId}")
-    public ResponseEntity deleteUtilisateur (@PathVariable UUID utilisateurId){
-        utilisateurServiceImpl.deleteUser(utilisateurId);
+    @DeleteMapping("/admin/utilisateur/{utilisateurId}/delete/")
+    public ResponseEntity deleteUtilisateur (@RequestBody Utilisateur utilisateur){
+        utilisateurServiceImpl.deleteUser(utilisateur);
         return ResponseEntity.ok().build();
     }
 

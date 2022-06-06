@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -46,7 +47,7 @@ public class SoftwareController {
 
     @JsonView(CustomJsonView.SoftwareView.class)
     @GetMapping("/admin/software/{softwareid}")
-    public ResponseEntity<Software> getSpecifiedSoftware(@PathVariable Long softwareid){
+    public ResponseEntity<Software> getSpecifiedSoftware(@PathVariable UUID softwareid){
         Optional<Software> softwareBdd = softwareRepository.findById(softwareid);
         if(softwareBdd.isPresent()){
             return ResponseEntity.ok(softwareBdd.get());

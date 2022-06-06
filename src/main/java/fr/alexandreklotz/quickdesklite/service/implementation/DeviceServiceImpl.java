@@ -59,6 +59,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void deleteDevice(Device device) {
-        deviceRepository.deleteById(device.getId());
+        deviceRepository.delete(device);
     }
 }

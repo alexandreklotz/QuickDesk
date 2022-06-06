@@ -76,11 +76,8 @@ public class ContractorServiceImpl implements ContractorService {
     }
 
     @Override
-    public void deleteContractor(Long contractorId) {
-        Optional<Contractor> deletedContractor = contractorRepository.findById(contractorId);
-        if(deletedContractor.isPresent()){
-            contractorRepository.deleteById(contractorId);
-        }
+    public void deleteContractor(Contractor contractor) {
+        contractorRepository.delete(contractor);
     }
 
 }

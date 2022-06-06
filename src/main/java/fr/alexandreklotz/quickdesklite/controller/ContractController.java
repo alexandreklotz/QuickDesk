@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -46,7 +47,7 @@ public class ContractController {
 
     @JsonView(CustomJsonView.ContractView.class)
     @GetMapping("/admin/contract/{contractid}")
-    public ResponseEntity<Contract> getSpecifiedContract(@PathVariable Long contractid){
+    public ResponseEntity<Contract> getSpecifiedContract(@PathVariable UUID contractid){
         Optional<Contract> ctrBdd = contractRepository.findById(contractid);
         if(ctrBdd.isPresent()){
             return ResponseEntity.ok(ctrBdd.get());

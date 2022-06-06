@@ -45,7 +45,7 @@ public class CommentController {
 
     @JsonView(CustomJsonView.CommentView.class)
     @GetMapping("/admin/comments/{commentid}")
-    public ResponseEntity<Comment> getSpecifiedComment (@PathVariable Long commentid){
+    public ResponseEntity<Comment> getSpecifiedComment (@PathVariable UUID commentid){
 
         Optional<Comment> commentBdd = commentRepository.findById(commentid);
 
@@ -81,7 +81,7 @@ public class CommentController {
     @JsonView(CustomJsonView.CommentView.class)
     @DeleteMapping("/{userid}/ticket/{ticketid}/comment/{commentid}/delete")
     public String deleteComment(@PathVariable UUID ticketid,
-                                @PathVariable Long commentid,
+                                @PathVariable UUID commentid,
                                 @PathVariable UUID userid){
 
         //Creation of an optional for each element required to create a ticket.

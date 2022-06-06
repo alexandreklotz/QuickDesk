@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -40,7 +41,7 @@ public class LicenseKeyController {
 
     @JsonView(CustomJsonView.LicenseKeyView.class)
     @GetMapping("/admin/licensekey/{licenseid}")
-    public ResponseEntity<LicenseKey> getSpecifiedLicense(@PathVariable Long licenseid){
+    public ResponseEntity<LicenseKey> getSpecifiedLicense(@PathVariable UUID licenseid){
         Optional<LicenseKey> licenseBdd = licenseKeyRepository.findById(licenseid);
         if(licenseBdd.isPresent()){
             return ResponseEntity.ok(licenseBdd.get());

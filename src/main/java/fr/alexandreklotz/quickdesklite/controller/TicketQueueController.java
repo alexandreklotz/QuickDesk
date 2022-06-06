@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -43,7 +44,7 @@ public class TicketQueueController {
 
     @JsonView(CustomJsonView.TicketQueueView.class)
     @GetMapping("/admin/ticketqueue/{queueid}")
-    public ResponseEntity<TicketQueue> getSpecifiedQueue(@PathVariable Long queueid){
+    public ResponseEntity<TicketQueue> getSpecifiedQueue(@PathVariable UUID queueid){
 
         Optional<TicketQueue> ticketQueueBdd = ticketQueueRepository.findById(queueid);
         if(ticketQueueBdd.isPresent()){

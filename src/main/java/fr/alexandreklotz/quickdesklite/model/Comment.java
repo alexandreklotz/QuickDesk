@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Comment implements Serializable {
+public class Comment {
 
     @JsonView({CustomJsonView.CommentView.class,CustomJsonView.TicketView.class})
     @Id

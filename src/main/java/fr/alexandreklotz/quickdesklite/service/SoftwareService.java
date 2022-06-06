@@ -15,5 +15,5 @@ public interface SoftwareService {
 
     public Software updateSoftware(Software software);
 
-    public void deleteSoftware(UUID softwareId);
+    public void deleteSoftware(Software software);
 }

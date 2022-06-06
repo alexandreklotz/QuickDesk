@@ -89,6 +89,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void deleteTeam(Team team) {
-        teamRepository.deleteById(team.getId());
+        teamRepository.delete(team);
     }
 }

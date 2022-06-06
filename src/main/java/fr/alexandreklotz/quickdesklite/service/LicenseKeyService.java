@@ -15,5 +15,5 @@ public interface LicenseKeyService {
 
     public LicenseKey updateLicenseKey(LicenseKey licenseKey);
 
-    public void deleteLicenseKey(UUID licenseId);
+    public void deleteLicenseKey(LicenseKey licenseKey);
 }

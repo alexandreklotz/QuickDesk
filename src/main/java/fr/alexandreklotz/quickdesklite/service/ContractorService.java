@@ -14,5 +14,5 @@ public interface ContractorService {
 
     public Contractor updateContractor(Contractor contractor);
 
-    public void deleteContractor(Long contractorId);
+    public void deleteContractor(Contractor contractor);
 }

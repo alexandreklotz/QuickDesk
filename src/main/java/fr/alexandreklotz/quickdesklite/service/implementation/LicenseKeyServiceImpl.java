@@ -69,7 +69,7 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
     }
 
     @Override
-    public void deleteLicenseKey(UUID licenseId) {
-        licenseKeyRepository.deleteById(licenseId);
+    public void deleteLicenseKey(LicenseKey licenseKey) {
+        licenseKeyRepository.delete(licenseKey);
     }
 }

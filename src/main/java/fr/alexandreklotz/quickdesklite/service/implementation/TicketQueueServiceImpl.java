@@ -66,7 +66,7 @@ public class TicketQueueServiceImpl implements TicketQueueService {
 
     @Override
     public void deleteTicketQueue(TicketQueue ticketQueue) {
-        ticketQueueRepository.deleteById(ticketQueue.getId());
+        ticketQueueRepository.delete(ticketQueue);
     }
 
 }

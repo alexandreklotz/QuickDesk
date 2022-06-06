@@ -246,10 +246,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void deleteUser(UUID userid) {
-        Optional<Utilisateur> deletedUser = utilisateurRepository.findById(userid);
-        if(deletedUser.isPresent()){
-            utilisateurRepository.delete(deletedUser.get());
-        }
+    public void deleteUser(Utilisateur utilisateur) {
+        utilisateurRepository.delete(utilisateur);
     }
 }

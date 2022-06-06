@@ -78,7 +78,7 @@ public class SoftwareServiceImpl implements SoftwareService {
     }
 
     @Override
-    public void deleteSoftware(UUID softwareId) {
-        softwareRepository.deleteById(softwareId);
+    public void deleteSoftware(Software software) {
+        softwareRepository.delete(software);
     }
 }

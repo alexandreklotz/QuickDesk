@@ -1,5 +1,25 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 06/06/2022
+*Quick changes. Regarding the last changelog, i'll use the "delete" method instead of the "deleteById". Changes have been made accordingly.
+Controllers will be deleted and completely revamped.*
+
+* All `deleteById` methods in the `Impl` classes have been replaced by `delete`.
+* The __@DeleteMapping__ in `UtilisateurController` has been modified.
+* `getTicketByNumber in TicketServiceImpl` has been modified => Since this method will be used by both users and admins, it will check the calling user's role and only allow the user to access the ticket if he's the owner. Admins have access to all tickets (obviously).
+* Creation of `UserEndPointController`. This controller will contain all the default methods for the users :
+  * `createUserTicket` which will use the method `createUserTicket` in `TicketServiceImpl`.
+  * `getUserTicket` which will use the `getTicketByNumber` method in `TicketServiceImpl`.
+  * `addCommentOnTicket` which will use the `createNewComment` method in `CommentServiceImpl`.
+  * `updateExistingComment` which will use the `updateComment` method in `CommentServiceImpl`.
+  * `deleteExistingComment` which will use the `deleteComment` method in `CommentServiceImpl`. `deleteComment` will need some modifications to ensure that only an admin can delete an admin comment and that a user can only delete his own comments. This method is not working yet.
+* `createNewComment` method in `CommentServiceImpl and CommentService` has been modified => This method will only need the ticket's number to link a comment to the ticket.
+* Creation of `getCommentById method in CommentService`. The method has been implemented in the service's Impl class.
+
+*Once i'll have working user endpoints, admin endpoints will be an easy task. After that, i'll set up an error/message management class to return messages accordingly to the outcome of the called method.
+I will also manage attachments in tickets and contracts (pdf files, excel sheets, pictures, .pngs, etc...) later on.
+Other users might be able to add comments on a ticket aswell, for example if an user creates a ticket asking for a software or an access and needs an approval from his manager etc*
+***
 ### 30/05/2022
 
 *The delete methods in the Services need to be checked, corrected/modified and tested. I hesitate between sending the object's ID through the URL and use the deleteById method or to send the

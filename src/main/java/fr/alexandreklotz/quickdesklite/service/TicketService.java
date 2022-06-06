@@ -15,7 +15,7 @@ public interface TicketService {
 
     public Ticket getTicketById(UUID ticketid);
 
-    public Ticket getTicketByNumber(Long ticketnbr);
+    public Ticket getTicketByNumber(Long ticketNbr, String login);
 
     public Ticket createUserTicket(Ticket ticket);
 
@@ -25,6 +25,6 @@ public interface TicketService {
 
     public void closeTicket(Ticket ticket);
 
-    public void deleteTicket(UUID ticketid);
+    public void deleteTicket(Ticket ticket);
 
 }

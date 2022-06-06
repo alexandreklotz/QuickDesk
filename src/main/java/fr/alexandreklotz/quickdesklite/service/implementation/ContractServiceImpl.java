@@ -53,6 +53,6 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void deleteContract(Contract contract) {
-        contractRepository.deleteById(contract.getId());
+        contractRepository.delete(contract);
     }
 }

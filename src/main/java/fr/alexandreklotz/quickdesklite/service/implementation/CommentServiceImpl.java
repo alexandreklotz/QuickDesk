@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -24,11 +25,20 @@ public class CommentServiceImpl implements CommentService {
         this.ticketRepository = ticketRepository;
     }
 
+    @Override
+    public Comment getCommentById(UUID commentid) {
+        Optional<Comment> searchedComment = commentRepository.findById(commentid);
+        if(searchedComment.isPresent()){
+            return searchedComment.get();
+        } else {
+            return null;
+        }
+    }
 
     @Override
-    public Comment createNewComment(Ticket ticket, Comment comment) {
+    public Comment createNewComment(Long ticketNbr, Comment comment) {
 
-        Optional<Ticket> currentTicket = ticketRepository.findById(ticket.getId());
+        Optional<Ticket> currentTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
         if(currentTicket.isPresent()){
 
             //We save the time at which the comment has been created as it will be displayed on the ticket's page.
@@ -59,6 +69,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Comment comment) {
-        commentRepository.deleteById(comment.getId());
+        commentRepository.delete(comment);
     }
 }
