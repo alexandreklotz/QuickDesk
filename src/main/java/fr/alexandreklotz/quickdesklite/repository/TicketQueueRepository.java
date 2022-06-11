@@ -19,4 +19,7 @@ public interface TicketQueueRepository extends JpaRepository<TicketQueue, UUID> 
     @Modifying
     @Query("UPDATE TicketQueue t SET t.isDefault = true WHERE t.id = :queueid")
     void setDefaultTicketQueue(@Param("queueid") UUID queueid);
+
+    @Query("FROM TicketQueue t WHERE t.name = :queuename")
+    Optional<TicketQueue> findTicketQueueByName(@Param("queuename") String queuename);
 }

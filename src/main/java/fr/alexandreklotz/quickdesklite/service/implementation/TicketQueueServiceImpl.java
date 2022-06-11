@@ -2,6 +2,7 @@ package fr.alexandreklotz.quickdesklite.service.implementation;
 
 import fr.alexandreklotz.quickdesklite.model.TicketQueue;
 import fr.alexandreklotz.quickdesklite.repository.TicketQueueRepository;
+import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,12 @@ public class TicketQueueServiceImpl implements TicketQueueService {
 
 
     private TicketQueueRepository ticketQueueRepository;
-    private DefaultValueServiceImpl defaultValueServiceImpl;
+    private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketQueueServiceImpl(TicketQueueRepository ticketQueueRepository, DefaultValueServiceImpl defaultValueServiceImpl){
+    TicketQueueServiceImpl(TicketQueueRepository ticketQueueRepository, DefaultValueService defaultValueService){
         this.ticketQueueRepository = ticketQueueRepository;
-        this.defaultValueServiceImpl = defaultValueServiceImpl;
+        this.defaultValueService = defaultValueService;
     }
 
 
@@ -32,7 +33,7 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     }
 
     @Override
-    public TicketQueue getSpecifiedTicketQueue(TicketQueue ticketQueue) {
+    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) {
         Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
         if(tQueue.isPresent()){
             return tQueue.get();
@@ -42,9 +43,22 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     }
 
     @Override
+    public TicketQueue getTicketQueueByName(String queue) {
+        Optional<TicketQueue> searchedQueue = ticketQueueRepository.findTicketQueueByName(queue);
+        if(!searchedQueue.isPresent()){
+            return null; //doesn't exist
+        }
+        return searchedQueue.get();
+    }
+
+    @Override
     public TicketQueue createNewTicketQueue(TicketQueue ticketQueue) {
+        Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
+        if(existingQueue.isPresent()){
+            return null; //a queue with this name already exists
+        }
         if(ticketQueue.isDefault()){
-            defaultValueServiceImpl.setDefaultTicketQueue(ticketQueue);
+            defaultValueService.setDefaultTicketQueue(ticketQueue);
         }
         ticketQueueRepository.saveAndFlush(ticketQueue);
         return ticketQueue;
@@ -53,15 +67,19 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     @Override
     public TicketQueue updateTicketQueue(TicketQueue ticketQueue) {
         Optional<TicketQueue> updatedQueue = ticketQueueRepository.findById(ticketQueue.getId());
-        if(updatedQueue.isPresent()) {
-            if (ticketQueue.isDefault()) {
-                defaultValueServiceImpl.setDefaultTicketQueue(updatedQueue.get());
-            }
-            ticketQueueRepository.saveAndFlush(updatedQueue.get());
-            return updatedQueue.get();
-        } else {
-            return null; //return an error
+        if(!updatedQueue.isPresent()) {
+            return null; //the queue you're trying to update doesn't exist
         }
+        Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
+        if(existingQueue.isPresent()){
+            return null; //a queue with this name already exists
+        }
+        if(ticketQueue.isDefault()){
+            defaultValueService.setDefaultTicketQueue(updatedQueue.get());
+        }
+
+        updatedQueue.get().setName(ticketQueue.getName());
+        return ticketQueueRepository.saveAndFlush(updatedQueue.get());
     }
 
     @Override

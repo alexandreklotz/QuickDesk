@@ -19,4 +19,7 @@ public interface TicketCategoryRepository extends JpaRepository<TicketCategory, 
     @Modifying
     @Query("UPDATE TicketCategory t SET t.isDefault = true WHERE t.id = :catid")
     void setDefaultTicketCategory(@Param("catid") UUID catid);
+
+    @Query("FROM TicketCategory t WHERE t.name = :catname")
+    Optional<TicketCategory> findTicketCategoryByName(@Param("catname")String catname);
 }

@@ -4,7 +4,9 @@ import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.Utilisateur;
 import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
 import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
+import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketService;
+import fr.alexandreklotz.quickdesklite.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +21,15 @@ public class TicketServiceImpl implements TicketService {
 
     private TicketRepository ticketRepository;
     private UtilisateurRepository utilisateurRepository;
-    private UtilisateurServiceImpl utilisateurServiceImpl;
-    private DefaultValueServiceImpl defaultValueServiceImpl;
+    private UtilisateurService utilisateurService;
+    private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketServiceImpl(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, UtilisateurServiceImpl utilisateurServiceImpl, DefaultValueServiceImpl defaultValueServiceImpl){
+    TicketServiceImpl(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, UtilisateurService utilisateurService, DefaultValueService defaultValueService){
         this.ticketRepository = ticketRepository;
         this.utilisateurRepository = utilisateurRepository;
-        this.utilisateurServiceImpl = utilisateurServiceImpl;
-        this.defaultValueServiceImpl = defaultValueServiceImpl;
+        this.utilisateurService = utilisateurService;
+        this.defaultValueService = defaultValueService;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
@@ -84,26 +86,22 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.findAll();
     }
 
-    //Method to retrieve a specific ticket
+    //Method to retrieve a specific ticket. It implements user's role verification in order to filter requests. Used by the front end.
     @Override
     public Ticket getTicketByNumber(Long ticketNbr, String login){
-        Utilisateur callingUser = utilisateurServiceImpl.getUserByLogin(login);
+        Utilisateur callingUser = utilisateurService.getUserByLogin(login);
         Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
         if(searchedTicket.isPresent()){
-            boolean userRole = utilisateurServiceImpl.isUserAdmin(login);
-            if(userRole){
-                return searchedTicket.get();
-            } else {
+            boolean userRole = utilisateurService.isUserAdmin(login);
+            if(!userRole){
                 Utilisateur ticketAssignedUser = searchedTicket.get().getUtilisateur();
-                if(ticketAssignedUser.equals(callingUser)){
-                    return searchedTicket.get();
-                } else {
-                    return null; //return an error, forbidden
+                if(!ticketAssignedUser.equals(callingUser)){
+                    return null; //error, not allowed to access this ticket
                 }
             }
-        } else {
-            return null; //might break the code. should return an error saying "ticket doesn't exist".
+            return searchedTicket.get();
         }
+        return null; //verify this line
     }
 
     @Override
@@ -120,11 +118,11 @@ public class TicketServiceImpl implements TicketService {
     public Ticket createUserTicket(Ticket ticket) {
 
         //We first set the default values
-        ticket.setTicketStatus(defaultValueServiceImpl.getDefaultStatusValue());
-        ticket.setTicketCategory(defaultValueServiceImpl.getDefaultCategoryValue());
+        ticket.setTicketStatus(defaultValueService.getDefaultStatusValue());
+        ticket.setTicketCategory(defaultValueService.getDefaultCategoryValue());
 
         //We assign the ticket to the default queue
-        ticket.setTicketQueue(defaultValueServiceImpl.getDefaultTicketQueue());
+        ticket.setTicketQueue(defaultValueService.getDefaultTicketQueue());
 
         //Ticket will be editable
         ticket.setEditableTicket(true);
@@ -145,19 +143,19 @@ public class TicketServiceImpl implements TicketService {
 
         //We define conditions to manage empty fields
         if(ticket.getTicketStatus() == null){
-            ticket.setTicketStatus(defaultValueServiceImpl.getDefaultStatusValue());
+            ticket.setTicketStatus(defaultValueService.getDefaultStatusValue());
         }
         if(ticket.getTicketCategory() == null){
-            ticket.setTicketCategory(defaultValueServiceImpl.getDefaultCategoryValue());
+            ticket.setTicketCategory(defaultValueService.getDefaultCategoryValue());
         }
         if(ticket.getTicketType() == null){
-            ticket.setTicketType(defaultValueServiceImpl.getDefaultTypeValue());
+            ticket.setTicketType(defaultValueService.getDefaultTypeValue());
         }
         if(ticket.getTicketPriority() == null){
-            ticket.setTicketPriority(defaultValueServiceImpl.getDefaultPriorityValue());
+            ticket.setTicketPriority(defaultValueService.getDefaultPriorityValue());
         }
         if(ticket.getTicketQueue() == null){
-            ticket.setTicketQueue(defaultValueServiceImpl.getDefaultTicketQueue());
+            ticket.setTicketQueue(defaultValueService.getDefaultTicketQueue());
         }
 
         if(ticket.getAssignedAdmin() != null){

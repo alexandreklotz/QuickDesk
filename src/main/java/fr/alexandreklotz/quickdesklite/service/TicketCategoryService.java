@@ -10,6 +10,8 @@ public interface TicketCategoryService {
 
     public TicketCategory getSpecifiedTicketCategory(TicketCategory ticketCategory);
 
+    public TicketCategory getTicketCategoryByName(String category);
+
     public TicketCategory createTicketCategory(TicketCategory ticketCategory);
 
     public TicketCategory updateTicketCategory(TicketCategory ticketCategory);

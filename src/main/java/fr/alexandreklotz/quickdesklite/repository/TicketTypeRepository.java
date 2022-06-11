@@ -19,4 +19,7 @@ public interface TicketTypeRepository extends JpaRepository<TicketType, UUID> {
     @Modifying
     @Query("UPDATE TicketType t SET t.isDefault = true WHERE t.id = :typeid")
     void setDefaultTicketType(@Param("typeid") UUID typeid);
+
+    @Query("FROM TicketType t WHERE t.name = :typename")
+    Optional<TicketType> findTicketTypeValueByName(@Param("typename")String typename);
 }

@@ -20,4 +20,6 @@ public interface TicketStatusRepository extends JpaRepository<TicketStatus, UUID
     @Query("UPDATE TicketStatus t SET t.isDefault = true WHERE t.id = :statusid")
     void setDefaultTicketStatus(@Param("statusid") UUID statusid);
 
+    @Query("FROM TicketStatus t WHERE t.name = :statusname")
+    Optional<TicketStatus> findTicketStatusByName(@Param("statusname") String statusname);
 }

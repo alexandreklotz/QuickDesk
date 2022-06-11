@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface TicketPriorityService {
 
-    public List<TicketPriority> getAllTicketPriorities(TicketPriority ticketPriority);
+    public List<TicketPriority> getAllTicketPriorities();
 
     public TicketPriority getSpecifiedTicketPriority(TicketPriority ticketPriority);
+
+    public TicketPriority getTicketPriorityByName(String priority);
 
     public TicketPriority createTicketPriority(TicketPriority ticketPriority);
 

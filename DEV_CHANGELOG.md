@@ -1,5 +1,18 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 11/06/2020
+*Quick modifications, ServiceImpl classes have been slightly modified. I started to create an error package to send error custom messages but i'll also try to find a way to send custom success messages.
+Some modifications still need to be made in some ServiceImpl classes and then they'll be tested. Once tested, I'll create new controllers and start the front-end.*
+
+* `getByTicketNumber` method has been recoded in order to make it cleaner and easier to read in `TicketServiceImpl`.
+* Creation of a new @Query in `TicketTypeRepository` : `findTicketTypeValueByName`. The same query has been implemented in all TicketXXX repositories.
+* I was importing the Impl classes of each service in the controllers which i replaced by the service itself (testing).
+* Creation of `TicketTypeServiceImpl, TicketCategoryServiceImpl, TicketStatusServiceImpl and TicketPriorityServiceImpl`.
+* Quick fix in the `getAll` method in `TicketPriorityService`. It was asking for a ticketPriority object which isn't needed to retrieve all objects.
+* `findTicketXXXByName` method has been created in each `TicketXXXService` and has been implemented in their Impl classes.
+* Creation of an `error` package in which a class has been created for each entity. It will be used to send custom error messages.
+
+***
 ### 06/06/2022
 *Quick changes. Regarding the last changelog, i'll use the "delete" method instead of the "deleteById". Changes have been made accordingly.
 Controllers will be deleted and completely revamped.*

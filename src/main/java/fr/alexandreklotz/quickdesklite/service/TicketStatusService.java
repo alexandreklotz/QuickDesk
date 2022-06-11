@@ -10,6 +10,8 @@ public interface TicketStatusService {
 
     public TicketStatus getSpecifiedTicketStatus(TicketStatus ticketStatus);
 
+    public TicketStatus getTicketStatusByName(String status);
+
     public TicketStatus createTicketStatus(TicketStatus ticketStatus);
 
     public TicketStatus updateTicketStatus(TicketStatus ticketStatus);

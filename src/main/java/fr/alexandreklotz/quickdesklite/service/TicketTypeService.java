@@ -10,6 +10,8 @@ public interface TicketTypeService {
 
     public TicketType getSpecifiedTicketType(TicketType ticketType);
 
+    public TicketType getTicketTypeByName(String type);
+
     public TicketType createTicketType(TicketType ticketType);
 
     public TicketType updateTicketType(TicketType ticketType);

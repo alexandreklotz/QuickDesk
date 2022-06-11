@@ -8,7 +8,9 @@ public interface TicketQueueService {
 
     public List<TicketQueue> getAllTicketQueues();
 
-    public TicketQueue getSpecifiedTicketQueue(TicketQueue ticketQueue);
+    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue);
+
+    public TicketQueue getTicketQueueByName(String queue);
 
     public TicketQueue createNewTicketQueue(TicketQueue ticketQueue);
 

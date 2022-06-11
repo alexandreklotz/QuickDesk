@@ -19,4 +19,7 @@ public interface TicketPriorityRepository extends JpaRepository<TicketPriority, 
     @Modifying
     @Query("UPDATE TicketPriority t SET t.isDefault = true WHERE t.id = :priorityid")
     void setDefaultTicketPriority(@Param("priorityid") UUID priorityid);
+
+    @Query("FROM TicketPriority t WHERE t.name = :priorityname")
+    Optional<TicketPriority> findTicketPriorityWithName(@Param("priorityname") String priorityname);
 }
