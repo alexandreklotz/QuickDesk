@@ -29,7 +29,7 @@ public class UserEndPointController {
     ///////////////
 
     //Methods for tickets. Will be used to retrieve and create tickets.
-
+    /*
     @PostMapping("/ticket/new")
     public ResponseEntity<Ticket> createUserTicket(@RequestBody Ticket ticket){
         ticketService.createUserTicket(ticket);
@@ -56,7 +56,7 @@ public class UserEndPointController {
         return ResponseEntity.ok(commentService.updateComment(comment));
     }
 
-    /*@DeleteMapping("/{commentId}/delete")
+    @DeleteMapping("/{commentId}/delete")
     public ResponseEntity<Comment> deleteExistingComment(@RequestBody Comment comment){
         return ResponseEntity.ok(commentServiceImpl.deleteComment(comment));
     }*/

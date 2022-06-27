@@ -1,5 +1,7 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.ContractException;
+import fr.alexandreklotz.quickdesklite.error.ContractorException;
 import fr.alexandreklotz.quickdesklite.model.Contract;
 import fr.alexandreklotz.quickdesklite.model.Contractor;
 import fr.alexandreklotz.quickdesklite.repository.ContractRepository;
@@ -30,24 +32,21 @@ public class ContractorServiceImpl implements ContractorService {
     }
 
     @Override
-    public Contractor getSpecifiedContractor(Contractor contractor) {
-        Optional<Contractor> searchedContractor = contractorRepository.findById(contractor.getId());
-        if(searchedContractor.isPresent()){
-            return searchedContractor.get();
-        } else {
-            return null; //return an error instead
-        }
+    public Contractor getSpecifiedContractor(Contractor contractor) throws ContractorException {
+        return contractorRepository.findById(contractor.getId()).orElseThrow(()
+        -> new ContractorException("The specified contractor doesn't exist."));
     }
 
     @Override
-    public Contractor createContractor(Contractor contractor) {
+    public Contractor createContractor(Contractor contractor) throws ContractException {
         if(contractor.getContracts() != null){
             for(Contract contract : contractor.getContracts()){
                 Optional<Contract> ctr = contractRepository.findById(contract.getId());
-                if(ctr.isPresent()){
-                    ctr.get().setContractor(contractor);
-                    contractRepository.saveAndFlush(ctr.get());
+                if(!ctr.isPresent()){
+                    throw new ContractException("This contract doesn't exist");
                 }
+                ctr.get().setContractor(contractor);
+                contractRepository.saveAndFlush(ctr.get());
             }
         }
         contractor.setContractorDateCreated(LocalDateTime.now());
@@ -56,23 +55,34 @@ public class ContractorServiceImpl implements ContractorService {
     }
 
     @Override
-    public Contractor updateContractor(Contractor contractor) {
+    public Contractor updateContractor(Contractor contractor) throws ContractorException, ContractException {
+
         Optional<Contractor> updatedContractor = contractorRepository.findById(contractor.getId());
-        if(updatedContractor.isPresent()){
-            if(contractor.getContracts() != null){
-                for(Contract contract : contractor.getContracts()){
-                    Optional<Contract> ctr = contractRepository.findById(contract.getId());
-                    if(ctr.isPresent()){
-                        ctr.get().setContractor(contractor);
-                        contractRepository.saveAndFlush(ctr.get());
-                    }
-                }
-            }
-            contractorRepository.saveAndFlush(updatedContractor.get());
-            return updatedContractor.get();
-        } else {
-            return null; //return an error
+
+        if(!updatedContractor.isPresent()){
+            throw new ContractorException("This contractor doesn't exist.");
         }
+
+        if(contractor.getContracts() != null){
+            for(Contract contract : contractor.getContracts()){
+                Optional<Contract> ctr = contractRepository.findById(contract.getId());
+                if(!ctr.isPresent()){
+                    throw new ContractException("This contract doesn't exist.");
+                }
+                ctr.get().setContractor(contractor);
+                contractRepository.saveAndFlush(ctr.get());
+            }
+        }
+
+        if(contractor.getContractorName() != null){
+            updatedContractor.get().setContractorName(contractor.getContractorName());
+        }
+        if(contractor.getContractorDescription() != null){
+            updatedContractor.get().setContractorDescription(contractor.getContractorDescription());
+        }
+
+        contractorRepository.saveAndFlush(updatedContractor.get());
+        return updatedContractor.get();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.TicketCategoryException;
 import fr.alexandreklotz.quickdesklite.model.TicketCategory;
 import fr.alexandreklotz.quickdesklite.repository.TicketCategoryRepository;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -29,28 +30,22 @@ public class TicketCategoryServiceImpl implements TicketCategoryService {
     }
 
     @Override
-    public TicketCategory getSpecifiedTicketCategory(TicketCategory ticketCategory) {
-        Optional<TicketCategory> searchedCategory = ticketCategoryRepository.findById(ticketCategory.getId());
-        if(!searchedCategory.isPresent()){
-            return null; //non existent
-        }
-        return searchedCategory.get();
+    public TicketCategory getSpecifiedTicketCategory(TicketCategory ticketCategory) throws TicketCategoryException {
+        return ticketCategoryRepository.findById(ticketCategory.getId()).orElseThrow(()
+        -> new TicketCategoryException("The ticket category with the id " + ticketCategory.getId() + " doesn't match any existing ticket category."));
     }
 
     @Override
-    public TicketCategory getTicketCategoryByName(String category) {
-        Optional<TicketCategory> searchedCategory = ticketCategoryRepository.findTicketCategoryByName(category);
-        if(!searchedCategory.isPresent()){
-            return null; //doesn't exist
-        }
-        return searchedCategory.get();
+    public TicketCategory getTicketCategoryByName(String category) throws TicketCategoryException {
+        return ticketCategoryRepository.findTicketCategoryByName(category).orElseThrow(()
+        -> new TicketCategoryException(category + " doesn't match any existing category"));
     }
 
     @Override
-    public TicketCategory createTicketCategory(TicketCategory ticketCategory) {
+    public TicketCategory createTicketCategory(TicketCategory ticketCategory) throws TicketCategoryException {
         Optional<TicketCategory> existingCategory = ticketCategoryRepository.findTicketCategoryByName(ticketCategory.getName());
         if(existingCategory.isPresent()){
-           return null; //existing category
+           throw new TicketCategoryException("A ticket category already uses this name. Please specify another name or modify the existing entity.");
         }
         if(ticketCategory.isDefault()){
             defaultValueService.setDefaultCategoryValue(ticketCategory);
@@ -60,20 +55,29 @@ public class TicketCategoryServiceImpl implements TicketCategoryService {
     }
 
     @Override
-    public TicketCategory updateTicketCategory(TicketCategory ticketCategory) {
+    public TicketCategory updateTicketCategory(TicketCategory ticketCategory) throws TicketCategoryException
+    {
         Optional<TicketCategory> updatedCategory = ticketCategoryRepository.findById(ticketCategory.getId());
         if(!updatedCategory.isPresent()){
-            return null; //the category you're trying to update doesn't exist.
+            throw new TicketCategoryException("The category you're trying to update doesn't exist.");
         }
+
         Optional<TicketCategory> existingCategory = ticketCategoryRepository.findTicketCategoryByName(ticketCategory.getName());
         if(existingCategory.isPresent()){
-            return null; //a category with this name already exists
+            throw new TicketCategoryException("A ticket category already uses this name. Please specify another name or modify the existing entity.");
         }
+
         if(ticketCategory.isDefault()){
             defaultValueService.setDefaultCategoryValue(updatedCategory.get());
         }
 
-        updatedCategory.get().setName(ticketCategory.getName());
+        if(ticketCategory.getName() != null){
+            updatedCategory.get().setName(ticketCategory.getName());
+        }
+
+        if(ticketCategory.getName() != null){
+            updatedCategory.get().setName(ticketCategory.getName());
+        }
 
         return ticketCategoryRepository.saveAndFlush(updatedCategory.get());
     }

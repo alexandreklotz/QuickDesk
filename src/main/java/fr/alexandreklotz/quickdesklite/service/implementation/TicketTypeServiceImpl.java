@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.TicketTypeException;
 import fr.alexandreklotz.quickdesklite.model.TicketType;
 import fr.alexandreklotz.quickdesklite.repository.TicketTypeRepository;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -28,29 +29,24 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     }
 
     @Override
-    public TicketType getSpecifiedTicketType(TicketType ticketType) {
-        Optional<TicketType> type = ticketTypeRepository.findById(ticketType.getId());
-        if(!type.isPresent()){
-            return null;
-        }
-        return type.get();
+    public TicketType getSpecifiedTicketType(TicketType ticketType) throws TicketTypeException {
+        return ticketTypeRepository.findById(ticketType.getId()).orElseThrow(()
+        -> new TicketTypeException("The specified ticket type doesn't exist."));
     }
 
     @Override
-    public TicketType getTicketTypeByName(String type) {
-        Optional<TicketType> searchedType = ticketTypeRepository.findTicketTypeValueByName(type);
-        if(!searchedType.isPresent()){
-            return null; //doesn't exist
-        }
-        return searchedType.get();
+    public TicketType getTicketTypeByName(String type) throws TicketTypeException {
+        return ticketTypeRepository.findTicketTypeValueByName(type).orElseThrow(()
+        -> new TicketTypeException(type + " doesn't match any existing ticket type."));
     }
 
     @Override
-    public TicketType createTicketType(TicketType ticketType) {
+    public TicketType createTicketType(TicketType ticketType) throws TicketTypeException {
         Optional<TicketType> existingType = ticketTypeRepository.findTicketTypeValueByName(ticketType.getName());
         if(existingType.isPresent()){
-            return null; //return error message saying a type with this name already exists.
+            throw new TicketTypeException("A ticket type already uses this name. Please specify another name or update the existing entity.");
         }
+
         if(ticketType.isDefault()){
             defaultValueService.setDefaultTypeValue(ticketType);
         }
@@ -59,21 +55,23 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     }
 
     @Override
-    public TicketType updateTicketType(TicketType ticketType) {
+    public TicketType updateTicketType(TicketType ticketType) throws TicketTypeException {
         Optional<TicketType> updatedType = ticketTypeRepository.findById(ticketType.getId());
         if(!updatedType.isPresent()){
-            return null; //not existing type
+            throw new TicketTypeException("The specified ticket type doesn't exist.");
         }
+
         Optional<TicketType> existingType = ticketTypeRepository.findTicketTypeValueByName(ticketType.getName());
         if(existingType.isPresent()){
-           return null; //error message, existing type with this name
+           throw new TicketTypeException("A ticket type already uses this name. Please specify another name or update the existing entity.");
         }
+
         if(ticketType.isDefault()){
             defaultValueService.setDefaultTypeValue(updatedType.get());
         }
 
         updatedType.get().setName(ticketType.getName());
-        return updatedType.get();
+        return ticketTypeRepository.saveAndFlush(updatedType.get());
     }
 
     @Override

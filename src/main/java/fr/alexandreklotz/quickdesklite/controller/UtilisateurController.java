@@ -25,7 +25,7 @@ public class UtilisateurController {
     ////////////////
     //Rest Methods//
     ////////////////
-
+    /*
     @JsonView(CustomJsonView.UtilisateurView.class)
     @GetMapping("/admin/utilisateur/all")
     public ResponseEntity<List<Utilisateur>> getAllUtilisateurs(){
@@ -64,6 +64,6 @@ public class UtilisateurController {
     public ResponseEntity deleteUtilisateur (@RequestBody Utilisateur utilisateur){
         utilisateurServiceImpl.deleteUser(utilisateur);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
 }

@@ -1,5 +1,7 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.CommentException;
+import fr.alexandreklotz.quickdesklite.error.TicketException;
 import fr.alexandreklotz.quickdesklite.model.Comment;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.repository.CommentRepository;
@@ -26,43 +28,44 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getCommentById(UUID commentid) {
-        Optional<Comment> searchedComment = commentRepository.findById(commentid);
-        if(searchedComment.isPresent()){
-            return searchedComment.get();
-        } else {
-            return null;
-        }
+    public Comment getCommentById(UUID commentid) throws CommentException {
+        return commentRepository.findById(commentid).orElseThrow(()
+        -> new CommentException(commentid + " doesn't match any existing comment."));
     }
 
     @Override
-    public Comment createNewComment(Long ticketNbr, Comment comment) {
+    public Comment createNewComment(Long ticketNbr, Comment comment) throws TicketException {
 
         Optional<Ticket> currentTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
-        if(currentTicket.isPresent()){
-
-            //We save the time at which the comment has been created as it will be displayed on the ticket's page.
-            comment.setCommentDate(LocalDateTime.now());
-            comment.setTicket(currentTicket.get());
-
-            commentRepository.saveAndFlush(comment);
+        if(!currentTicket.isPresent()){
+            throw new TicketException("Cannot create a new comment, the specified ticket doesn't exist.");
         }
+
+        //We save the time at which the comment has been created as it will be displayed on the ticket's page.
+        comment.setCommentDate(LocalDateTime.now());
+        comment.setTicket(currentTicket.get());
+
+        commentRepository.saveAndFlush(comment);
 
         return comment;
     }
 
     @Override
-    public Comment updateComment(Comment comment) {
+    public Comment updateComment(Comment comment) throws CommentException {
 
         Optional<Comment> updatedComment = commentRepository.findById(comment.getId());
-        if(updatedComment.isPresent()){
-            if(comment.getTicket().getId() != updatedComment.get().getTicket().getId()){
-                //return an error. make sure that this if has a purpose.
-            }
-            updatedComment.get().setHasBeenEdited(true);
-            updatedComment.get().setCommentDate(LocalDateTime.now());
-            commentRepository.saveAndFlush(updatedComment.get());
+        if(!updatedComment.isPresent()){
+            throw new CommentException("The specified comment doesn't exist.");
         }
+
+        updatedComment.get().setHasBeenEdited(true);
+        updatedComment.get().setCommentDate(LocalDateTime.now());
+
+        if(comment.getCommentText() != null){
+            updatedComment.get().setCommentText(comment.getCommentText());
+        }
+
+        commentRepository.saveAndFlush(updatedComment.get());
         return updatedComment.get();
     }
 

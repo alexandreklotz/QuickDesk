@@ -1,5 +1,7 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.LicenseKeyException;
+import fr.alexandreklotz.quickdesklite.error.SoftwareException;
 import fr.alexandreklotz.quickdesklite.model.LicenseKey;
 import fr.alexandreklotz.quickdesklite.model.Software;
 import fr.alexandreklotz.quickdesklite.repository.LicenseKeyRepository;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LicenseKeyServiceImpl implements LicenseKeyService {
@@ -30,42 +31,43 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
     }
 
     @Override
-    public LicenseKey getSpecifiedLicenseKey(LicenseKey licenseKey) {
-        Optional<LicenseKey> searchedLicense = licenseKeyRepository.findById(licenseKey.getId());
-        if(searchedLicense.isPresent()){
-            return searchedLicense.get();
-        } else {
-            return null; //return an error
-        }
+    public LicenseKey getSpecifiedLicenseKey(LicenseKey licenseKey) throws LicenseKeyException {
+        return licenseKeyRepository.findById(licenseKey.getId()).orElseThrow(()
+        -> new LicenseKeyException("The license key you specified doesn't exist."));
     }
 
     @Override
-    public LicenseKey createLicenseKey(LicenseKey licenseKey) {
+    public LicenseKey createLicenseKey(LicenseKey licenseKey) throws SoftwareException {
+
         if(licenseKey.getSoftware() != null){
             Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-            if(licSoftware.isPresent()){
-                licenseKey.setSoftware(licSoftware.get());
+            if(!licSoftware.isPresent()){
+                throw new SoftwareException("The software you're trying to assign to this license key doesn't exist.");
             }
+            licenseKey.setSoftware(licSoftware.get());
         }
+
         licenseKeyRepository.saveAndFlush(licenseKey);
         return licenseKey;
     }
 
+
     @Override
-    public LicenseKey updateLicenseKey(LicenseKey licenseKey) {
-        Optional<LicenseKey> updLicense = licenseKeyRepository.findById(licenseKey.getId());
-        if(updLicense.isPresent()){
-            if(licenseKey.getSoftware() != null){
-                Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-                if(licSoftware.isPresent()){
-                    licenseKey.setSoftware(licSoftware.get());
-                }
-            }
-            licenseKeyRepository.saveAndFlush(updLicense.get());
-            return updLicense.get();
-        } else {
-            return null; //return an error
+    public LicenseKey updateLicenseKey(LicenseKey licenseKey) throws LicenseKeyException, SoftwareException {
+        Optional<LicenseKey> updatedLic = licenseKeyRepository.findById(licenseKey.getId());
+        if(!updatedLic.isPresent()){
+            throw new LicenseKeyException("The license key you're trying to update doesn't exist.");
         }
+
+        if(licenseKey.getSoftware() != null){
+            Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
+            if(!licSoftware.isPresent()){
+                throw new SoftwareException("The software you're trying to assign to this license key doesn't exist.");
+            }
+            updatedLic.get().setSoftware(licSoftware.get());
+        }
+        licenseKeyRepository.saveAndFlush(updatedLic.get());
+        return updatedLic.get();
     }
 
     @Override

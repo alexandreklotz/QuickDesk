@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.TicketPriorityException;
 import fr.alexandreklotz.quickdesklite.model.TicketPriority;
 import fr.alexandreklotz.quickdesklite.repository.TicketPriorityRepository;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -29,28 +30,22 @@ public class TicketPriorityServiceImpl implements TicketPriorityService {
     }
 
     @Override
-    public TicketPriority getSpecifiedTicketPriority(TicketPriority ticketPriority) {
-        Optional<TicketPriority> searchedPriority  = ticketPriorityRepository.findById(ticketPriority.getId());
-        if(!searchedPriority.isPresent()){
-            return null; //not existing
-        }
-        return searchedPriority.get();
+    public TicketPriority getSpecifiedTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException {
+        return ticketPriorityRepository.findById(ticketPriority.getId()).orElseThrow(()
+        -> new TicketPriorityException(ticketPriority.getId() + " doesn't match any existing ticket priority."));
     }
 
     @Override
-    public TicketPriority getTicketPriorityByName(String priority) {
-        Optional<TicketPriority> searchedPriority = ticketPriorityRepository.findTicketPriorityWithName(priority);
-        if(!searchedPriority.isPresent()){
-            return null; //doesn't exist
-        }
-        return searchedPriority.get();
+    public TicketPriority getTicketPriorityByName(String priority) throws TicketPriorityException{
+        return ticketPriorityRepository.findTicketPriorityWithName(priority).orElseThrow(()
+        -> new TicketPriorityException(priority + " doesn't match any existing entity."));
     }
 
     @Override
-    public TicketPriority createTicketPriority(TicketPriority ticketPriority) {
+    public TicketPriority createTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException{
         Optional<TicketPriority> existingPriority = ticketPriorityRepository.findTicketPriorityWithName(ticketPriority.getName());
         if(existingPriority.isPresent()){
-            return null; //return a priority already exists with this name
+            throw new TicketPriorityException("A ticket priority already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketPriority.isDefault()){
             defaultValueService.setDefaultPriorityValue(ticketPriority);
@@ -60,20 +55,23 @@ public class TicketPriorityServiceImpl implements TicketPriorityService {
     }
 
     @Override
-    public TicketPriority updateTicketPriority(TicketPriority ticketPriority) {
+    public TicketPriority updateTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException{
         Optional<TicketPriority> updatedPriority = ticketPriorityRepository.findById(ticketPriority.getId());
         if(!updatedPriority.isPresent()){
-            return null; //the priority you're trying to update doesn't exist
+            throw new TicketPriorityException("The priority you're trying to update doesn't exist");
         }
         Optional<TicketPriority> existingPriority = ticketPriorityRepository.findTicketPriorityWithName(ticketPriority.getName());
         if(existingPriority.isPresent()){
-            return null; //a priority already exists with this name
+            throw new TicketPriorityException("A ticket priority already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketPriority.isDefault()){
             defaultValueService.setDefaultPriorityValue(updatedPriority.get());
         }
 
-        updatedPriority.get().setName(ticketPriority.getName());
+        if(ticketPriority.getName() != null){
+            updatedPriority.get().setName(ticketPriority.getName());
+        }
+
         return ticketPriorityRepository.saveAndFlush(updatedPriority.get());
     }
 

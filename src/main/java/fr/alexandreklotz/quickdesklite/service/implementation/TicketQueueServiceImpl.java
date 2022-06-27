@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.TicketQueueException;
 import fr.alexandreklotz.quickdesklite.model.TicketQueue;
 import fr.alexandreklotz.quickdesklite.repository.TicketQueueRepository;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -33,52 +34,50 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     }
 
     @Override
-    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) {
-        Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
-        if(tQueue.isPresent()){
-            return tQueue.get();
-        } else {
-            return null;
-        }
+    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) throws TicketQueueException {
+        return ticketQueueRepository.findById(ticketQueue.getId()).orElseThrow(()
+        -> new TicketQueueException(ticketQueue.getId() + " doesn't match any existing ticket queue."));
     }
 
     @Override
-    public TicketQueue getTicketQueueByName(String queue) {
-        Optional<TicketQueue> searchedQueue = ticketQueueRepository.findTicketQueueByName(queue);
-        if(!searchedQueue.isPresent()){
-            return null; //doesn't exist
-        }
-        return searchedQueue.get();
+    public TicketQueue getTicketQueueByName(String queue) throws TicketQueueException {
+        return ticketQueueRepository.findTicketQueueByName(queue).orElseThrow(()
+        -> new TicketQueueException(queue + " doesn't match any existing ticket queue."));
     }
 
     @Override
-    public TicketQueue createNewTicketQueue(TicketQueue ticketQueue) {
+    public TicketQueue createNewTicketQueue(TicketQueue ticketQueue) throws TicketQueueException{
         Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
         if(existingQueue.isPresent()){
-            return null; //a queue with this name already exists
+            throw new TicketQueueException("A ticket queue already uses this name. Please specify another name or update the existing entity.");
         }
+
         if(ticketQueue.isDefault()){
             defaultValueService.setDefaultTicketQueue(ticketQueue);
         }
+
         ticketQueueRepository.saveAndFlush(ticketQueue);
         return ticketQueue;
     }
 
     @Override
-    public TicketQueue updateTicketQueue(TicketQueue ticketQueue) {
+    public TicketQueue updateTicketQueue(TicketQueue ticketQueue) throws TicketQueueException {
         Optional<TicketQueue> updatedQueue = ticketQueueRepository.findById(ticketQueue.getId());
         if(!updatedQueue.isPresent()) {
-            return null; //the queue you're trying to update doesn't exist
+            throw new TicketQueueException("The ticket queue you're trying to update doesn't exist.");
         }
         Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
         if(existingQueue.isPresent()){
-            return null; //a queue with this name already exists
+            throw new TicketQueueException("A ticket queue already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketQueue.isDefault()){
             defaultValueService.setDefaultTicketQueue(updatedQueue.get());
         }
 
-        updatedQueue.get().setName(ticketQueue.getName());
+        if(ticketQueue.getName() != null){
+            updatedQueue.get().setName(ticketQueue.getName());
+        }
+
         return ticketQueueRepository.saveAndFlush(updatedQueue.get());
     }
 

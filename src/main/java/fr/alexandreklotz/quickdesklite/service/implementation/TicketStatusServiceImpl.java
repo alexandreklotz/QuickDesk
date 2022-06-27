@@ -1,5 +1,7 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
+import fr.alexandreklotz.quickdesklite.error.TicketStatusException;
 import fr.alexandreklotz.quickdesklite.model.TicketStatus;
 import fr.alexandreklotz.quickdesklite.repository.TicketStatusRepository;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -29,28 +31,22 @@ public class TicketStatusServiceImpl implements TicketStatusService {
     }
 
     @Override
-    public TicketStatus getSpecifiedTicketStatus(TicketStatus ticketStatus) {
-        Optional<TicketStatus> searchedStatus = ticketStatusRepository.findById(ticketStatus.getId());
-        if(!searchedStatus.isPresent()){
-            return null; //non existing status
-        }
-        return searchedStatus.get();
+    public TicketStatus getSpecifiedTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
+        return ticketStatusRepository.findById(ticketStatus.getId()).orElseThrow(()
+        -> new TicketStatusException("The specified ticket status doesn't exist."));
     }
 
     @Override
-    public TicketStatus getTicketStatusByName(String status) {
-        Optional<TicketStatus> searchedStatus = ticketStatusRepository.findTicketStatusByName(status);
-        if(!searchedStatus.isPresent()){
-            return null; //doesn't exist
-        }
-        return searchedStatus.get();
+    public TicketStatus getTicketStatusByName(String status) throws TicketStatusException {
+        return ticketStatusRepository.findTicketStatusByName(status).orElseThrow(()
+        -> new TicketStatusException(status + " doesn't match any existing ticket status."));
     }
 
     @Override
-    public TicketStatus createTicketStatus(TicketStatus ticketStatus) {
+    public TicketStatus createTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
         Optional<TicketStatus> existingStatus = ticketStatusRepository.findTicketStatusByName(ticketStatus.getName());
         if(existingStatus.isPresent()){
-            return null; //a status with this name already exists
+            throw new TicketStatusException("A ticket status already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketStatus.isDefault()){
             defaultValueService.setDefaultStatusValue(ticketStatus);
@@ -60,20 +56,26 @@ public class TicketStatusServiceImpl implements TicketStatusService {
     }
 
     @Override
-    public TicketStatus updateTicketStatus(TicketStatus ticketStatus) {
+    public TicketStatus updateTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
+
         Optional<TicketStatus> updatedStatus = ticketStatusRepository.findById(ticketStatus.getId());
         if(!updatedStatus.isPresent()){
-            return null; //the status you're trying to update doesn't exist
+            throw new TicketStatusException("The ticket status you're trying to update doesn't exist.");
         }
+
         Optional<TicketStatus> existingStatus = ticketStatusRepository.findTicketStatusByName(ticketStatus.getName());
         if(existingStatus.isPresent()){
-            return null; //this name is already assigned to another status
+            throw new TicketStatusException("A ticket status already uses this name. Please specify another name or update the existing entity.");
         }
+
         if(ticketStatus.isDefault()){
             defaultValueService.setDefaultStatusValue(updatedStatus.get());
         }
 
-        updatedStatus.get().setName(ticketStatus.getName());
+        if(ticketStatus.getName() != null){
+            updatedStatus.get().setName(ticketStatus.getName());
+        }
+
         return ticketStatusRepository.saveAndFlush(updatedStatus.get());
     }
 

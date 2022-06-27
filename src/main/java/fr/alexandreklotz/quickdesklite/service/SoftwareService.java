@@ -1,5 +1,8 @@
 package fr.alexandreklotz.quickdesklite.service;
 
+import fr.alexandreklotz.quickdesklite.error.ContractException;
+import fr.alexandreklotz.quickdesklite.error.LicenseKeyException;
+import fr.alexandreklotz.quickdesklite.error.SoftwareException;
 import fr.alexandreklotz.quickdesklite.model.Software;
 
 import java.util.List;
@@ -9,11 +12,11 @@ public interface SoftwareService {
 
     public List<Software> getAllSoftware();
 
-    public Software getSpecifiedSoftware(UUID softwareId);
+    public Software getSpecifiedSoftware(UUID softwareId) throws SoftwareException;
 
-    public Software createSoftware(Software software);
+    public Software createSoftware(Software software) throws LicenseKeyException, ContractException;
 
-    public Software updateSoftware(Software software);
+    public Software updateSoftware(Software software) throws SoftwareException, LicenseKeyException, ContractException;
 
     public void deleteSoftware(Software software);
 }

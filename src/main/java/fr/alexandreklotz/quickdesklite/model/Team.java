@@ -60,7 +60,7 @@ public class Team {
     //A team can access multiple queues and vice versa
     @JsonView(CustomJsonView.TeamView.class)
     @ManyToMany(mappedBy = "teams")
-    private Set<TicketQueue> ticketQueue;
+    private Set<TicketQueue> ticketQueues;
 
     /////////////////////
     //Getters & Setters//
@@ -115,12 +115,12 @@ public class Team {
         this.utilisateurs = utilisateurs;
     }
 
-    public Set<TicketQueue> getTicketQueue() {
-        return ticketQueue;
+    public Set<TicketQueue> getTicketQueues() {
+        return ticketQueues;
     }
 
-    public void setTicketQueue(Set<TicketQueue> ticketqueue) {
-        this.ticketQueue = ticketqueue;
+    public void setTicketQueues(Set<TicketQueue> ticketqueue) {
+        this.ticketQueues = ticketqueue;
     }
 
     @Override

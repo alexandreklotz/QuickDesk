@@ -1,6 +1,15 @@
 # QuickDesk Lite Coding Changelog
 ***
-### 11/06/2020
+### 27/06/2022
+*A few refactors have been done. I'm also "cleaning" the code. Implementation of exception handling : `NotFoundException` classes now all extend "Exception" and are implemented in their respective `Service and ServiceImpl`.
+Error handling will be implemented once exception handling is functional. Cleaning the code allowed me to finalize many methods that weren't aswell.*
+
+* A missing end of the ManyToMany relation between `Contract` and `Software` has been added. Even though it was functional, the missing end has been added in the Software class.
+* The relation between `Contract` and `Software` has been modified : It has been modified from a __ManyToMany__ to a __OneToMany // ManyToOne__. A software can only be linked to one contract but a contract can be linked to multiple software.
+* `PanelController, UserEndPointController and UtilisateurController` have been "disabled" (everything is now a comment). The errors in these controllers will be solved later.
+* Creation of `RolesException`.
+***
+### 11/06/2022
 *Quick modifications, ServiceImpl classes have been slightly modified. I started to create an error package to send error custom messages but i'll also try to find a way to send custom success messages.
 Some modifications still need to be made in some ServiceImpl classes and then they'll be tested. Once tested, I'll create new controllers and start the front-end.*
 

@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service;
 
+import fr.alexandreklotz.quickdesklite.error.TicketQueueException;
 import fr.alexandreklotz.quickdesklite.model.TicketQueue;
 
 import java.util.List;
@@ -8,13 +9,13 @@ public interface TicketQueueService {
 
     public List<TicketQueue> getAllTicketQueues();
 
-    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue);
+    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) throws TicketQueueException;
 
-    public TicketQueue getTicketQueueByName(String queue);
+    public TicketQueue getTicketQueueByName(String queue) throws TicketQueueException;
 
-    public TicketQueue createNewTicketQueue(TicketQueue ticketQueue);
+    public TicketQueue createNewTicketQueue(TicketQueue ticketQueue) throws TicketQueueException;
 
-    public TicketQueue updateTicketQueue(TicketQueue ticketQueue);
+    public TicketQueue updateTicketQueue(TicketQueue ticketQueue) throws TicketQueueException;
 
     public void deleteTicketQueue(TicketQueue ticketQueue);
 }

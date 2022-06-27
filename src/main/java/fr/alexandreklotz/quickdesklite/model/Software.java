@@ -52,6 +52,11 @@ public class Software {
     @OneToMany(mappedBy = "software")
     private Set<LicenseKey> licenses;
 
+    //A software can be linked to only one contract but a contract can be linked to multiple software
+    @JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 
     /////////////////////
     //Getters & setters//
@@ -96,6 +101,14 @@ public class Software {
 
     public void setLicenses(Set<LicenseKey> licenses) {
         this.licenses = licenses;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
     @Override

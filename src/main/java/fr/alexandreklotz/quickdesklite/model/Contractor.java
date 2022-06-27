@@ -28,11 +28,11 @@ public class Contractor {
 
     @JsonView(CustomJsonView.ContractorView.class)
     @Column(nullable = false)
-    private String contractorname;
+    private String contractorName;
 
     @JsonView(CustomJsonView.ContractorView.class)
     @Column
-    private String contractorcomment;
+    private String contractorDescription;
 
     @JsonView(CustomJsonView.ContractorView.class)
     @Column(nullable = false)
@@ -65,20 +65,20 @@ public class Contractor {
         this.id = id;
     }
 
-    public String getContractorname() {
-        return contractorname;
+    public String getContractorName() {
+        return contractorName;
     }
 
-    public void setContractorname(String contractorname) {
-        this.contractorname = contractorname;
+    public void setContractorName(String contractorname) {
+        this.contractorName = contractorname;
     }
 
-    public String getContractorcomment() {
-        return contractorcomment;
+    public String getContractorDescription() {
+        return contractorDescription;
     }
 
-    public void setContractorcomment(String contractorcomment) {
-        this.contractorcomment = contractorcomment;
+    public void setContractorDescription(String contractorcomment) {
+        this.contractorDescription = contractorcomment;
     }
 
     public LocalDateTime getContractorDateCreated() {

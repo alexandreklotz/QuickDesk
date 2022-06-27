@@ -29,6 +29,7 @@ public class PanelController {
 
     //TODO : should the user be redirected if he would get an error instead of getting his panel ?
     //HttpResponse might be useless since it is not used.
+    /*
     @GetMapping("/mypanel")
     public ModelAndView userPanel (HttpServletRequest request) throws IOException {
         ModelAndView panel = new ModelAndView("adminpanel");
@@ -51,5 +52,5 @@ public class PanelController {
         }
 
         return panel;
-    }
+    }*/
 }

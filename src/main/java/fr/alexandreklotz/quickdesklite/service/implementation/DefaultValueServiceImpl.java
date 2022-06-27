@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.service.implementation;
 
+import fr.alexandreklotz.quickdesklite.error.*;
 import fr.alexandreklotz.quickdesklite.model.*;
 import fr.alexandreklotz.quickdesklite.repository.*;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -42,127 +43,142 @@ public class DefaultValueServiceImpl implements DefaultValueService {
 
 
     @Override
-    public TicketStatus getDefaultStatusValue() {
+    public TicketStatus getDefaultStatusValue() throws DefaultValueException {
         Optional<TicketStatus> ticketStatus = ticketStatusRepository.findDefaultTicketStatusValue(true);
-        if(ticketStatus.isPresent()){
-            return ticketStatus.get();
-        } else {
-            return null; //Return an error message
+        if(!ticketStatus.isPresent()){
+            throw new DefaultValueException("No default value is set for ticket status.");
         }
+        return ticketStatus.get();
     }
 
     @Override
-    public TicketStatus setDefaultStatusValue(TicketStatus ticketStatus) {
+    public TicketStatus setDefaultStatusValue(TicketStatus ticketStatus) throws TicketStatusException {
         Optional<TicketStatus> currentDefault = ticketStatusRepository.findDefaultTicketStatusValue(true);
-        if(currentDefault.isPresent()){
-            currentDefault.get().setDefault(false);
-            ticketStatusRepository.saveAndFlush(currentDefault.get());
+        if(!currentDefault.isPresent()){
+            throw new TicketStatusException("The previous default value for ticket status doesn't exist or wasn't set.");
         }
+        currentDefault.get().setDefault(false);
+        ticketStatusRepository.saveAndFlush(currentDefault.get());
+
         Optional<TicketStatus> newDefaultStatusValue = ticketStatusRepository.findById(ticketStatus.getId());
-        if(newDefaultStatusValue.isPresent()){
-            ticketStatusRepository.setDefaultTicketStatus(newDefaultStatusValue.get().getId());
-            ticketStatusRepository.saveAndFlush(newDefaultStatusValue.get());
+        if(!newDefaultStatusValue.isPresent()){
+            throw new TicketStatusException("The ticket status value you're trying to set as default doesn't exist.");
         }
+        ticketStatusRepository.setDefaultTicketStatus(newDefaultStatusValue.get().getId());
+        ticketStatusRepository.saveAndFlush(newDefaultStatusValue.get());
+
         return newDefaultStatusValue.get();
     }
 
     @Override
-    public TicketCategory getDefaultCategoryValue() {
+    public TicketCategory getDefaultCategoryValue() throws DefaultValueException {
         Optional<TicketCategory> ticketCategory = ticketCategoryRepository.findDefaultTicketCategory(true);
-        if(ticketCategory.isPresent()){
-            return ticketCategory.get();
-        } else {
-            return null;
+        if(!ticketCategory.isPresent()){
+            throw new DefaultValueException("No default value is set for ticket category.");
         }
+        return ticketCategory.get();
     }
 
     @Override
-    public TicketCategory setDefaultCategoryValue(TicketCategory ticketCategory) {
+    public TicketCategory setDefaultCategoryValue(TicketCategory ticketCategory) throws TicketCategoryException {
         Optional<TicketCategory> currentDefault = ticketCategoryRepository.findDefaultTicketCategory(true);
-        if(currentDefault.isPresent()){
-            currentDefault.get().setDefault(false);
-            ticketCategoryRepository.saveAndFlush(currentDefault.get());
+        if(!currentDefault.isPresent()){
+            throw new TicketCategoryException("The previous default value for ticket category doesn't exist or wasn't set.");
         }
+        currentDefault.get().setDefault(false);
+        ticketCategoryRepository.saveAndFlush(currentDefault.get());
+
         Optional<TicketCategory> newDefaultCategory = ticketCategoryRepository.findById(ticketCategory.getId());
-        if(newDefaultCategory.isPresent()){
-            ticketCategoryRepository.setDefaultTicketCategory(newDefaultCategory.get().getId());
-            ticketCategoryRepository.saveAndFlush(newDefaultCategory.get());
+        if(!newDefaultCategory.isPresent()){
+            throw new TicketCategoryException("The ticket category value you're trying to set as default doesn't exist.");
         }
+        ticketCategoryRepository.setDefaultTicketCategory(newDefaultCategory.get().getId());
+        ticketCategoryRepository.saveAndFlush(newDefaultCategory.get());
+
         return newDefaultCategory.get();
     }
 
     @Override
-    public TicketType getDefaultTypeValue() {
+    public TicketType getDefaultTypeValue() throws DefaultValueException {
         Optional<TicketType> ticketType = ticketTypeRepository.findDefaultTicketTypeValue(true);
-        if(ticketType.isPresent()){
-            return ticketType.get();
-        } else {
-            return null;
+        if(!ticketType.isPresent()){
+            throw new DefaultValueException("No default value is set for ticket value.");
         }
+        return ticketType.get();
     }
 
     @Override
-    public TicketType setDefaultTypeValue(TicketType ticketType) {
+    public TicketType setDefaultTypeValue(TicketType ticketType) throws TicketTypeException {
         Optional<TicketType> currentDefault = ticketTypeRepository.findDefaultTicketTypeValue(true);
-        if(currentDefault.isPresent()){
-            currentDefault.get().setDefault(false);
-            ticketTypeRepository.saveAndFlush(currentDefault.get());
+        if(!currentDefault.isPresent()){
+            throw new TicketTypeException("The previous default value for ticket type doesn't exist or wasn't set.");
         }
+        currentDefault.get().setDefault(false);
+        ticketTypeRepository.saveAndFlush(currentDefault.get());
+
         Optional<TicketType> newDefaultType = ticketTypeRepository.findById(ticketType.getId());
-        if(newDefaultType.isPresent()){
-            ticketTypeRepository.setDefaultTicketType(newDefaultType.get().getId());
-            ticketTypeRepository.saveAndFlush(newDefaultType.get());
+        if(!newDefaultType.isPresent()){
+            throw new TicketTypeException("The ticket type value you're trying to set as default doesn't exist.");
         }
+        ticketTypeRepository.setDefaultTicketType(newDefaultType.get().getId());
+        ticketTypeRepository.saveAndFlush(newDefaultType.get());
+
         return newDefaultType.get();
     }
 
     @Override
-    public TicketPriority getDefaultPriorityValue() {
+    public TicketPriority getDefaultPriorityValue() throws DefaultValueException {
         Optional<TicketPriority> ticketPriority = ticketPriorityRepository.findDefaultTicketPriorityValue(true);
-        if(ticketPriority.isPresent()){
-            return ticketPriority.get();
-        } else {
-            return null;
+        if(!ticketPriority.isPresent()){
+            throw new DefaultValueException("No default value is set for ticket priority.");
         }
+        return ticketPriority.get();
     }
 
     @Override
-    public TicketPriority setDefaultPriorityValue(TicketPriority ticketPriority) {
+    public TicketPriority setDefaultPriorityValue(TicketPriority ticketPriority) throws TicketPriorityException {
         Optional<TicketPriority> currentDefault = ticketPriorityRepository.findDefaultTicketPriorityValue(true);
-        if(currentDefault.isPresent()){
-            currentDefault.get().setDefault(false);
-            ticketPriorityRepository.saveAndFlush(currentDefault.get());
+        if(!currentDefault.isPresent()){
+            throw new TicketPriorityException("The previous default value for ticket priority doesn't exist or wasn't set.");
         }
+        currentDefault.get().setDefault(false);
+        ticketPriorityRepository.saveAndFlush(currentDefault.get());
+
         Optional<TicketPriority> newDefaultPriority = ticketPriorityRepository.findById(ticketPriority.getId());
-        if(newDefaultPriority.isPresent()){
-            ticketPriorityRepository.setDefaultTicketPriority(newDefaultPriority.get().getId());
-            ticketPriorityRepository.saveAndFlush(newDefaultPriority.get());
+        if(!newDefaultPriority.isPresent()){
+            throw new TicketPriorityException("The ticket priority value you're trying to set as default doesn't exist.");
         }
+        ticketPriorityRepository.setDefaultTicketPriority(newDefaultPriority.get().getId());
+        ticketPriorityRepository.saveAndFlush(newDefaultPriority.get());
+
         return newDefaultPriority.get();
     }
 
     @Override
-    public TicketQueue getDefaultTicketQueue() {
+    public TicketQueue getDefaultTicketQueue() throws DefaultValueException {
         Optional<TicketQueue> ticketQueue = ticketQueueRepository.findDefaultTicketQueueValue(true);
-        if(ticketQueue.isPresent()){
-            return ticketQueue.get();
-        } else {
-            return null;
+        if(!ticketQueue.isPresent()) {
+            throw new DefaultValueException("No default value is set for ticket queue.");
         }
+        return ticketQueue.get();
     }
 
     @Override
-    public TicketQueue setDefaultTicketQueue(TicketQueue ticketQueue) {
+    public TicketQueue setDefaultTicketQueue(TicketQueue ticketQueue) throws TicketQueueException {
         Optional<TicketQueue> currentDefault = ticketQueueRepository.findDefaultTicketQueueValue(true);
-        if(currentDefault.isPresent()){
-            currentDefault.get().setDefault(false);
-            ticketQueueRepository.saveAndFlush(currentDefault.get());
+        if(!currentDefault.isPresent()){
+            throw new TicketQueueException("The previous default value for ticket queue doesn't exist or wasn't set.");
         }
+        currentDefault.get().setDefault(false);
+        ticketQueueRepository.saveAndFlush(currentDefault.get());
+
         Optional<TicketQueue> newDefaultQueue = ticketQueueRepository.findById(ticketQueue.getId());
-        if(newDefaultQueue.isPresent()){
-            ticketQueueRepository.setDefaultTicketQueue(newDefaultQueue.get().getId());
-            ticketQueueRepository.saveAndFlush(newDefaultQueue.get());
+        if(!newDefaultQueue.isPresent()){
+            throw new TicketQueueException("The ticket queue value you're trying to set as default doesn't exist.");
         }
+        ticketQueueRepository.setDefaultTicketQueue(newDefaultQueue.get().getId());
+        ticketQueueRepository.saveAndFlush(newDefaultQueue.get());
+
         return newDefaultQueue.get();
     }
 }

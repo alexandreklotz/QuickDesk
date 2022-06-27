@@ -49,15 +49,10 @@ public class Contract {
     //Relations//
     /////////////
 
-    //A contract can have multiple software and vice versa
+    //A contract can be linked to multiple software but a software can only be linked to one contract
     @JsonView(CustomJsonView.ContractView.class)
-    @ManyToMany
-    @JoinTable(
-            name = "contract_software",
-            joinColumns = @JoinColumn(name = "contract_id"),
-            inverseJoinColumns = @JoinColumn(name = "software_id")
-    )
-    private Set<Software> ctrsoftware;
+    @OneToMany(mappedBy = "contract")
+    private Set<Software> ctrSoftware;
 
     //A contract can only have one contractor but a contractor can have multiple contracts
     @JsonView(CustomJsonView.ContractView.class)
@@ -101,12 +96,12 @@ public class Contract {
         this.ctrNumber = ctrNumber;
     }
 
-    public Set<Software> getCtrsoftware() {
-        return ctrsoftware;
+    public Set<Software> getCtrSoftware() {
+        return ctrSoftware;
     }
 
-    public void setCtrsoftware(Set<Software> ctrsoftware) {
-        this.ctrsoftware = ctrsoftware;
+    public void setCtrSoftware(Set<Software> softwares) {
+        this.ctrSoftware = softwares;
     }
 
     public Contractor getContractor() {
