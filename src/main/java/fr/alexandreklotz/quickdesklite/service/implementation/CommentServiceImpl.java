@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createNewComment(Long ticketNbr, Comment comment) throws TicketException {
+    public Comment createNewComment(Long ticketNbr, Comment comment) throws TicketException{
 
         Optional<Ticket> currentTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
         if(!currentTicket.isPresent()){
@@ -51,7 +51,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(Comment comment) throws CommentException {
+    public Comment updateComment(Long ticketNbr, Comment comment) throws CommentException, TicketException {
+
+        Optional<Ticket> linkedTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
+        if(!linkedTicket.isPresent()){
+            throw new TicketException("The ticket this comment is linked to doesn't exist or has been deleted.");
+        }
 
         Optional<Comment> updatedComment = commentRepository.findById(comment.getId());
         if(!updatedComment.isPresent()){

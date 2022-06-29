@@ -18,13 +18,15 @@ public interface TicketService {
 
     public Ticket getTicketByNumber(Long ticketNbr, String login) throws TicketException, UtilisateurException;
 
+    public List<Ticket> getClosedTickets(boolean closed);
+
     public Ticket createUserTicket(Ticket ticket) throws DefaultValueException;
 
     public Ticket createAdminTicket(Ticket ticket) throws UtilisateurException, DefaultValueException;
 
     public Ticket updateTicket(Ticket ticket) throws TicketException;
 
-    public void closeTicket(Ticket ticket) throws TicketException;
+    public Ticket closeTicket(Ticket ticket) throws TicketException;
 
     public void deleteTicket(Ticket ticket);
 

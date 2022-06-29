@@ -1,5 +1,21 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 29/06/2022
+*Some blocks of code still need to be cleaned.*
+*The relation between `Contract` and `Software` will be modified to a __ManyToMany__ as it was before. The modification that has been
+made a few days ago wasn't correct and needs to be fixed.*
+
+* Modifications have been made in `UserEndPointController` => Methods have been implemented and will be tested.
+* A few modifications have been made in `CommentService and CommentServiceImpl` -> `TicketException` has been added in the `updateComment` method.
+* A few modifications have been made in `TicketService and TicketServiceImpl`.
+* All the previous controllers have been deleted and recreated in the following package : `controller.admin`.
+* Creation of a new method in `TicketRepository` => `getClosedTickets`. This method will retrieve all closed tickets. The same method has been created in `TicketService and TicketServiceImpl`.
+* `TicketController` and `TicketCategoryController` have been implemented. They will be tested once all the controllers will be finished since many entities are linked to each other.
+
+*Since there is a service managing the default values such as ticket categories and etc, i need to take into consideration the fact that if you
+delete a value which is set as default that the user ticket creation process won't work. Should i prevent admins to delete default values without setting
+another value as default ? This functionality will be thought of once all the admin controllers will be finished.*
+***
 ### 27/06/2022
 *A few refactors have been done. I'm also "cleaning" the code. Implementation of exception handling : `NotFoundException` classes now all extend "Exception" and are implemented in their respective `Service and ServiceImpl`.
 Error handling will be implemented once exception handling is functional. Cleaning the code allowed me to finalize many methods that weren't aswell.*

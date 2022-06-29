@@ -11,7 +11,7 @@ public interface CommentService {
 
     public Comment createNewComment(Long ticketNbr, Comment comment) throws TicketException;
 
-    public Comment updateComment(Comment comment) throws CommentException;
+    public Comment updateComment(Long ticketNbr, Comment comment) throws CommentException, TicketException;
 
     public void deleteComment(Comment comment);
 

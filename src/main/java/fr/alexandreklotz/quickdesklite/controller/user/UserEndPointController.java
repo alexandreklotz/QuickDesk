@@ -1,5 +1,9 @@
 package fr.alexandreklotz.quickdesklite.controller.user;
 
+import fr.alexandreklotz.quickdesklite.error.CommentException;
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
+import fr.alexandreklotz.quickdesklite.error.TicketException;
+import fr.alexandreklotz.quickdesklite.error.UtilisateurException;
 import fr.alexandreklotz.quickdesklite.model.Comment;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.service.CommentService;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -28,37 +34,38 @@ public class UserEndPointController {
     // Endpoints //
     ///////////////
 
-    //Methods for tickets. Will be used to retrieve and create tickets.
-    /*
-    @PostMapping("/ticket/new")
-    public ResponseEntity<Ticket> createUserTicket(@RequestBody Ticket ticket){
-        ticketService.createUserTicket(ticket);
-        return ResponseEntity.ok().body(ticket);
+    @GetMapping("/ticket/getOpenedTickets")
+    public List<Ticket> getOpenedTickets(HttpServletRequest request) throws UtilisateurException{
+        Principal principal = request.getUserPrincipal();
+        String userLogin = principal.getName();
+        return ticketService.getOpenedTickets(userLogin);
     }
 
     @GetMapping("/ticket/{ticketNbr}")
-    public ResponseEntity<Ticket> getUserTicket(@PathVariable Long ticketNbr, HttpServletRequest request){
+    public Ticket getUserTicket(@PathVariable Long ticketNbr, HttpServletRequest request) throws TicketException, UtilisateurException {
         Principal principal = request.getUserPrincipal();
         String userLogin = principal.getName();
-        return ResponseEntity.ok(ticketService.getTicketByNumber(ticketNbr, userLogin));
+        return ticketService.getTicketByNumber(ticketNbr, userLogin);
     }
 
-
-    //Methods for comments. Will be used to create, retrieve and delete comments.
+    @PostMapping("/ticket/new")
+    public Ticket createUserTicket(@RequestBody Ticket ticket) throws DefaultValueException {
+        return ticketService.createUserTicket(ticket);
+    }
 
     @PostMapping("/ticket/{ticketNbr}/addComment")
-    public ResponseEntity<Comment> addCommentOnTicket(@PathVariable Long ticketNbr, @RequestBody Comment comment){
-        return ResponseEntity.ok(commentService.createNewComment(ticketNbr, comment));
+    public Comment addCommentToTicket(@PathVariable Long ticketNbr, @RequestBody Comment comment) throws TicketException {
+        return commentService.createNewComment(ticketNbr, comment);
     }
 
-    @PostMapping("/{commentId}/update")
-    public ResponseEntity<Comment> updateExistingComment(@RequestBody Comment comment){
-        return ResponseEntity.ok(commentService.updateComment(comment));
+    @PostMapping("/ticket/{ticketNbr}/commentUpdate")
+    public Comment updateExistingComment(@PathVariable Long ticketNbr, @RequestBody Comment comment) throws TicketException, CommentException {
+        return commentService.updateComment(ticketNbr, comment);
     }
 
-    @DeleteMapping("/{commentId}/delete")
-    public ResponseEntity<Comment> deleteExistingComment(@RequestBody Comment comment){
-        return ResponseEntity.ok(commentServiceImpl.deleteComment(comment));
-    }*/
+    @DeleteMapping("/comment/{commentId}/delete")
+    public void deleteComment(@RequestBody Comment comment){
+        commentService.deleteComment(comment);
+    }
 
 }

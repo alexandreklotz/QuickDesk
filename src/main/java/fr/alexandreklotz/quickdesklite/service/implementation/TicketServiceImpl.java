@@ -244,13 +244,20 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void closeTicket(Ticket ticket) throws TicketException {
+    public Ticket closeTicket(Ticket ticket) throws TicketException {
         Optional<Ticket> closedTicket = ticketRepository.findById(ticket.getId());
         if(!closedTicket.isPresent()){
             throw new TicketException("The ticket you're trying to close doesn't exist.");
         }
         closedTicket.get().setEditableTicket(false);
         ticketRepository.saveAndFlush(closedTicket.get());
+        return closedTicket.get();
+    }
+
+    //TODO : This method needs to be tested.
+    @Override
+    public List<Ticket> getClosedTickets(boolean closed) {
+        return ticketRepository.getClosedTickets(true);
     }
 
     @Override

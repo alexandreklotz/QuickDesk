@@ -16,4 +16,7 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     @Query("FROM Ticket t WHERE t.ticketNumber = :number")
     Optional<Ticket> findTicketWithTicketNumber (@Param("number") Long number);
 
+    @Query("FROM Ticket WHERE editableTicket = :isclosed")
+    List<Ticket> getClosedTickets (@Param("isclosed")boolean isclosed);
+
 }
