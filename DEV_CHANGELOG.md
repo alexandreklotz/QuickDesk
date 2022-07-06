@@ -1,5 +1,26 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 06/07/2022
+*The `getSpecifiedXXX` methods in `ServiceImpl` classes need to be fixed. They are currently being sent an object, retrieve its ID and then return it.
+However, considering that we have a list of contracts for example, how can we possibly, by just clicking on the contract, send it and retrieve it ?
+It means that we already have it then. These methods will be modified to only receive an ID and use the __findById__ method and then return it.
+This interface has already been modified in `ContractorService` and `ContractService` which therefore modified the methods in the `ServiceImpl` classes.*
+
+* Creation of a new method in `ContractRepository` -> `getContractByContractNumber`. It will be used to find contracts by using the specified number.
+* The relation between `Contract` and `Software` has been modified => It now is a ManyToMany. The __update__ and __create__ methods have been updated accordingly in their `ServiceImpl` classes. Still need testing though.
+* Creation of a new @Query in `ContractorRepository` : `getContractorByName`.
+* `ContractController` and `ContractorController` have been created. They now need to be tested.
+* Creation of `findDeviceByName`, `findDeviceBySerialNumber` and `findDeviceByManufacturer` in `DeviceRepository`. These interfaces will be used later.
+
+*Update methods in `ServiceImpl` classes will be modified. The way the code is right now seems "heavy" to me. Instead of retrieving the existing object and modifying
+its attributes through its setters, maybe we could just verify that the updated object that is sent to the API exists and if yes then we could just delete the existing object to replace it
+with the one that has been sent.*
+***
+### 04/07/2022
+*Quick modification. Was checking a few things in my code and saw that the links in `UserEndPointController` were wrong.
+I forgot to add /user/ at the beginning. The change has been done. Other changes will be done in the security config about
+links. The "test" antmatcher will probably be deleted*
+***
 ### 29/06/2022
 *Some blocks of code still need to be cleaned.*
 *The relation between `Contract` and `Software` will be modified to a __ManyToMany__ as it was before. The modification that has been

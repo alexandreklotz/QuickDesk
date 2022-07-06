@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ContractorServiceImpl implements ContractorService {
@@ -32,9 +33,18 @@ public class ContractorServiceImpl implements ContractorService {
     }
 
     @Override
-    public Contractor getSpecifiedContractor(Contractor contractor) throws ContractorException {
-        return contractorRepository.findById(contractor.getId()).orElseThrow(()
+    public Contractor getContractorById(UUID contractorId) throws ContractorException {
+        return contractorRepository.findById(contractorId).orElseThrow(()
         -> new ContractorException("The specified contractor doesn't exist."));
+    }
+
+    @Override
+    public Contractor getContractorByName(String name) throws ContractorException {
+        Optional<Contractor> searchedContractor = contractorRepository.getContractorByName(name);
+        if(!searchedContractor.isPresent()){
+            throw new ContractorException(name + " isn't an existing contractor.");
+        }
+        return searchedContractor.get();
     }
 
     @Override

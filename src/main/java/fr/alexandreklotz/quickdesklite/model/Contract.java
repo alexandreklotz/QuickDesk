@@ -50,8 +50,17 @@ public class Contract {
     /////////////
 
     //A contract can be linked to multiple software but a software can only be linked to one contract
-    @JsonView(CustomJsonView.ContractView.class)
+    /*@JsonView(CustomJsonView.ContractView.class)
     @OneToMany(mappedBy = "contract")
+    private Set<Software> ctrSoftware;*/
+
+    @JsonView(CustomJsonView.ContractView.class)
+    @ManyToMany
+    @JoinTable(
+            name = "contract_software",
+            joinColumns = @JoinColumn(name = "software_id"),
+            inverseJoinColumns = @JoinColumn(name = "contract_id")
+    )
     private Set<Software> ctrSoftware;
 
     //A contract can only have one contractor but a contractor can have multiple contracts

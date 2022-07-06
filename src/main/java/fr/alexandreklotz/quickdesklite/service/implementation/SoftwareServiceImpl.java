@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -57,12 +58,15 @@ public class SoftwareServiceImpl implements SoftwareService {
             }
         }
 
-        if(software.getContract() != null){
-            Optional<Contract> softCtr = contractRepository.findById(software.getContract().getId());
-            if(!softCtr.isPresent()){
-                throw new ContractException("The specified contract doesn't exist and therefore cannot be assigned a software.");
+        if(software.getContracts() != null){
+            for(Contract contract : software.getContracts()){
+                Optional<Contract> softCtr = contractRepository.findById(contract.getId());
+                if(!softCtr.isPresent()){
+                    throw new ContractException("The specified contract doesn't exist. \n ID : " + contract.getId());
+                }
+                Set<Contract> softwareContracts = software.getContracts();
+                softwareContracts.add(softCtr.get());
             }
-            software.setContract(softCtr.get());
         }
 
         softwareRepository.saveAndFlush(software);
@@ -88,12 +92,15 @@ public class SoftwareServiceImpl implements SoftwareService {
             }
         }
 
-        if(software.getContract() != null){
-            Optional<Contract> softCtr = contractRepository.findById(software.getContract().getId());
-            if(!softCtr.isPresent()){
-                throw new ContractException("The specified contract doesn't exist and therefore cannot be assigned.");
+        if(software.getContracts() != null){
+            for(Contract contract : software.getContracts()){
+                Optional<Contract> softCtr = contractRepository.findById(contract.getId());
+                if(!softCtr.isPresent()){
+                    throw new ContractException("The specified contract doesn't exist. \n ID : " + contract.getId());
+                }
+                Set<Contract> softwareContracts = software.getContracts();
+                softwareContracts.add(softCtr.get());
             }
-            updatedSoftware.get().setContract(softCtr.get());
         }
 
         softwareRepository.saveAndFlush(updatedSoftware.get());

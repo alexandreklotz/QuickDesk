@@ -34,36 +34,36 @@ public class UserEndPointController {
     // Endpoints //
     ///////////////
 
-    @GetMapping("/ticket/getOpenedTickets")
+    @GetMapping("/user/ticket/getOpenedTickets")
     public List<Ticket> getOpenedTickets(HttpServletRequest request) throws UtilisateurException{
         Principal principal = request.getUserPrincipal();
         String userLogin = principal.getName();
         return ticketService.getOpenedTickets(userLogin);
     }
 
-    @GetMapping("/ticket/{ticketNbr}")
+    @GetMapping("/user/ticket/{ticketNbr}")
     public Ticket getUserTicket(@PathVariable Long ticketNbr, HttpServletRequest request) throws TicketException, UtilisateurException {
         Principal principal = request.getUserPrincipal();
         String userLogin = principal.getName();
         return ticketService.getTicketByNumber(ticketNbr, userLogin);
     }
 
-    @PostMapping("/ticket/new")
+    @PostMapping("/user/ticket/new")
     public Ticket createUserTicket(@RequestBody Ticket ticket) throws DefaultValueException {
         return ticketService.createUserTicket(ticket);
     }
 
-    @PostMapping("/ticket/{ticketNbr}/addComment")
+    @PostMapping("/user/ticket/{ticketNbr}/addComment")
     public Comment addCommentToTicket(@PathVariable Long ticketNbr, @RequestBody Comment comment) throws TicketException {
         return commentService.createNewComment(ticketNbr, comment);
     }
 
-    @PostMapping("/ticket/{ticketNbr}/commentUpdate")
+    @PostMapping("/user/ticket/{ticketNbr}/commentUpdate")
     public Comment updateExistingComment(@PathVariable Long ticketNbr, @RequestBody Comment comment) throws TicketException, CommentException {
         return commentService.updateComment(ticketNbr, comment);
     }
 
-    @DeleteMapping("/comment/{commentId}/delete")
+    @DeleteMapping("/user/comment/{commentId}/delete")
     public void deleteComment(@RequestBody Comment comment){
         commentService.deleteComment(comment);
     }

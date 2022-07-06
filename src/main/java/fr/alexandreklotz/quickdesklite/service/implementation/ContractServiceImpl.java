@@ -13,8 +13,7 @@ import fr.alexandreklotz.quickdesklite.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -36,24 +35,49 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Contract getSpecifiedContract(Contract contract) throws ContractException {
-        return contractRepository.findById(contract.getId()).orElseThrow(()
+    public Contract getContractById(UUID contractId) throws ContractException {
+        return contractRepository.findById(contractId).orElseThrow(()
         -> new ContractException("The specified contract doesn't exist."));
     }
 
+    // TODO : Needs testing
     @Override
-    public Contract createContract(Contract contract) throws ContractorException {
-        if(contract.getContractor() != null){
+    public Contract getContractByContractNumber(String ctrNbr) throws ContractException {
+        Optional<Contract> searchedCtr = contractRepository.getContractByContractNumber(ctrNbr);
+        if(!searchedCtr.isPresent()){
+            throw new ContractException("The contract with the number " + ctrNbr + " doesn't exist.");
+        }
+        return searchedCtr.get();
+    }
+
+    @Override
+    public Contract createContract(Contract contract) throws ContractorException, SoftwareException {
+        if (contract.getContractor() != null) {
             Optional<Contractor> contractor = contractorRepository.findById(contract.getContractor().getId());
-            if(!contractor.isPresent()){
+            if (!contractor.isPresent()) {
                 throw new ContractorException("This contractor doesn't exist.");
             }
             contract.setContractor(contractor.get());
+        }
+
+        Set<Software> ctrSoftwares = new HashSet<>();
+
+        if (contract.getCtrSoftware() != null) {
+            for (Software software : contract.getCtrSoftware()) {
+                Optional<Software> ctrSoft = softwareRepository.findById(software.getId());
+                if (!ctrSoft.isPresent()) {
+                    throw new SoftwareException(software.getName() + " doesn't exist and cannot be assigned to a contract.");
+                }
+                ctrSoftwares.add(ctrSoft.get());
+            }
+            contract.setCtrSoftware(ctrSoftwares);
         }
         contractRepository.saveAndFlush(contract);
         return contract;
     }
 
+    //TODO : Find a way to make this method less "heavy". Maybe we can just save the new object by replacing the existing one.
+    // We'd just need to check that the assigned contractor and softwares exist.
     @Override
     public Contract updateContract(Contract contract) throws ContractException, ContractorException, SoftwareException {
         Optional<Contract> updatedContract = contractRepository.findById(contract.getId());
@@ -81,13 +105,15 @@ public class ContractServiceImpl implements ContractService {
             updatedContract.get().setCtrNumber(contract.getCtrNumber());
         }
 
+        Set<Software> ctrSoftware = updatedContract.get().getCtrSoftware();
+
         if(contract.getCtrSoftware() != null){
             for(Software software : contract.getCtrSoftware()){
                 Optional<Software> ctrSoft = softwareRepository.findById(software.getId());
                 if(!ctrSoft.isPresent()){
-                    throw new SoftwareException(software.getName() + " doesn't exist and cannot be assigned to the contract.");
+                    throw new SoftwareException(software.getName() + " doesn't exist and cannot be assigned to a contract.");
                 }
-                ctrSoft.get().setContract(updatedContract.get());
+                ctrSoftware.add(ctrSoft.get());
             }
         }
 

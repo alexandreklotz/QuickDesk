@@ -107,13 +107,14 @@ public class TeamServiceImpl implements TeamService {
             updatedTeam.get().setTeamDesc(team.getTeamDesc());
         }
 
+        Set<TicketQueue> teamQueues = updatedTeam.get().getTicketQueues();
+
         if(team.getTicketQueues() != null){
             for(TicketQueue ticketQueue : team.getTicketQueues()){
                 Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
                 if(!tQueue.isPresent()){
                     throw new TicketQueueException("The specified ticket queue with the id " + ticketQueue.getId() + " doesn't exist.");
                 }
-                Set<TicketQueue> teamQueues = updatedTeam.get().getTicketQueues();
                 teamQueues.add(tQueue.get());
                 ticketQueueRepository.saveAndFlush(tQueue.get());
             }
