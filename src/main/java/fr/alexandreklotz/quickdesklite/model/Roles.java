@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesklite.view.CustomJsonView;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,7 +33,8 @@ public class Roles {
     /////////////
 
     //A user has only one role but the same role can be assigned to multiple users
-    @JsonView(CustomJsonView.RolesView.class)
+    //@JsonView(CustomJsonView.RolesView.class)
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private Set<Utilisateur> utilisateurs;
 

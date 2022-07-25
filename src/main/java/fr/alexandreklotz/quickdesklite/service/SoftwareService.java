@@ -12,7 +12,7 @@ public interface SoftwareService {
 
     public List<Software> getAllSoftware();
 
-    public Software getSpecifiedSoftware(UUID softwareId) throws SoftwareException;
+    public Software getSoftwareById(UUID softwareId) throws SoftwareException;
 
     public Software createSoftware(Software software) throws LicenseKeyException, ContractException;
 

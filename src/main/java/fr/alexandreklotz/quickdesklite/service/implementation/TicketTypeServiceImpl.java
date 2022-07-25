@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TicketTypeServiceImpl implements TicketTypeService {
@@ -29,8 +30,8 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     }
 
     @Override
-    public TicketType getSpecifiedTicketType(TicketType ticketType) throws TicketTypeException {
-        return ticketTypeRepository.findById(ticketType.getId()).orElseThrow(()
+    public TicketType getTicketTypeById(UUID typeId) throws TicketTypeException {
+        return ticketTypeRepository.findById(typeId).orElseThrow(()
         -> new TicketTypeException("The specified ticket type doesn't exist."));
     }
 

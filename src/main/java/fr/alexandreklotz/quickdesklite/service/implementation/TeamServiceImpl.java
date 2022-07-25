@@ -41,7 +41,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team getSpecifiedTeam(UUID teamid) throws TeamException {
+    public Team getTeamById(UUID teamid) throws TeamException {
         return teamRepository.findById(teamid).orElseThrow(()
         -> new TeamException(teamid + " doesn't match any existing team."));
     }

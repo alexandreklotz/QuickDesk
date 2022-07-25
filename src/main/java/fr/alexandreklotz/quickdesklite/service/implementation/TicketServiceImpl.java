@@ -199,6 +199,8 @@ public class TicketServiceImpl implements TicketService {
         return ticket;
     }
 
+    //TODO : Update this method, make it more simple. It's probably possible to just save the updated ticket instead
+    // of updating the existing one with the data from the updated one.
     @Override
     public Ticket updateTicket(Ticket ticket) throws TicketException {
         Optional<Ticket> updatedTicket = ticketRepository.findById(ticket.getId());

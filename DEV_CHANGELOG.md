@@ -1,5 +1,44 @@
 # QuickDesk Lite Coding Changelog
 ***
+
+*Delete methods will be modified afterall. They will delete the object by using its ID.*
+
+*I've been having a JSON generation issue between `Roles` and `Utilisateur` which never happened before. I fixed this issue by addinbg @JsonIgnore in `Roles` for the Set<Utilisateur> HashSet.*
+
+*A few minor changes have been made aswell*
+
+* `UtilisateurController` has been created. Some methods haven't been implemented because they serve no purpose. They will be deleted if they don't, and if not they will remain.
+* Creation of `RolesService, RolesServiceImpl, RolesController`. They will be used only to retrieve roles.
+***
+### 19/07/2022
+
+*Minor modifications only. Two more controllers have been created (`TicketStatusController and TicketTypeController`) and `UtilisateurController` will be created aswell*
+
+* `getSpecifiedTicketStatus` in `TicketStatusService` has been refactored to `getTicketStatusById` and retrieves the object by using its UUID. The same modification has been made in `TicketTypeService`.
+
+*Once `UtilisateurController` will be finished, i'll test all the methods by sending JSON forms. If everything works as intended, i'll then start developing the front-end and check the overall functionality of
+the software and release a beta if there's enough functionalities, etc.*
+
+***
+### 18/07/2022
+*`getSpecified` methods in all services will be modified to retrieve the desired object by sending its ID.*
+*The Delete methods will also be modified to delete the object by using its ID instead of receiving the whole object.*
+
+* `getSpecifiedTeam` in `TeamService and TeamServiceImpl` has been refactored to `getTeamById`
+* `TeamController` has been created
+* `TicketPriorityController` has been created
+* `TicketQueueController` has been created. `getSpecifiedXXX` method in `TicketQueueService and ServiceImpl` has been refactored to `getTicketQueueById` and now retrieves the object by using its id. The same method will be applied to all the other get methods in other controllers/services.
+
+***
+### 14/07/2022
+*Minor modifications have been done in `DeviceService, DeviceServiceImpl`. `getSpecifiedXXX` method has been renamed to `getDeviceById`
+and it now retrieves the object with its UUID (could still be subject to change, maybe we can send the whole object).*
+
+*Delete methods will probably be modified, passing the object's id through the URL instead of sending the whole object seems
+smarter to me.*
+
+*A few modifications have been made in other services and serviceimpl classes following the admin controllers creation.*
+***
 ### 06/07/2022
 *The `getSpecifiedXXX` methods in `ServiceImpl` classes need to be fixed. They are currently being sent an object, retrieve its ID and then return it.
 However, considering that we have a list of contracts for example, how can we possibly, by just clicking on the contract, send it and retrieve it ?

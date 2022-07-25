@@ -12,7 +12,7 @@ public interface TeamService {
 
     public List<Team> getAllTeams();
 
-    public Team getSpecifiedTeam(UUID teamid) throws TeamException;
+    public Team getTeamById(UUID teamid) throws TeamException;
 
     public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException;
 

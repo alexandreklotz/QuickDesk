@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
@@ -32,16 +33,16 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device getSpecificDevice(Device device) throws DeviceException {
-        return deviceRepository.findById(device.getId()).orElseThrow(()
-        -> new DeviceException(device.getId() + "doesn't match any existing device in the database."));
+    public Device getDeviceById(UUID deviceId) throws DeviceException {
+        return deviceRepository.findById(deviceId).orElseThrow(()
+        -> new DeviceException(deviceId + "doesn't match any existing device in the database."));
     }
 
     @Override
     public Device createDevice(Device device) throws UtilisateurException {
         if(device.getDeviceUtilisateur() != null){
             Optional<Utilisateur> deviceUser = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
-            if(!deviceUser.isPresent()){
+            if(device.getDeviceUtilisateur() != null && !deviceUser.isPresent()){
                 throw new UtilisateurException("The user assigned to this device doesn't exist.");
             }
             deviceUser.get().setDevice(device);

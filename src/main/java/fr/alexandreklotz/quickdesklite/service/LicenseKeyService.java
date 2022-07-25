@@ -5,12 +5,13 @@ import fr.alexandreklotz.quickdesklite.error.SoftwareException;
 import fr.alexandreklotz.quickdesklite.model.LicenseKey;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface LicenseKeyService {
 
     public List<LicenseKey> getAllLicenses();
 
-    public LicenseKey getSpecifiedLicenseKey(LicenseKey licenseKey) throws LicenseKeyException;
+    public LicenseKey getLicensekeyById(UUID licenseId) throws LicenseKeyException;
 
     public LicenseKey createLicenseKey(LicenseKey licenseKey) throws SoftwareException;
 

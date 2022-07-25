@@ -38,7 +38,7 @@ public class SoftwareServiceImpl implements SoftwareService {
     }
 
     @Override
-    public Software getSpecifiedSoftware(UUID softwareId) throws SoftwareException {
+    public Software getSoftwareById(UUID softwareId) throws SoftwareException {
         return softwareRepository.findById(softwareId).orElseThrow(()
         -> new SoftwareException("The specified software doesn't exist."));
     }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class LicenseKeyServiceImpl implements LicenseKeyService {
@@ -31,8 +32,8 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
     }
 
     @Override
-    public LicenseKey getSpecifiedLicenseKey(LicenseKey licenseKey) throws LicenseKeyException {
-        return licenseKeyRepository.findById(licenseKey.getId()).orElseThrow(()
+    public LicenseKey getLicensekeyById(UUID licenseId) throws LicenseKeyException {
+        return licenseKeyRepository.findById(licenseId).orElseThrow(()
         -> new LicenseKeyException("The license key you specified doesn't exist."));
     }
 

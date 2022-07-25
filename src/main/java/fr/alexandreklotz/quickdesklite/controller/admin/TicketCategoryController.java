@@ -32,6 +32,7 @@ public class TicketCategoryController {
         return ticketCategoryService.getAllTicketCategories();
     }
 
+    //TODO : fix url
     @GetMapping("/admin/ticketcategory/getspecifiedcategory")
     public TicketCategory getTicketCategoryById(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
         return ticketCategoryService.getSpecifiedTicketCategory(ticketCategory);

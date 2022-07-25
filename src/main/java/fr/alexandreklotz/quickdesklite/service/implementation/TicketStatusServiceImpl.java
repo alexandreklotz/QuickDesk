@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TicketStatusServiceImpl implements TicketStatusService {
@@ -31,8 +32,8 @@ public class TicketStatusServiceImpl implements TicketStatusService {
     }
 
     @Override
-    public TicketStatus getSpecifiedTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
-        return ticketStatusRepository.findById(ticketStatus.getId()).orElseThrow(()
+    public TicketStatus getTicketStatusById(UUID statusId) throws TicketStatusException {
+        return ticketStatusRepository.findById(statusId).orElseThrow(()
         -> new TicketStatusException("The specified ticket status doesn't exist."));
     }
 

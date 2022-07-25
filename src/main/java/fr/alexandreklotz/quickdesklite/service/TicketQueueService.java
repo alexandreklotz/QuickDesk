@@ -4,12 +4,13 @@ import fr.alexandreklotz.quickdesklite.error.TicketQueueException;
 import fr.alexandreklotz.quickdesklite.model.TicketQueue;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TicketQueueService {
 
     public List<TicketQueue> getAllTicketQueues();
 
-    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) throws TicketQueueException;
+    public TicketQueue getTicketQueueById(UUID queueId) throws TicketQueueException;
 
     public TicketQueue getTicketQueueByName(String queue) throws TicketQueueException;
 

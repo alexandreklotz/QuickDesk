@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TicketQueueServiceImpl implements TicketQueueService {
@@ -34,9 +35,9 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     }
 
     @Override
-    public TicketQueue getSpecifiedTicketQueueById(TicketQueue ticketQueue) throws TicketQueueException {
-        return ticketQueueRepository.findById(ticketQueue.getId()).orElseThrow(()
-        -> new TicketQueueException(ticketQueue.getId() + " doesn't match any existing ticket queue."));
+    public TicketQueue getTicketQueueById(UUID queueId) throws TicketQueueException {
+        return ticketQueueRepository.findById(queueId).orElseThrow(()
+        -> new TicketQueueException(queueId + " doesn't match any existing ticket queue."));
     }
 
     @Override
