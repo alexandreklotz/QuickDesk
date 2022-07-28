@@ -1,7 +1,9 @@
 package fr.alexandreklotz.quickdesklite.controller.admin;
 
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
 import fr.alexandreklotz.quickdesklite.error.TicketTypeException;
 import fr.alexandreklotz.quickdesklite.model.TicketType;
+import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,12 @@ import java.util.UUID;
 public class TicketTypeController {
 
     private TicketTypeService ticketTypeService;
+    private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketTypeController(TicketTypeService ticketTypeService){
+    TicketTypeController(TicketTypeService ticketTypeService, DefaultValueService defaultValueService){
         this.ticketTypeService = ticketTypeService;
+        this.defaultValueService = defaultValueService;
     }
 
     ///////////////////
@@ -37,6 +41,11 @@ public class TicketTypeController {
     @GetMapping("/admin/tickettype/{typeName}")
     public TicketType getTicketTypeByName(@PathVariable String typeName) throws TicketTypeException {
         return ticketTypeService.getTicketTypeByName(typeName);
+    }
+
+    @GetMapping("/admin/tickettype/getdefault")
+    public TicketType getDefaultType() throws DefaultValueException {
+        return defaultValueService.getDefaultTypeValue();
     }
 
     @PostMapping("/admin/tickettype/all")

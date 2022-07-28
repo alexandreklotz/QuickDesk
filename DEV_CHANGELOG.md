@@ -1,7 +1,21 @@
 # QuickDesk Lite Coding Changelog
 ***
+*GetMappings `getDefaultXXX` for Ticket properties such as queue, priority, etc... has been created in each's respective controller.*
 
-*Delete methods will be modified afterall. They will delete the object by using its ID.*
+*Some code needs to be fixed and re-done, there's some messy stuff that needs fixing. Many corretions will be made in the upcoming days.
+Once everything is OK to me, i'll test everything and if it's fine then i'll start implementing angular.js for the front-end.
+This will allow me to compile a "beta" version to test everything out and see what i could add/fix/modify to make QuickDesk useful and easy to work with.*
+***
+### 27/07/2022
+
+*Update methods in `ServiceImpl` classes will be modified to save the new object and delete the previous one if existing. A check will be done before saving the object such as
+verifying that for example in the case of a ticket update that the user assigned exists, etc...*
+
+* New link has been created in `TicketTypeController` : `getDefaultType`. I'll test it later and see if calling the defaultvalueservice directly is okay or if i should implement this get method in each ServiceImpl for readability reasons.
+
+*This changelog is short because i spent most of my time creating a collection in postman and checking out things about spring on the net*
+***
+### 25/07/2022
 
 *I've been having a JSON generation issue between `Roles` and `Utilisateur` which never happened before. I fixed this issue by addinbg @JsonIgnore in `Roles` for the Set<Utilisateur> HashSet.*
 
@@ -11,7 +25,6 @@
 * Creation of `RolesService, RolesServiceImpl, RolesController`. They will be used only to retrieve roles.
 ***
 ### 19/07/2022
-
 *Minor modifications only. Two more controllers have been created (`TicketStatusController and TicketTypeController`) and `UtilisateurController` will be created aswell*
 
 * `getSpecifiedTicketStatus` in `TicketStatusService` has been refactored to `getTicketStatusById` and retrieves the object by using its UUID. The same modification has been made in `TicketTypeService`.

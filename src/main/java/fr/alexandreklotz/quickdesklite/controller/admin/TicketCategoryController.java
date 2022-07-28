@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesklite.controller.admin;
 
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
 import fr.alexandreklotz.quickdesklite.error.TicketCategoryException;
 import fr.alexandreklotz.quickdesklite.model.TicketCategory;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
@@ -38,6 +39,11 @@ public class TicketCategoryController {
         return ticketCategoryService.getSpecifiedTicketCategory(ticketCategory);
     }
 
+    @GetMapping("/admin/ticketcategory/getdefault")
+    public TicketCategory getDefaultTicketCategory() throws DefaultValueException {
+        return defaultValueService.getDefaultCategoryValue();
+    }
+
     @PostMapping("/admin/ticketcategory/new")
     public TicketCategory createTicketCategory(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
         return ticketCategoryService.createTicketCategory(ticketCategory);
@@ -46,11 +52,6 @@ public class TicketCategoryController {
     @PostMapping("/admin/ticketcategory/update")
     public TicketCategory updateTicketCategory(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
         return ticketCategoryService.updateTicketCategory(ticketCategory);
-    }
-
-    @PostMapping("/admin/ticketcategory/setasdefault")
-    public TicketCategory setTicketCategoryAsDefault(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
-        return defaultValueService.setDefaultCategoryValue(ticketCategory);
     }
 
     @DeleteMapping("/admin/ticketcategory/delete")

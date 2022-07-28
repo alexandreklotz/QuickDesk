@@ -1,8 +1,10 @@
 package fr.alexandreklotz.quickdesklite.controller.admin;
 
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
 import fr.alexandreklotz.quickdesklite.error.TicketStatusException;
 import fr.alexandreklotz.quickdesklite.model.Ticket;
 import fr.alexandreklotz.quickdesklite.model.TicketStatus;
+import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +17,12 @@ import java.util.UUID;
 public class TicketStatusController {
 
     private TicketStatusService ticketStatusService;
+    private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketStatusController(TicketStatusService ticketStatusService){
+    TicketStatusController(TicketStatusService ticketStatusService, DefaultValueService defaultValueService){
         this.ticketStatusService = ticketStatusService;
+        this.defaultValueService = defaultValueService;
     }
 
     ///////////////////
@@ -38,6 +42,11 @@ public class TicketStatusController {
     @GetMapping("/admin/ticketstatus/{statusName}")
     public TicketStatus getTicketStatusByName(@PathVariable String statusName) throws TicketStatusException {
         return ticketStatusService.getTicketStatusByName(statusName);
+    }
+
+    @GetMapping("/admin/ticketstatus/getdefault")
+    public TicketStatus getDefaultTicketStatus() throws DefaultValueException {
+        return defaultValueService.getDefaultStatusValue();
     }
 
     @PostMapping("/admin/ticketstatus/new")

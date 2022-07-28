@@ -1,7 +1,9 @@
 package fr.alexandreklotz.quickdesklite.controller.admin;
 
+import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
 import fr.alexandreklotz.quickdesklite.error.TicketPriorityException;
 import fr.alexandreklotz.quickdesklite.model.TicketPriority;
+import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketPriorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,12 @@ import java.util.List;
 public class TicketPriorityController {
 
     private TicketPriorityService ticketPriorityService;
+    private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketPriorityController(TicketPriorityService ticketPriorityService){
+    TicketPriorityController(TicketPriorityService ticketPriorityService, DefaultValueService defaultValueService){
         this.ticketPriorityService = ticketPriorityService;
+        this.defaultValueService = defaultValueService;
     }
 
     ///////////////////
@@ -31,6 +35,10 @@ public class TicketPriorityController {
     @GetMapping("/admin/ticketpriority/details")
     public TicketPriority getSpecifiedTicketPriority(@RequestBody TicketPriority ticketPriority) throws TicketPriorityException {
         return ticketPriorityService.getSpecifiedTicketPriority(ticketPriority);
+    }
+    @GetMapping("/admin/ticketpriority/getdefault")
+    public TicketPriority getDefaultTicketPriority() throws DefaultValueException {
+        return defaultValueService.getDefaultPriorityValue();
     }
 
     @PostMapping("/admin/ticketpriority/new")

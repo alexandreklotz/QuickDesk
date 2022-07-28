@@ -4,7 +4,7 @@ import fr.alexandreklotz.quickdesklite.error.*;
 import fr.alexandreklotz.quickdesklite.model.*;
 
 public interface DefaultValueService {
-
+    //TODO : Add "throws DefaultValueException" in the Set methods and update the code in the serviceimpl classes.
     public TicketStatus getDefaultStatusValue() throws DefaultValueException;
 
     public TicketStatus setDefaultStatusValue(TicketStatus ticketStatus) throws TicketStatusException;
