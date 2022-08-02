@@ -49,7 +49,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException {
 
-        if(team.getUtilisateurs() != null){
+        /*if(team.getUtilisateurs() != null){
             for(Utilisateur utilisateur : team.getUtilisateurs()){
                 Optional<Utilisateur> teamUser = utilisateurRepository.findById(utilisateur.getId());
                 if(!teamUser.isPresent()){
@@ -58,9 +58,9 @@ public class TeamServiceImpl implements TeamService {
                 teamUser.get().setTeam(team);
                 utilisateurRepository.saveAndFlush(teamUser.get());
             }
-        }
+        }*/
 
-        if(team.getTicketQueues() != null){
+        /*if(team.getTicketQueues() != null){
             Set<TicketQueue> teamQueues = new HashSet<>();
             for(TicketQueue ticketQueue : team.getTicketQueues()){
                 Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
@@ -71,7 +71,7 @@ public class TeamServiceImpl implements TeamService {
                 ticketQueueRepository.saveAndFlush(tQueue.get());
             }
             team.setTicketQueues(teamQueues);
-        }
+        }*/
 
         //We save the date at which the team has been created
         team.setTeamDateCreated(LocalDateTime.now());
@@ -84,27 +84,22 @@ public class TeamServiceImpl implements TeamService {
     public Team updateTeam(Team team) throws TeamException, UtilisateurException, TicketQueueException {
 
         Optional<Team> updatedTeam = teamRepository.findById(team.getId());
-        if(!updatedTeam.isPresent()){
+        if(updatedTeam.isEmpty()){
             throw new TeamException("The specified team doesn't exist and therefore cannot be updated.");
         }
 
-        if(team.getUtilisateurs() != null){
+        team.setTeamDateCreated(updatedTeam.get().getTeamDateCreated());
+
+        /*if(team.getUtilisateurs() != null){
             for(Utilisateur utilisateur : team.getUtilisateurs()){
                 Optional<Utilisateur> teamUser = utilisateurRepository.findById(utilisateur.getId());
-                if(!teamUser.isPresent()){
+                if(teamUser.isEmpty()){
                     throw new UtilisateurException("The specified user doesn't exist and cannot be assigned to the team.");
+                } else {
+                    teamUser.get().setTeam(team);
                 }
-                teamUser.get().setTeam(updatedTeam.get());
                 utilisateurRepository.saveAndFlush(teamUser.get());
             }
-        }
-
-        if(team.getTeamName() != null){
-            updatedTeam.get().setTeamName(team.getTeamName());
-        }
-
-        if(team.getTeamDesc() != null){
-            updatedTeam.get().setTeamDesc(team.getTeamDesc());
         }
 
         Set<TicketQueue> teamQueues = updatedTeam.get().getTicketQueues();
@@ -112,20 +107,17 @@ public class TeamServiceImpl implements TeamService {
         if(team.getTicketQueues() != null){
             for(TicketQueue ticketQueue : team.getTicketQueues()){
                 Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
-                if(!tQueue.isPresent()){
+                if(tQueue.isEmpty()){
                     throw new TicketQueueException("The specified ticket queue with the id " + ticketQueue.getId() + " doesn't exist.");
+                } else {
+                    teamQueues.add(tQueue.get());
                 }
-                teamQueues.add(tQueue.get());
                 ticketQueueRepository.saveAndFlush(tQueue.get());
             }
-        }
+        }*/
 
-        if(team.isTechTeam() != updatedTeam.get().isTechTeam()){
-            updatedTeam.get().setTechTeam(team.isTechTeam());
-        }
-
-        teamRepository.saveAndFlush(updatedTeam.get());
-        return updatedTeam.get();
+        teamRepository.saveAndFlush(team);
+        return team;
     }
 
 

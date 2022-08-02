@@ -53,9 +53,14 @@ public class TicketQueueController {
         return ticketQueueService.createNewTicketQueue(ticketQueue);
     }
 
-    @PostMapping("/admin/ticketqueue/update")
+    @PutMapping("/admin/ticketqueue/update")
     public TicketQueue updateTicketQueue(@RequestBody TicketQueue ticketQueue) throws TicketQueueException {
         return ticketQueueService.updateTicketQueue(ticketQueue);
+    }
+
+    @PutMapping("/admin/ticketqueue/setasdefault")
+    public TicketQueue setDefaultTicketQueue(@RequestBody TicketQueue ticketQueue) throws TicketQueueException {
+        return defaultValueService.setDefaultTicketQueue(ticketQueue);
     }
 
     @DeleteMapping("/admin/ticketqueue/delete")

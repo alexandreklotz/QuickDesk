@@ -47,14 +47,9 @@ public class UtilisateurController {
         return utilisateurService.createUser(utilisateur);
     }
 
-    @PostMapping("/admin/utilisateur/update")
+    @PutMapping("/admin/utilisateur/update")
     public Utilisateur updateUser(@RequestBody Utilisateur utilisateur) throws UtilisateurException, DeviceException, TeamException, RolesException {
         return utilisateurService.updateUser(utilisateur);
-    }
-
-    @PostMapping("/admin/utilisateur/disable")
-    public Utilisateur disableUser(@RequestBody Utilisateur utilisateur) throws UtilisateurException {
-        return utilisateurService.disableUser(utilisateur);
     }
 
     @DeleteMapping("/admin/utilisateur/delete")

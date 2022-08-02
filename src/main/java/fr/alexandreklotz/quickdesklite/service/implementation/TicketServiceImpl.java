@@ -3,10 +3,8 @@ package fr.alexandreklotz.quickdesklite.service.implementation;
 import fr.alexandreklotz.quickdesklite.error.DefaultValueException;
 import fr.alexandreklotz.quickdesklite.error.TicketException;
 import fr.alexandreklotz.quickdesklite.error.UtilisateurException;
-import fr.alexandreklotz.quickdesklite.model.Ticket;
-import fr.alexandreklotz.quickdesklite.model.Utilisateur;
-import fr.alexandreklotz.quickdesklite.repository.TicketRepository;
-import fr.alexandreklotz.quickdesklite.repository.UtilisateurRepository;
+import fr.alexandreklotz.quickdesklite.model.*;
+import fr.alexandreklotz.quickdesklite.repository.*;
 import fr.alexandreklotz.quickdesklite.service.DefaultValueService;
 import fr.alexandreklotz.quickdesklite.service.TicketService;
 import fr.alexandreklotz.quickdesklite.service.UtilisateurService;
@@ -23,13 +21,27 @@ import java.util.UUID;
 public class TicketServiceImpl implements TicketService {
 
     private TicketRepository ticketRepository;
+    private TicketTypeRepository ticketTypeRepository;
+    private TicketCategoryRepository ticketCategoryRepository;
+    private TicketQueueRepository ticketQueueRepository;
+    private TicketStatusRepository ticketStatusRepository;
+    private TicketPriorityRepository ticketPriorityRepository;
     private UtilisateurRepository utilisateurRepository;
     private UtilisateurService utilisateurService;
     private DefaultValueService defaultValueService;
 
     @Autowired
-    TicketServiceImpl(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository, UtilisateurService utilisateurService, DefaultValueService defaultValueService){
+    TicketServiceImpl(TicketRepository ticketRepository, UtilisateurRepository utilisateurRepository,
+                      UtilisateurService utilisateurService, DefaultValueService defaultValueService,
+                      TicketPriorityRepository ticketPriorityRepository, TicketCategoryRepository ticketCategoryRepository,
+                      TicketStatusRepository ticketStatusRepository, TicketTypeRepository ticketTypeRepository,
+                      TicketQueueRepository ticketQueueRepository){
         this.ticketRepository = ticketRepository;
+        this.ticketPriorityRepository = ticketPriorityRepository;
+        this.ticketCategoryRepository = ticketCategoryRepository;
+        this.ticketStatusRepository = ticketStatusRepository;
+        this.ticketTypeRepository = ticketTypeRepository;
+        this.ticketQueueRepository = ticketQueueRepository;
         this.utilisateurRepository = utilisateurRepository;
         this.utilisateurService = utilisateurService;
         this.defaultValueService = defaultValueService;
@@ -90,23 +102,6 @@ public class TicketServiceImpl implements TicketService {
     }
 
     //Method to retrieve a specific ticket. It implements user's role verification in order to filter requests. Used by the front end.
-    /*@Override
-    public Ticket getTicketByNumber(Long ticketNbr, String login) throws UtilisateurException {
-        Utilisateur callingUser = utilisateurService.getUserByLogin(login);
-        Optional<Ticket> searchedTicket = ticketRepository.findTicketWithTicketNumber(ticketNbr);
-        if(searchedTicket.isPresent()){
-            boolean userRole = utilisateurService.isUserAdmin(login);
-            if(!userRole){
-                Utilisateur ticketAssignedUser = searchedTicket.get().getUtilisateur();
-                if(!ticketAssignedUser.equals(callingUser)){
-                    return null; //error, not allowed to access this ticket
-                }
-            }
-            return searchedTicket.get();
-        }
-        return null; //verify this line
-    }*/
-
     @Override
     public Ticket getTicketByNumber(Long ticketNbr, String login) throws TicketException, UtilisateurException {
 
@@ -179,72 +174,38 @@ public class TicketServiceImpl implements TicketService {
             ticket.setTicketQueue(defaultValueService.getDefaultTicketQueue());
         }
 
-        if(ticket.getAssignedAdmin() != null){
-            Optional<Utilisateur> assignedAdmin = utilisateurRepository.findById(ticket.getAssignedAdmin());
-            if(!assignedAdmin.isPresent()){
-                throw new UtilisateurException("This admin doesn't exist.");
-            }
-            ticket.setAssignedAdminName(assignedAdmin.get().toString());
-        }
-
-        if(ticket.getUtilisateur() != null){
-            Optional<Utilisateur> userTicket = utilisateurRepository.findById(ticket.getUtilisateur().getId());
-            if(!userTicket.isPresent()){
-                throw new UtilisateurException("The user you're trying to assign to this ticket doesn't exist.");
-            }
-            ticket.setUtilisateur(userTicket.get());
+        if(ticket.getUtilisateur() == null){
+            throw new UtilisateurException("ERROR : The ticket " + ticket.getId() + " has no user assigned. You must assign a user to the ticket !");
         }
 
         ticketRepository.saveAndFlush(ticket);
         return ticket;
     }
 
-    //TODO : Update this method, make it more simple. It's probably possible to just save the updated ticket instead
-    // of updating the existing one with the data from the updated one.
     @Override
-    public Ticket updateTicket(Ticket ticket) throws TicketException {
-        Optional<Ticket> updatedTicket = ticketRepository.findById(ticket.getId());
-        if(!updatedTicket.isPresent()) {
-            throw new TicketException("The ticket you're trying to update doesn't exist.");
+    public Ticket updateTicket(Ticket ticket) throws TicketException, DefaultValueException, UtilisateurException {
+        Optional<Ticket> oldTicket = ticketRepository.findById(ticket.getId());
+        if(oldTicket.isEmpty()){
+            throw new TicketException("ERROR : Cannot update the ticket " + ticket.getId() + ". This ticket doesn't exist.");
         }
 
-        //We save the date at which the ticket has been updated/modified
-        updatedTicket.get().setTicketLastModified(LocalDateTime.now());
+        //Ticket properties. The creation date is the date at which the original ticket has been created.
+        ticket.setTicketDateCreated(oldTicket.get().getTicketDateCreated());
+        ticket.setTicketLastModified(LocalDateTime.now());
 
-        //Manage empty fields -> If the fields specified below aren't empty, they will be updated. If they are empty, nothing will happen.
-        //There might be a way to filter empty fields in the front end through JS scripts.
-        if(ticket.getAssignedAdmin() != null){
-            updatedTicket.get().setAssignedAdmin(ticket.getAssignedAdmin());
+        //I was planning to check every field at first but realized that it's useless considering that it will retrieve existing objects
+        //from the API. It's useless to check.
+
+        if(ticket.getUtilisateur() == null){
+            throw new UtilisateurException("ERROR : " + ticket.getId() + " => You must assign a user to the ticket !");
         }
 
-        if(ticket.getTicketType() != null){
-            updatedTicket.get().setTicketType(ticket.getTicketType());
-        } else {
-            throw new TicketException("You must specify the ticket type !");
-        }
-
-        if(ticket.getTicketStatus() != null){
-            updatedTicket.get().setTicketStatus(ticket.getTicketStatus());
-        } else {
-            throw new TicketException("You must specify the ticket status !");
-        }
-
-        if(ticket.getTicketCategory() != null){
-            updatedTicket.get().setTicketCategory(ticket.getTicketCategory());
-        } else {
-            throw new TicketException("You must specify the ticket category !");
-        }
-
-        if(ticket.getTicketPriority() != null){
-            updatedTicket.get().setTicketPriority(ticket.getTicketPriority());
-        } else {
-            throw new TicketException("You must specify the ticket priority !");
-        }
-
-        ticketRepository.saveAndFlush(updatedTicket.get());
-        return updatedTicket.get();
+        //We then delete the old ticket and save the new one.
+        ticketRepository.deleteById(oldTicket.get().getId());
+        return ticketRepository.saveAndFlush(ticket);
     }
 
+    //TODO : Check if useful or necessary, if not then delete
     @Override
     public Ticket closeTicket(Ticket ticket) throws TicketException {
         Optional<Ticket> closedTicket = ticketRepository.findById(ticket.getId());
@@ -256,7 +217,7 @@ public class TicketServiceImpl implements TicketService {
         return closedTicket.get();
     }
 
-    //TODO : This method needs to be tested.
+    //TODO : This method needs to be tested to see if necessary.
     @Override
     public List<Ticket> getClosedTickets(boolean closed) {
         return ticketRepository.getClosedTickets(true);

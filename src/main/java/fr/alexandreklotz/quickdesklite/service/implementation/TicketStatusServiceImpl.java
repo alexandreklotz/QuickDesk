@@ -47,7 +47,7 @@ public class TicketStatusServiceImpl implements TicketStatusService {
     public TicketStatus createTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
         Optional<TicketStatus> existingStatus = ticketStatusRepository.findTicketStatusByName(ticketStatus.getName());
         if(existingStatus.isPresent()){
-            throw new TicketStatusException("A ticket status already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketStatusException("ERROR : A ticket status already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketStatus.isDefault()){
             defaultValueService.setDefaultStatusValue(ticketStatus);
@@ -60,24 +60,20 @@ public class TicketStatusServiceImpl implements TicketStatusService {
     public TicketStatus updateTicketStatus(TicketStatus ticketStatus) throws TicketStatusException {
 
         Optional<TicketStatus> updatedStatus = ticketStatusRepository.findById(ticketStatus.getId());
-        if(!updatedStatus.isPresent()){
-            throw new TicketStatusException("The ticket status you're trying to update doesn't exist.");
+        if(updatedStatus.isEmpty()){
+            throw new TicketStatusException("ERROR : The ticket status " + ticketStatus.getName() + " you're trying to update doesn't exist.");
         }
 
         Optional<TicketStatus> existingStatus = ticketStatusRepository.findTicketStatusByName(ticketStatus.getName());
         if(existingStatus.isPresent()){
-            throw new TicketStatusException("A ticket status already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketStatusException("ERROR : A ticket status already uses this name. Please specify another name or update the existing entity.");
         }
 
         if(ticketStatus.isDefault()){
-            defaultValueService.setDefaultStatusValue(updatedStatus.get());
+            defaultValueService.setDefaultStatusValue(ticketStatus);
         }
 
-        if(ticketStatus.getName() != null){
-            updatedStatus.get().setName(ticketStatus.getName());
-        }
-
-        return ticketStatusRepository.saveAndFlush(updatedStatus.get());
+        return ticketStatusRepository.saveAndFlush(ticketStatus);
     }
 
     @Override

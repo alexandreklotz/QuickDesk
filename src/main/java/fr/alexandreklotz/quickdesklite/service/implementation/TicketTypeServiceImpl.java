@@ -45,7 +45,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     public TicketType createTicketType(TicketType ticketType) throws TicketTypeException {
         Optional<TicketType> existingType = ticketTypeRepository.findTicketTypeValueByName(ticketType.getName());
         if(existingType.isPresent()){
-            throw new TicketTypeException("A ticket type already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketTypeException("ERROR : A ticket type already uses this name. Please specify another name or update the existing entity.");
         }
 
         if(ticketType.isDefault()){
@@ -58,21 +58,20 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     @Override
     public TicketType updateTicketType(TicketType ticketType) throws TicketTypeException {
         Optional<TicketType> updatedType = ticketTypeRepository.findById(ticketType.getId());
-        if(!updatedType.isPresent()){
-            throw new TicketTypeException("The specified ticket type doesn't exist.");
+        if(updatedType.isEmpty()){
+            throw new TicketTypeException("ERROR : The specified ticket type " + ticketType.getName() + " doesn't exist.");
         }
 
         Optional<TicketType> existingType = ticketTypeRepository.findTicketTypeValueByName(ticketType.getName());
         if(existingType.isPresent()){
-           throw new TicketTypeException("A ticket type already uses this name. Please specify another name or update the existing entity.");
+           throw new TicketTypeException("ERROR : A ticket type already uses this name. Please specify another name or update the existing entity.");
         }
 
         if(ticketType.isDefault()){
-            defaultValueService.setDefaultTypeValue(updatedType.get());
+            defaultValueService.setDefaultTypeValue(ticketType);
         }
 
-        updatedType.get().setName(ticketType.getName());
-        return ticketTypeRepository.saveAndFlush(updatedType.get());
+        return ticketTypeRepository.saveAndFlush(ticketType);
     }
 
     @Override

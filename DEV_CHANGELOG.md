@@ -1,5 +1,26 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 02/08/2022
+*More code has been cleaned in `UtilisateurServiceImpl` and `TeamServiceImpl`. All the `ServiceImpl` classes for ticket attributes (priority, etc) have been cleaned aswell*
+
+* __PostMappings__ used to update objects are now __PutMappings__
+* Some methods have been deleted in `UtilisateurService` such as disableUser, updateUserRole, updateUserDevice. They will be reimplemented if needed afterall but i don't think so.
+
+*More code cleaning will be done in the incoming days.*
+***
+### 01/08/2022
+* Heavy code modifications in `TicketServiceImpl`. Most of the *if* and *else* statements have been removed to simplify the code. Considering that the front end will retrieve objects from the api, there's no need to run such verifications.
+* Code modifications have also been made in `UtilisateurServiceImpl`. Identical to what's mentioned above.
+
+*Most of the __ifs__ have been removed because it was getting complicated for nothing. More code needs to be cleaned, and the exceptions such as DeviceException for example
+will need to be either removed from some methods or used in a different way. Or even limited to their own class.*
+***
+### 31/07/2022
+* Created `setDefaultTicketXXX` in each controller to set default ticket properties values. It might not be necessary considering it stil sends the whole object anyway.
+* `updateTicket` in `TicketServiceImpl` has been modified. It still needs a few corrections.
+* `DefaultValueException` has been added in __create__ and __update__ methods in `TicketService and TicketServiceImpl`.
+***
+### 28/07/2022
 *GetMappings `getDefaultXXX` for Ticket properties such as queue, priority, etc... has been created in each's respective controller.*
 
 *Some code needs to be fixed and re-done, there's some messy stuff that needs fixing. Many corretions will be made in the upcoming days.

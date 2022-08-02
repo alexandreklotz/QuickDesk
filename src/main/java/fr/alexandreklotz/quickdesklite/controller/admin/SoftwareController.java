@@ -41,7 +41,7 @@ public class SoftwareController {
         return softwareService.createSoftware(software);
     }
 
-    @PostMapping("/admin/software/update")
+    @PutMapping("/admin/software/update")
     public Software updateSoftware(@RequestBody Software software) throws LicenseKeyException, ContractException, SoftwareException {
         return softwareService.updateSoftware(software);
     }

@@ -41,7 +41,7 @@ public class TeamController {
         return teamService.createNewTeam(team);
     }
 
-    @PostMapping("/admin/team/update")
+    @PutMapping("/admin/team/update")
     public Team updateTeam(@RequestBody Team team) throws UtilisateurException, TeamException, TicketQueueException {
         return teamService.updateTeam(team);
     }

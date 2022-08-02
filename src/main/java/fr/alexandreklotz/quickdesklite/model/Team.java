@@ -62,6 +62,7 @@ public class Team {
     @ManyToMany(mappedBy = "teams")
     private Set<TicketQueue> ticketQueues;
 
+
     /////////////////////
     //Getters & Setters//
     /////////////////////

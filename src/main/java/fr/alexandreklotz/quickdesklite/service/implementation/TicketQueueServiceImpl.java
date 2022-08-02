@@ -50,7 +50,7 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     public TicketQueue createNewTicketQueue(TicketQueue ticketQueue) throws TicketQueueException{
         Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
         if(existingQueue.isPresent()){
-            throw new TicketQueueException("A ticket queue already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketQueueException("ERROR : A ticket queue already uses this name. Please specify another name or update the existing entity.");
         }
 
         if(ticketQueue.isDefault()){
@@ -64,22 +64,18 @@ public class TicketQueueServiceImpl implements TicketQueueService {
     @Override
     public TicketQueue updateTicketQueue(TicketQueue ticketQueue) throws TicketQueueException {
         Optional<TicketQueue> updatedQueue = ticketQueueRepository.findById(ticketQueue.getId());
-        if(!updatedQueue.isPresent()) {
-            throw new TicketQueueException("The ticket queue you're trying to update doesn't exist.");
+        if(updatedQueue.isEmpty()) {
+            throw new TicketQueueException("ERROR : The ticket queue " + ticketQueue.getName() + " you're trying to update doesn't exist.");
         }
         Optional<TicketQueue> existingQueue = ticketQueueRepository.findTicketQueueByName(ticketQueue.getName());
         if(existingQueue.isPresent()){
-            throw new TicketQueueException("A ticket queue already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketQueueException("ERROR : A ticket queue already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketQueue.isDefault()){
-            defaultValueService.setDefaultTicketQueue(updatedQueue.get());
+            defaultValueService.setDefaultTicketQueue(ticketQueue);
         }
 
-        if(ticketQueue.getName() != null){
-            updatedQueue.get().setName(ticketQueue.getName());
-        }
-
-        return ticketQueueRepository.saveAndFlush(updatedQueue.get());
+        return ticketQueueRepository.saveAndFlush(ticketQueue);
     }
 
     @Override

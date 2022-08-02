@@ -50,12 +50,12 @@ public class TicketController {
         return ticketService.createAdminTicket(ticket);
     }
 
-    @PostMapping("/admin/ticket/update")
-    public Ticket updateTicket(@RequestBody Ticket ticket) throws TicketException {
+    @PutMapping("/admin/ticket/update")
+    public Ticket updateTicket(@RequestBody Ticket ticket) throws TicketException, DefaultValueException, UtilisateurException {
         return ticketService.updateTicket(ticket);
     }
 
-    @PostMapping("/admin/ticket/close")
+    @PutMapping("/admin/ticket/close")
     public Ticket closeTicket(@RequestBody Ticket ticket) throws TicketException {
         return ticketService.closeTicket(ticket);
     }

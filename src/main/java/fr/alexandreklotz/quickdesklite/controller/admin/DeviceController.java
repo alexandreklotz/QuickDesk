@@ -40,7 +40,7 @@ public class DeviceController {
         return deviceService.createDevice(device);
     }
 
-    @PostMapping("/admin/device/update")
+    @PutMapping("/admin/device/update")
     public Device updateDevice(@RequestBody Device device) throws UtilisateurException, DeviceException {
         return deviceService.updateDevice(device);
     }

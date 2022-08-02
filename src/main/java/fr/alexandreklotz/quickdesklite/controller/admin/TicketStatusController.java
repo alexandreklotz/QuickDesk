@@ -54,9 +54,14 @@ public class TicketStatusController {
         return ticketStatusService.createTicketStatus(ticketStatus);
     }
 
-    @PostMapping("/admin/ticketstatus/update")
+    @PutMapping("/admin/ticketstatus/update")
     public TicketStatus updateTicketStatus(@RequestBody TicketStatus ticketStatus) throws TicketStatusException {
         return ticketStatusService.updateTicketStatus(ticketStatus);
+    }
+
+    @PutMapping("/admin/ticketstatus/setasdefault")
+    public TicketStatus setDefaultTicketStatus(@RequestBody TicketStatus ticketStatus) throws TicketStatusException {
+        return defaultValueService.setDefaultStatusValue(ticketStatus);
     }
 
     @DeleteMapping("/admin/ticketstatus/delete")

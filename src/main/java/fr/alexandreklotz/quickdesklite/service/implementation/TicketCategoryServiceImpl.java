@@ -43,10 +43,12 @@ public class TicketCategoryServiceImpl implements TicketCategoryService {
 
     @Override
     public TicketCategory createTicketCategory(TicketCategory ticketCategory) throws TicketCategoryException {
+
         Optional<TicketCategory> existingCategory = ticketCategoryRepository.findTicketCategoryByName(ticketCategory.getName());
         if(existingCategory.isPresent()){
-           throw new TicketCategoryException("A ticket category already uses this name. Please specify another name or modify the existing entity.");
+           throw new TicketCategoryException("ERROR : A ticket category already uses this name. Please specify another name or modify the existing entity.");
         }
+
         if(ticketCategory.isDefault()){
             defaultValueService.setDefaultCategoryValue(ticketCategory);
         }
@@ -58,28 +60,20 @@ public class TicketCategoryServiceImpl implements TicketCategoryService {
     public TicketCategory updateTicketCategory(TicketCategory ticketCategory) throws TicketCategoryException
     {
         Optional<TicketCategory> updatedCategory = ticketCategoryRepository.findById(ticketCategory.getId());
-        if(!updatedCategory.isPresent()){
-            throw new TicketCategoryException("The category you're trying to update doesn't exist.");
+        if(updatedCategory.isEmpty()){
+            throw new TicketCategoryException("ERROR : The category you're trying to update doesn't exist.");
         }
 
         Optional<TicketCategory> existingCategory = ticketCategoryRepository.findTicketCategoryByName(ticketCategory.getName());
         if(existingCategory.isPresent()){
-            throw new TicketCategoryException("A ticket category already uses this name. Please specify another name or modify the existing entity.");
+            throw new TicketCategoryException("ERROR : A ticket category already uses this name. Please specify another name or modify the existing entity.");
         }
 
         if(ticketCategory.isDefault()){
-            defaultValueService.setDefaultCategoryValue(updatedCategory.get());
+            defaultValueService.setDefaultCategoryValue(ticketCategory);
         }
 
-        if(ticketCategory.getName() != null){
-            updatedCategory.get().setName(ticketCategory.getName());
-        }
-
-        if(ticketCategory.getName() != null){
-            updatedCategory.get().setName(ticketCategory.getName());
-        }
-
-        return ticketCategoryRepository.saveAndFlush(updatedCategory.get());
+        return ticketCategoryRepository.saveAndFlush(ticketCategory);
     }
 
     @Override

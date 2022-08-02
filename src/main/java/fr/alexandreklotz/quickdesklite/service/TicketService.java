@@ -24,7 +24,7 @@ public interface TicketService {
 
     public Ticket createAdminTicket(Ticket ticket) throws UtilisateurException, DefaultValueException;
 
-    public Ticket updateTicket(Ticket ticket) throws TicketException;
+    public Ticket updateTicket(Ticket ticket) throws TicketException, DefaultValueException, UtilisateurException;
 
     public Ticket closeTicket(Ticket ticket) throws TicketException;
 

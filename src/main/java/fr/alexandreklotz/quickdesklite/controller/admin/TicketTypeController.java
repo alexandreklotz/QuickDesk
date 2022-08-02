@@ -53,9 +53,14 @@ public class TicketTypeController {
         return ticketTypeService.createTicketType(ticketType);
     }
 
-    @PostMapping("/admin/tickettype/update")
+    @PutMapping("/admin/tickettype/update")
     public TicketType updateTicketType(@RequestBody TicketType ticketType) throws TicketTypeException {
         return ticketTypeService.updateTicketType(ticketType);
+    }
+
+    @PutMapping("/admin/tickettype/setasdefault")
+    public TicketType setTicketTypeAsDefault(@RequestBody TicketType ticketType) throws TicketTypeException {
+        return defaultValueService.setDefaultTypeValue(ticketType);
     }
 
     @DeleteMapping("/admin/tickettype/delete")

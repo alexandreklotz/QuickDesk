@@ -45,7 +45,7 @@ public class TicketPriorityServiceImpl implements TicketPriorityService {
     public TicketPriority createTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException{
         Optional<TicketPriority> existingPriority = ticketPriorityRepository.findTicketPriorityWithName(ticketPriority.getName());
         if(existingPriority.isPresent()){
-            throw new TicketPriorityException("A ticket priority already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketPriorityException("ERROR : A ticket priority already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketPriority.isDefault()){
             defaultValueService.setDefaultPriorityValue(ticketPriority);
@@ -56,23 +56,21 @@ public class TicketPriorityServiceImpl implements TicketPriorityService {
 
     @Override
     public TicketPriority updateTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException{
+
         Optional<TicketPriority> updatedPriority = ticketPriorityRepository.findById(ticketPriority.getId());
-        if(!updatedPriority.isPresent()){
-            throw new TicketPriorityException("The priority you're trying to update doesn't exist");
+        if(updatedPriority.isEmpty()){
+            throw new TicketPriorityException("ERROR : The priority " + ticketPriority.getName() + " you're trying to update doesn't exist");
         }
+
         Optional<TicketPriority> existingPriority = ticketPriorityRepository.findTicketPriorityWithName(ticketPriority.getName());
         if(existingPriority.isPresent()){
-            throw new TicketPriorityException("A ticket priority already uses this name. Please specify another name or update the existing entity.");
+            throw new TicketPriorityException("ERROR : A ticket priority already uses this name. Please specify another name or update the existing entity.");
         }
         if(ticketPriority.isDefault()){
-            defaultValueService.setDefaultPriorityValue(updatedPriority.get());
+            defaultValueService.setDefaultPriorityValue(ticketPriority);
         }
 
-        if(ticketPriority.getName() != null){
-            updatedPriority.get().setName(ticketPriority.getName());
-        }
-
-        return ticketPriorityRepository.saveAndFlush(updatedPriority.get());
+        return ticketPriorityRepository.saveAndFlush(ticketPriority);
     }
 
     @Override

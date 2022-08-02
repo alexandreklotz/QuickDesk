@@ -46,7 +46,7 @@ public class ContractController {
         return contractService.createContract(contract);
     }
 
-    @PostMapping("/admin/contract/update")
+    @PutMapping("/admin/contract/update")
     public Contract updateContract(@RequestBody Contract contract) throws ContractException, ContractorException, SoftwareException {
         return contractService.updateContract(contract);
     }

@@ -45,7 +45,7 @@ public class ContractorController {
         return contractorService.createContractor(contractor);
     }
 
-    @PostMapping("/admin/contractor/update")
+    @PutMapping("/admin/contractor/update")
     public Contractor updateContractor(@RequestBody Contractor contractor) throws ContractorException, ContractException {
         return contractorService.updateContractor(contractor);
     }

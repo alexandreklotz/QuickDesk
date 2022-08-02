@@ -46,9 +46,14 @@ public class TicketPriorityController {
         return ticketPriorityService.createTicketPriority(ticketPriority);
     }
 
-    @PostMapping("/admin/ticketpriority/update")
+    @PutMapping("/admin/ticketpriority/update")
     public TicketPriority updateTicketPriority(@RequestBody TicketPriority ticketPriority) throws TicketPriorityException {
         return ticketPriorityService.updateTicketPriority(ticketPriority);
+    }
+
+    @PutMapping("/admin/ticketpriority/setasdefault")
+    public TicketPriority setDefaultTicketPriority(@RequestBody TicketPriority ticketPriority) throws TicketPriorityException {
+        return defaultValueService.setDefaultPriorityValue(ticketPriority);
     }
 
     @DeleteMapping("/admin/ticketpriority/delete")

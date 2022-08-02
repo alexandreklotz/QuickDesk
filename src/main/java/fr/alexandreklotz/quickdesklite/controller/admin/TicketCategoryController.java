@@ -49,9 +49,14 @@ public class TicketCategoryController {
         return ticketCategoryService.createTicketCategory(ticketCategory);
     }
 
-    @PostMapping("/admin/ticketcategory/update")
+    @PutMapping("/admin/ticketcategory/update")
     public TicketCategory updateTicketCategory(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
         return ticketCategoryService.updateTicketCategory(ticketCategory);
+    }
+
+    @PutMapping("/admin/ticketcategory/setasdefault")
+    public TicketCategory setDefaultTicketCategory(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
+        return defaultValueService.setDefaultCategoryValue(ticketCategory);
     }
 
     @DeleteMapping("/admin/ticketcategory/delete")
