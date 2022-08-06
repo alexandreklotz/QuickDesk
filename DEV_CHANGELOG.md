@@ -1,5 +1,32 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 06/08/2022
+
+*`DefaultValueServiceImpl` might be modified. Instead of sending complete objects, i'll probably only send the object's ID. The code in the controllers when creating a new type might also be changed since i think it might lead
+to an error considering how the create methods have been developed. Exceptions will also be added for each @DeleteMapping. I'll also start checking out how to implement logging and once i'll start developing
+the front end i'll give a look at how to send custom error messages to it when an error occurs or anything else.*
+
+* Some ambiguous GetMappings URLs have been modified in a few controllers
+* `Delete` method in `UtilisateurController/Service/ServiceImpl` has been deleted and replaced by a `deleteById` method. This modification has been done for each entity (contrary to what i said i would do before but it's more logical and easier to implement, at least to me).
+* New interface has been created in `ContractRepository` => `getContractByContractName`. It will be used by the `getContractByName` method in `ContractService/ServiceImpl`.
+* New interface has been created in `SoftwareRepository` => `getSoftwareByName`. It will be implemented in the `Service/ServiceImpl/Controller` to retrieve a software by searching for its name.
+* New interface has been created in `TeamRepository` => `getTeamByName`. It will have the same use as the two above.
+* `getTicketCategoryByName` has been implemented in `TicketCategoryServiceImpl and Controller`.
+* The interface `getDeviceByName` has been implemented in `DeviceService/ServiceImpl/Controller`.
+* New interface has been created in `LicenseKeyRepository` => `getLicenseKeyByKey`. It has been implemented.
+
+***
+### 04/08/2022
+__The project has been renamed to `QuickDesk`. There will only be one version. I'll implement more functions over time such as a mailing service to send emails to users, etc...__
+*More code has been cleaned. I'll test all the methods ASAP and if everything is fine then i'll start developing the frontend with angular.
+Once the frontend will be implemented, new methods will be developed if required.*
+***
+### 03/08/2022
+* Creation of a new package : `backend`. It will contain the whole backend and another package called `frontend` will be created which will contain the angular front. The project will be refactored and renamed to QuickDesk instead of QuickDesk Lite.
+* Creation of a new LocalDateTime variable in `Comment` => commentDateEdited.
+* Code has been reviewed in `CommentServiceImpl`. Modifications have been made in `CommentService` accordingly such as create and update comment methods : the code will retrieve the ticket attached to the comment from the ticket's body instead of using the repository to find it in the database.
+* Code has been reviewed in `ContractorServiceImpl`.
+***
 ### 02/08/2022
 *More code has been cleaned in `UtilisateurServiceImpl` and `TeamServiceImpl`. All the `ServiceImpl` classes for ticket attributes (priority, etc) have been cleaned aswell*
 

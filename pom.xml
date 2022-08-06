@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>fr.alexandreklotz</groupId>
-	<artifactId>quickdesklite</artifactId>
+	<artifactId>quickdesk</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>quickdesklite</name>
-	<description>QuickDesk Ticketing Lite</description>
+	<name>quickdesk</name>
+	<description>QuickDesk Ticketing</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
