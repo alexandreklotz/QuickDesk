@@ -48,7 +48,7 @@ public class TicketTypeController {
         return defaultValueService.getDefaultTypeValue();
     }
 
-    @PostMapping("/admin/tickettype/all")
+    @PostMapping("/admin/tickettype/create")
     public TicketType createTicketType(@RequestBody TicketType ticketType) throws TicketTypeException {
         return ticketTypeService.createTicketType(ticketType);
     }

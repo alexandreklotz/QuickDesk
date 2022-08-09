@@ -41,7 +41,7 @@ public class ContractController {
         return contractService.getContractByContractNumber(ctrNbr);
     }
 
-    @PostMapping("/admin/contract/new")
+    @PostMapping("/admin/contract/create")
     public Contract createContract(@RequestBody Contract contract) throws ContractorException, SoftwareException {
         return contractService.createContract(contract);
     }

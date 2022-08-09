@@ -40,7 +40,7 @@ public class ContractorController {
         return contractorService.getContractorByName(contractorName);
     }
 
-    @PostMapping("/admin/contractor/new")
+    @PostMapping("/admin/contractor/create")
     public Contractor createContractor(@RequestBody Contractor contractor) throws ContractException {
         return contractorService.createContractor(contractor);
     }

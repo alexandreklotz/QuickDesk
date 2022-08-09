@@ -48,7 +48,7 @@ public class TicketCategoryController {
         return defaultValueService.getDefaultCategoryValue();
     }
 
-    @PostMapping("/admin/ticketcategory/new")
+    @PostMapping("/admin/ticketcategory/create")
     public TicketCategory createTicketCategory(@RequestBody TicketCategory ticketCategory) throws TicketCategoryException {
         return ticketCategoryService.createTicketCategory(ticketCategory);
     }

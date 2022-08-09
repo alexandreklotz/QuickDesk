@@ -1,5 +1,8 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 08/08/2022
+* @PostMappings URLs have been modified => They ended with /new, they now end with /create. More logical.*
+***
 ### 06/08/2022
 
 *`DefaultValueServiceImpl` might be modified. Instead of sending complete objects, i'll probably only send the object's ID. The code in the controllers when creating a new type might also be changed since i think it might lead

@@ -48,7 +48,7 @@ public class TicketQueueController {
         return defaultValueService.getDefaultTicketQueue();
     }
 
-    @PostMapping("/admin/ticketqueue/new")
+    @PostMapping("/admin/ticketqueue/create")
     public TicketQueue createNewTicketQueue(@RequestBody TicketQueue ticketQueue) throws TicketQueueException{
         return ticketQueueService.createNewTicketQueue(ticketQueue);
     }

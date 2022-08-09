@@ -40,7 +40,7 @@ public class LicenseKeyController {
         return licenseKeyService.getLicenseKeyByKey(licKey);
     }
 
-    @PostMapping("/admin/licensekey/new")
+    @PostMapping("/admin/licensekey/create")
     public LicenseKey createLicensekey(@RequestBody LicenseKey licenseKey) throws SoftwareException {
         return licenseKeyService.createLicenseKey(licenseKey);
     }

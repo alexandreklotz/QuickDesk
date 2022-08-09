@@ -40,7 +40,7 @@ public class DeviceController {
         return deviceService.getDeviceByName(devName);
     }
 
-    @PostMapping("/admin/device/new")
+    @PostMapping("/admin/device/create")
     public Device createDevice(@RequestBody Device device) throws UtilisateurException {
         return deviceService.createDevice(device);
     }

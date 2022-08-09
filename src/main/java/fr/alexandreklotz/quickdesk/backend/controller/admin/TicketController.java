@@ -45,7 +45,7 @@ public class TicketController {
         return ticketService.getTicketById(ticketId);
     }
 
-    @PostMapping("/admin/ticket/new")
+    @PostMapping("/admin/ticket/create")
     public Ticket createAdminTicket(@RequestBody Ticket ticket) throws UtilisateurException, DefaultValueException {
         return ticketService.createAdminTicket(ticket);
     }

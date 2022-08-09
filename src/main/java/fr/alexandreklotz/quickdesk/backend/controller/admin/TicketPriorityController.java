@@ -43,7 +43,7 @@ public class TicketPriorityController {
         return defaultValueService.getDefaultPriorityValue();
     }
 
-    @PostMapping("/admin/ticketpriority/new")
+    @PostMapping("/admin/ticketpriority/create")
     public TicketPriority createTicketPriority(@RequestBody TicketPriority ticketPriority) throws TicketPriorityException{
         return ticketPriorityService.createTicketPriority(ticketPriority);
     }

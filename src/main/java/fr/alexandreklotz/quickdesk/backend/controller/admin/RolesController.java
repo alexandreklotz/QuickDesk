@@ -27,12 +27,12 @@ public class RolesController {
         return rolesService.getAllRoles();
     }
 
-    @GetMapping("/admin/roles/{roleName}")
+    @GetMapping("/admin/roles/name/{roleName}")
     public Roles getRoleByName(@PathVariable String roleName) throws RolesException {
         return rolesService.getRoleByName(roleName);
     }
 
-    @GetMapping("/admin/roles/{roleId}")
+    @GetMapping("/admin/roles/id/{roleId}")
     public Roles getRoleById(@PathVariable Long roleId) throws RolesException{
         return rolesService.getRoleById(roleId);
     }

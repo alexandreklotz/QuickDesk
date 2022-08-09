@@ -42,7 +42,7 @@ public class UtilisateurController {
         return utilisateurService.getUserByLogin(userLogin);
     }
 
-    @PostMapping("/admin/utilisateur/new")
+    @PostMapping("/admin/utilisateur/create")
     public Utilisateur createUser(@RequestBody Utilisateur utilisateur) throws UtilisateurException, DeviceException, TeamException, RolesException {
         return utilisateurService.createUser(utilisateur);
     }

@@ -41,7 +41,7 @@ public class TeamController {
         return teamService.getTeamByName(teamName);
     }
 
-    @PostMapping("/admin/team/new")
+    @PostMapping("/admin/team/create")
     public Team createNewTeam(@RequestBody Team team) throws UtilisateurException, TicketQueueException {
         return teamService.createNewTeam(team);
     }

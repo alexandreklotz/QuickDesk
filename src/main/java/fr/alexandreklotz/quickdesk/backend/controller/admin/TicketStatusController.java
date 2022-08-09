@@ -48,7 +48,7 @@ public class TicketStatusController {
         return defaultValueService.getDefaultStatusValue();
     }
 
-    @PostMapping("/admin/ticketstatus/new")
+    @PostMapping("/admin/ticketstatus/create")
     public TicketStatus createTicketStatus(@RequestBody TicketStatus ticketStatus) throws TicketStatusException{
         return ticketStatusService.createTicketStatus(ticketStatus);
     }
