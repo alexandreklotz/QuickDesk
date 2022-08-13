@@ -42,7 +42,7 @@ public class TeamController {
     }
 
     @PostMapping("/admin/team/create")
-    public Team createNewTeam(@RequestBody Team team) throws UtilisateurException, TicketQueueException {
+    public Team createNewTeam(@RequestBody Team team) throws UtilisateurException, TicketQueueException, TeamException {
         return teamService.createNewTeam(team);
     }
 
@@ -51,8 +51,8 @@ public class TeamController {
         return teamService.updateTeam(team);
     }
 
-    @DeleteMapping("/admin/team/delete")
-    public void deleteTeam(@RequestBody Team team){
-        teamService.deleteTeam(team);
+    @DeleteMapping("/admin/team/id/{teamId}/delete")
+    public void deleteTeam(@PathVariable UUID teamId){
+        teamService.deleteTeam(teamId);
     }
 }

@@ -1,7 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -74,18 +73,19 @@ public class Utilisateur {
     private Roles role;
 
     //A user can be part of only one team but a team can have multiple users
-    @JsonView(CustomJsonView.UtilisateurView.class)
+    //@JsonView(CustomJsonView.UtilisateurView.class)
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
     //A user can create multiple tickets but a ticket can only be assigned to one user
-    @JsonView(CustomJsonView.UtilisateurView.class)
+    @JsonIgnore
     @OneToMany(mappedBy = "utilisateur")
     private Set<Ticket> tickets;
 
     //A user, whatever his role is, can create multiple comments but a comment can only be created/linked by/to one user.
-    @JsonView(CustomJsonView.UtilisateurView.class)
+    @JsonIgnore
     @OneToMany(mappedBy = "utilisateur")
     private Set<Comment> comments;
 

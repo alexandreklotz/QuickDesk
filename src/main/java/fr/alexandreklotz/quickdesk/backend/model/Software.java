@@ -30,11 +30,11 @@ public class Software {
     private String name;
 
     @JsonView(CustomJsonView.SoftwareView.class)
-    @Column(nullable = true)
+    @Column
     private String editor;
 
     @JsonView(CustomJsonView.SoftwareView.class)
-    @Column(nullable = true)
+    @Column
     private String comment;
 
     ///////////////
@@ -51,6 +51,9 @@ public class Software {
     @JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.LicenseKeyView.class})
     @OneToMany(mappedBy = "software")
     private Set<LicenseKey> licenses;
+
+
+    //TODO : Check the relation between software and contract
 
     //A software can be linked to only one contract but a contract can be linked to multiple software
     /*@JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})

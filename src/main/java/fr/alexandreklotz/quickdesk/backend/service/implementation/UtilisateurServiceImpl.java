@@ -1,7 +1,9 @@
 package fr.alexandreklotz.quickdesk.backend.service.implementation;
 
+import fr.alexandreklotz.quickdesk.backend.error.DeviceException;
 import fr.alexandreklotz.quickdesk.backend.error.TeamException;
 import fr.alexandreklotz.quickdesk.backend.error.UtilisateurException;
+import fr.alexandreklotz.quickdesk.backend.model.Device;
 import fr.alexandreklotz.quickdesk.backend.model.Roles;
 import fr.alexandreklotz.quickdesk.backend.model.Team;
 import fr.alexandreklotz.quickdesk.backend.model.Utilisateur;
@@ -38,9 +40,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
 
-    ///////////////////////////////////////////
-    // METHODS FOR PANEL AND BASIC FUNCTIONS //
-    ///////////////////////////////////////////
+    ////////////////////////
+    // FUNCTIONAL METHODS //
+    ////////////////////////
 
     @Override
     public boolean isUserExisting(String login) {
@@ -74,17 +76,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public Utilisateur getUserById(UUID userid) throws UtilisateurException {
         return utilisateurRepository.findById(userid).orElseThrow(()
-        -> new UtilisateurException(userid + " doesn't match any existing user."));
+        -> new UtilisateurException("ERROR : " + userid + " doesn't match any existing user."));
     }
 
     @Override
     public Utilisateur getUserByLogin(String login) throws UtilisateurException {
         return utilisateurRepository.findUserWithLogin(login).orElseThrow(()
-        -> new UtilisateurException(login + " doesn't match any existing user."));
+        -> new UtilisateurException("ERROR : " + login + " doesn't match any existing user."));
     }
 
     @Override
-    public Utilisateur createUser(Utilisateur utilisateur) throws UtilisateurException, TeamException {
+    public Utilisateur createUser(Utilisateur utilisateur) throws UtilisateurException, TeamException, DeviceException {
 
         boolean existingUser = isUserExisting(utilisateur.getUtilLogin());
 
@@ -114,19 +116,26 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             }
         }
 
+        if(utilisateur.getDevice() != null){
+            Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
+            if(device.isEmpty()){
+                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " doesn't exist and cannot be assigned to the user.");
+            }
+        }
+
         utilisateurRepository.saveAndFlush(utilisateur);
         return utilisateur;
     }
 
     @Override
-    public Utilisateur updateUser(Utilisateur utilisateur) throws UtilisateurException, TeamException {
+    public Utilisateur updateUser(Utilisateur utilisateur) throws UtilisateurException, TeamException, DeviceException {
         Optional<Utilisateur> updatedUser = utilisateurRepository.findById(utilisateur.getId());
         if(updatedUser.isEmpty()){
             throw new UtilisateurException("ERROR : The user you're trying to update doesn't exist.");
         }
 
         boolean existingUser = isUserExisting(utilisateur.getUtilLogin());
-        if(existingUser){
+        if(existingUser && !updatedUser.get().getUtilLogin().equals(utilisateur.getUtilLogin())){
             throw new UtilisateurException("ERROR : The login you specified is already used by another user => " + utilisateur.getUtilLogin());
         }
 
@@ -137,9 +146,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             }
         }
 
+        if(utilisateur.getDevice() != null){
+            Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
+            if(device.isEmpty()){
+                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " doesn't exist.");
+            }
+        }
+
         utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
 
-        //utilisateurRepository.delete(updatedUser.get());
         utilisateurRepository.saveAndFlush(utilisateur);
 
         return utilisateur;

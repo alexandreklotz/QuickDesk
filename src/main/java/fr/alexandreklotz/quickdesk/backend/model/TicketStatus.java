@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;
@@ -44,6 +45,7 @@ public class TicketStatus {
     /////////////
 
     //One status per ticket but multiple tickets can have the same status
+    @JsonIgnore
     @OneToMany(mappedBy = "ticketStatus")
     private Set<Ticket> tickets;
 

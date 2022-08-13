@@ -13,6 +13,9 @@ import java.util.UUID;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
+    @Query(value = "SELECT max(ticketNumber) FROM Ticket")
+    Long getLatestTicketNumber();
+
     @Query("FROM Ticket t WHERE t.ticketNumber = :number")
     Optional<Ticket> findTicketWithTicketNumber (@Param("number") Long number);
 

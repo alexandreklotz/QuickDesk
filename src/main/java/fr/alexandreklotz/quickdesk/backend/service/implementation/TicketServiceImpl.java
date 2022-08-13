@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -90,6 +91,20 @@ public class TicketServiceImpl implements TicketService {
         return assignedTickets;
     }
 
+    ////////////////////////
+    // FUNCTIONAL METHODS //
+    ////////////////////////
+
+    @Override
+    public Long getLatestTicketNumber() {
+        Long latestNbr = ticketRepository.getLatestTicketNumber();
+        if(latestNbr == null || latestNbr == 0){
+            return 1L;
+        } else {
+            return latestNbr+1;
+        }
+    }
+
     //////////////////////////////////
     //The methods below are for CRUD//
     //////////////////////////////////
@@ -136,16 +151,17 @@ public class TicketServiceImpl implements TicketService {
 
         //We first set the default values
         ticket.setTicketStatus(defaultValueService.getDefaultStatusValue());
-        ticket.setTicketCategory(defaultValueService.getDefaultCategoryValue());
-
-        //We assign the ticket to the default queue
         ticket.setTicketQueue(defaultValueService.getDefaultTicketQueue());
+        ticket.setTicketCategory(defaultValueService.getDefaultCategoryValue());
 
         //Ticket will be editable
         ticket.setEditableTicket(true);
 
         //We set the creation date to now()
         ticket.setTicketDateCreated(LocalDateTime.now());
+
+        //We generate a ticket number
+        ticket.setTicketNumber(getLatestTicketNumber());
 
         ticketRepository.saveAndFlush(ticket);
         return ticket;

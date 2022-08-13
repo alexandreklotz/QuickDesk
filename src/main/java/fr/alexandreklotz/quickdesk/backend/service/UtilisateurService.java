@@ -1,6 +1,7 @@
 package fr.alexandreklotz.quickdesk.backend.service;
 
 
+import fr.alexandreklotz.quickdesk.backend.error.DeviceException;
 import fr.alexandreklotz.quickdesk.backend.error.TeamException;
 import fr.alexandreklotz.quickdesk.backend.error.UtilisateurException;
 import fr.alexandreklotz.quickdesk.backend.model.Utilisateur;
@@ -20,9 +21,9 @@ public interface UtilisateurService {
 
     public Utilisateur getUserByLogin(String login) throws UtilisateurException;
 
-    public Utilisateur createUser(Utilisateur utilisateur) throws UtilisateurException, TeamException;
+    public Utilisateur createUser(Utilisateur utilisateur) throws UtilisateurException, TeamException, DeviceException;
 
-    public Utilisateur updateUser(Utilisateur utilisateur) throws UtilisateurException, TeamException;
+    public Utilisateur updateUser(Utilisateur utilisateur) throws UtilisateurException, TeamException, DeviceException;
 
     public void deleteUserById(UUID userId);
 }

@@ -10,6 +10,7 @@ import fr.alexandreklotz.quickdesk.backend.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,6 +55,9 @@ public class DeviceServiceImpl implements DeviceService {
             deviceUser.get().setDevice(device);
             utilisateurRepository.saveAndFlush(deviceUser.get());
         }
+
+        device.setDeviceCreated(LocalDateTime.now());
+
         deviceRepository.saveAndFlush(device);
         return device;
     }
@@ -71,6 +75,8 @@ public class DeviceServiceImpl implements DeviceService {
                 throw new UtilisateurException("ERROR : The user you're trying to assign to this device doesn't exist.");
             }
         }
+
+        //device.setDeviceCreated(devBdd.get().getDeviceCreated()); //Necessary ?
 
         deviceRepository.saveAndFlush(device);
         return device;

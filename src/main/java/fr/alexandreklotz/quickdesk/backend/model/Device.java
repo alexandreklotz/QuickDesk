@@ -1,6 +1,8 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;

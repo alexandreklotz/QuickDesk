@@ -1,5 +1,21 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 13/08/2022
+*I'm currently testing the API to ensure that everything works as intended. It allows me to fix issues or coding mistakes and think about other interfaces/methods i'll implement .*
+
+* Added `@JsonIgnoreProperties({"hibernateLazyInitializer"})` in `Roles` model. If i'd create a user without specifying his role (quickdesk automatically assigns the "USER" role by default if no role is specified) it would generate a JSON error (recursion).
+* Modification of the User URL in `UserEndPointController` -> `user/ticket/new` is now `user/ticket/create`.
+* Fixed a coding mistake in `UtilisateurServiceImpl` -> When you would try to update a user, it would return an error saying that the user already exists because his login is already in use.
+* Created a new interface in `TeamService` => `isTeamExisting`. It will have the same use than `isUserExisting` in `UtilisateurServiceImpl`. Method has been implemented and will serve the same purpose (check code in both `UtilisateurServiceImpl and TeamServiceImpl`).
+* The code in each __Set__ interface in `DefaultValueServiceImpl` has been fixed. It was throwing an exception if there wasn't a default value set which would stop the execution.
+* __@Transactional__ has been added in `TicketQueueRepository` `TicketStatusRepository` `TicketCategoryRepository` `TicketTypeRepository` and `TicketPriorityRepository`.
+* `ticketNumber` auto-increments and assigns itself to every new ticket. I'll try to see if i can implement custom ticket numbers and also a prefix for each queue, for example if a ticket is created in the __Network__ queue then it would have a __NW - xxxx__ number.
+
+*The links between `Utilisateur` <=> `Team` but also `Utilisateur` <=> `Device` need to be fixed. There are JSON infinite recursion errors and some fields need to be filtered. There might be the same JSON issues between all entities (these issues weren't present before, i haven't made any modifications to the entities and i therefore don't understand why this happens all of a sudden)*
+
+*Next steps : Manage all the JSON recursions and filter fields in JSON responses.*
+
+***
 ### 08/08/2022
 * @PostMappings URLs have been modified => They ended with /new, they now end with /create. More logical.*
 ***

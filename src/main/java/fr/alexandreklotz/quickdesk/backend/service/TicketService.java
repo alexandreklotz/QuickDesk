@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface TicketService {
 
+    public Long getLatestTicketNumber();
+
     public List<Ticket> getOpenedTickets(String login) throws UtilisateurException;
 
     public List<Ticket> getAssignedTickets(String login) throws UtilisateurException;

@@ -10,15 +10,17 @@ import java.util.UUID;
 
 public interface TeamService {
 
+    public boolean isTeamExisting(String teamName);
+
     public List<Team> getAllTeams();
 
     public Team getTeamById(UUID teamid) throws TeamException;
 
     public Team getTeamByName(String name) throws TeamException;
 
-    public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException;
+    public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException, TeamException;
 
     public Team updateTeam(Team team) throws TeamException, UtilisateurException, TicketQueueException;
 
-    public void deleteTeam (Team team);
+    public void deleteTeam (UUID teamId);
 }

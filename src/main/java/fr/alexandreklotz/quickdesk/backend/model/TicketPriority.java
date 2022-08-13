@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;
@@ -44,6 +45,7 @@ public class TicketPriority {
     /////////////
 
     //A ticket has only priority but a priority can be assigned to multiple tickets
+    @JsonIgnore
     @OneToMany(mappedBy = "ticketPriority")
     private Set<Ticket> tickets;
 

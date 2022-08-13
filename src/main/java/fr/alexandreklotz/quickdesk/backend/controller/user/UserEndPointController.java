@@ -50,7 +50,7 @@ public class UserEndPointController {
         return ticketService.getTicketByNumber(ticketNbr, userLogin);
     }
 
-    @PostMapping("/user/ticket/new")
+    @PostMapping("/user/ticket/create")
     public Ticket createUserTicket(@RequestBody Ticket ticket) throws DefaultValueException {
         return ticketService.createUserTicket(ticket);
     }

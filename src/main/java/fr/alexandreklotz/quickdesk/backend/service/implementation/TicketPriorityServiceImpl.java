@@ -31,9 +31,9 @@ public class TicketPriorityServiceImpl implements TicketPriorityService {
     }
 
     @Override
-    public TicketPriority getSpecifiedTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException {
-        return ticketPriorityRepository.findById(ticketPriority.getId()).orElseThrow(()
-        -> new TicketPriorityException(ticketPriority.getId() + " doesn't match any existing ticket priority."));
+    public TicketPriority getTicketPriorityById(UUID priorityId) throws TicketPriorityException {
+        return ticketPriorityRepository.findById(priorityId).orElseThrow(()
+        -> new TicketPriorityException("ERROR : " + priorityId + " doesn't match any existing ticket priority."));
     }
 
     @Override

@@ -30,6 +30,20 @@ public class TeamServiceImpl implements TeamService {
         this.ticketQueueRepository = ticketQueueRepository;
     }
 
+    ////////////////////////
+    // FUNCTIONAL METHODS //
+    ////////////////////////
+
+    @Override
+    public boolean isTeamExisting(String teamName) {
+        Optional<Team> team = teamRepository.getTeamByName(teamName);
+        if(team.isPresent()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     ////////
     //CRUD//
     ////////
@@ -53,7 +67,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException {
+    public Team createNewTeam(Team team) throws UtilisateurException, TicketQueueException, TeamException {
+
+        boolean TeamExisting = isTeamExisting(team.getTeamName());
+        if(TeamExisting){
+            throw new TeamException("ERROR : The team " + team.getTeamName() + " already exists.");
+        }
 
         Set<Utilisateur> usersTeam = new HashSet<>();
 
@@ -75,7 +94,7 @@ public class TeamServiceImpl implements TeamService {
             for(TicketQueue ticketQueue : team.getTicketQueues()){
                 Optional<TicketQueue> tQueue = ticketQueueRepository.findById(ticketQueue.getId());
                 if(tQueue.isEmpty()){
-                    throw new TicketQueueException("EROR : The specified ticket queue with the id " + ticketQueue.getId() + " doesn't exist.");
+                    throw new TicketQueueException("ERROR : The specified ticket queue with the id " + ticketQueue.getId() + " doesn't exist.");
                 }
                 teamQueues.add(tQueue.get());
             }
@@ -89,11 +108,16 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team updateTeam(Team team) throws TeamException, UtilisateurException, TicketQueueException {
+    public Team updateTeam(Team team) throws TeamException, UtilisateurException, TicketQueueException{
 
         Optional<Team> updatedTeam = teamRepository.findById(team.getId());
         if(updatedTeam.isEmpty()){
             throw new TeamException("ERROR : The specified team doesn't exist and therefore cannot be updated.");
+        }
+
+        boolean TeamExisting = isTeamExisting(team.getTeamName());
+        if(TeamExisting && !updatedTeam.get().getTeamName().equals(team.getTeamName())){
+            throw new TeamException("ERROR : The team " + team.getTeamName() + " already exists.");
         }
 
         team.setTeamDateCreated(updatedTeam.get().getTeamDateCreated());
@@ -132,7 +156,7 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public void deleteTeam(Team team) {
-        teamRepository.delete(team);
+    public void deleteTeam(UUID teamId) {
+        teamRepository.deleteById(teamId);
     }
 }

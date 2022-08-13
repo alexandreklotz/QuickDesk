@@ -33,11 +33,16 @@ public class TicketPriorityController {
         return ticketPriorityService.getAllTicketPriorities();
     }
 
-    //TODO : Rename/replace by GetById method.
-    @GetMapping("/admin/ticketpriority/details")
-    public TicketPriority getSpecifiedTicketPriority(@RequestBody TicketPriority ticketPriority) throws TicketPriorityException {
-        return ticketPriorityService.getSpecifiedTicketPriority(ticketPriority);
+    @GetMapping("/admin/ticketpriority/id/{priorityId}")
+    public TicketPriority getTicketPriorityById(@PathVariable UUID priorityId) throws TicketPriorityException {
+        return ticketPriorityService.getTicketPriorityById(priorityId);
     }
+
+    @GetMapping("/admin/ticketpriority/name/{priorityName}")
+    public TicketPriority getTicketPriorityByName(@PathVariable String priorityName) throws TicketPriorityException {
+        return ticketPriorityService.getTicketPriorityByName(priorityName);
+    }
+
     @GetMapping("/admin/ticketpriority/getdefault")
     public TicketPriority getDefaultTicketPriority() throws DefaultValueException {
         return defaultValueService.getDefaultPriorityValue();

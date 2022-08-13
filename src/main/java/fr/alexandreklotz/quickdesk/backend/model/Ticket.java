@@ -28,7 +28,6 @@ public class Ticket {
     private UUID id;
 
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO) //Can .IDENTITY be used ?
     @JsonView({CustomJsonView.TicketView.class, CustomJsonView.UtilisateurView.class, CustomJsonView.CommentView.class})
     private Long ticketNumber;
 
@@ -80,7 +79,7 @@ public class Ticket {
     //A ticket has one category but multiple tickets can be categorized identically
     @JsonView(CustomJsonView.TicketView.class)
     @ManyToOne
-    @JoinColumn(name = "ticketcategory_id", nullable = false)
+    @JoinColumn(name = "ticketcategory_id")
     private TicketCategory ticketCategory;
 
     //A ticket has one type but multiple tickets can have the same type

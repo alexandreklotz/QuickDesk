@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public interface TicketCategoryRepository extends JpaRepository<TicketCategory, 
     @Query("FROM TicketCategory t WHERE t.isDefault = :defvalue")
     Optional<TicketCategory> findDefaultTicketCategory(@Param("defvalue")boolean defvalue);
 
+    @Transactional
     @Modifying
     @Query("UPDATE TicketCategory t SET t.isDefault = true WHERE t.id = :catid")
     void setDefaultTicketCategory(@Param("catid") UUID catid);

@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;
@@ -54,7 +55,7 @@ public class TicketQueue {
     private Set<Team> teams;
 
     //A queue can contain multiple tickets but a ticket can only be assigned to one queue
-    @JsonView(CustomJsonView.TicketQueueView.class)
+    @JsonIgnore
     @OneToMany(mappedBy = "ticketQueue")
     private Set<Ticket> tickets;
 

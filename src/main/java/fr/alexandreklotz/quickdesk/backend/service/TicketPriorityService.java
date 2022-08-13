@@ -10,7 +10,7 @@ public interface TicketPriorityService {
 
     public List<TicketPriority> getAllTicketPriorities();
 
-    public TicketPriority getSpecifiedTicketPriority(TicketPriority ticketPriority) throws TicketPriorityException;
+    public TicketPriority getTicketPriorityById(UUID priorityId) throws TicketPriorityException;
 
     public TicketPriority getTicketPriorityByName(String priority) throws TicketPriorityException;
 
