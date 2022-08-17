@@ -27,7 +27,7 @@ public class TicketType {
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketTypeView.class)
+    @JsonView({CustomJsonView.TicketTypeView.class, CustomJsonView.TicketView.class})
     private String name;
 
     @Column(nullable = false)
@@ -45,7 +45,7 @@ public class TicketType {
     /////////////
 
     //One type per ticket but multiple tickets per type
-    @JsonIgnore
+    @JsonView(CustomJsonView.TicketTypeView.class)
     @OneToMany(mappedBy = "ticketType")
     private Set<Ticket> tickets;
 

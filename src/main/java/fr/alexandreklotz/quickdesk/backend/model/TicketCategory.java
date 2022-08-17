@@ -27,7 +27,7 @@ public class TicketCategory {
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketCategoryView.class)
+    @JsonView({CustomJsonView.TicketCategoryView.class, CustomJsonView.TicketView.class})
     private String name;
 
     @Column(nullable = false)
@@ -45,7 +45,7 @@ public class TicketCategory {
     /////////////
 
     //One category per ticket but mutliple tickets can be categorized identically
-    @JsonIgnore
+    @JsonView(CustomJsonView.TicketCategoryView.class)
     @OneToMany(mappedBy = "ticketCategory")
     private Set<Ticket> tickets;
 

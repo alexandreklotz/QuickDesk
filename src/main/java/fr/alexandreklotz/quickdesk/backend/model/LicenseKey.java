@@ -25,8 +25,8 @@ public class LicenseKey {
     private UUID id;
 
     @JsonView(CustomJsonView.LicenseKeyView.class)
-    @Column(nullable = false)
-    private String lkey;
+    @Column
+    private String licenseSerial;
 
     ///////////////
     //Constructor//
@@ -56,12 +56,12 @@ public class LicenseKey {
         this.id = id;
     }
 
-    public String getLkey() {
-        return lkey;
+    public String getLicenseSerial() {
+        return licenseSerial;
     }
 
-    public void setLkey(String lkey) {
-        this.lkey = lkey;
+    public void setLicenseSerial(String licenseSerial) {
+        this.licenseSerial = licenseSerial;
     }
 
     public Software getSoftware() {
@@ -74,6 +74,6 @@ public class LicenseKey {
 
     @Override
     public String toString(){
-        return "License id : " + this.id + "\n" + "License key : " + this.lkey;
+        return "License id : " + this.id + "\n" + "License key : " + this.licenseSerial;
     }
 }

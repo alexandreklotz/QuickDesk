@@ -26,7 +26,7 @@ public class TicketQueue {
     @JsonView(CustomJsonView.TicketQueueView.class)
     private UUID id;
 
-    @JsonView(CustomJsonView.TicketQueueView.class)
+    @JsonView({CustomJsonView.TicketQueueView.class, CustomJsonView.TicketView.class, CustomJsonView.TeamView.class})
     @Column(nullable = false)
     private String name;
 
@@ -55,7 +55,7 @@ public class TicketQueue {
     private Set<Team> teams;
 
     //A queue can contain multiple tickets but a ticket can only be assigned to one queue
-    @JsonIgnore
+    @JsonView(CustomJsonView.TicketQueueView.class)
     @OneToMany(mappedBy = "ticketQueue")
     private Set<Ticket> tickets;
 

@@ -27,7 +27,7 @@ public class TicketPriority {
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketPriorityView.class)
+    @JsonView({CustomJsonView.TicketPriorityView.class, CustomJsonView.TicketView.class})
     private String name;
 
     @Column(nullable = false)
@@ -45,7 +45,7 @@ public class TicketPriority {
     /////////////
 
     //A ticket has only priority but a priority can be assigned to multiple tickets
-    @JsonIgnore
+    @JsonView(CustomJsonView.TicketPriorityView.class)
     @OneToMany(mappedBy = "ticketPriority")
     private Set<Ticket> tickets;
 

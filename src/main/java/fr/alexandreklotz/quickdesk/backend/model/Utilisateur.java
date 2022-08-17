@@ -24,19 +24,19 @@ public class Utilisateur {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(nullable = false, columnDefinition = "BINARY(16)")
-    @JsonView(CustomJsonView.UtilisateurView.class)
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class})
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class})
     private String utilFirstName;
 
     @Column(nullable = false)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class})
+    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.TeamView.class, CustomJsonView.TicketView.class, CustomJsonView.CommentView.class})
     private String utilLastName;
 
     @Column(nullable = false, unique = true)
-    @JsonView({CustomJsonView.UtilisateurView.class, CustomJsonView.DeviceView.class, CustomJsonView.CommentView.class})
+    @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilLogin;
 
     @Column(nullable = false)
@@ -47,10 +47,10 @@ public class Utilisateur {
     @JsonView(CustomJsonView.UtilisateurView.class)
     private String utilMailAddr;
 
-    @Column()
+    @Column
     @JsonView(CustomJsonView.UtilisateurView.class)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationDate;
+    private static LocalDateTime creationDate;
 
     @Column(nullable = false)
     @JsonView(CustomJsonView.UtilisateurView.class)
@@ -74,13 +74,13 @@ public class Utilisateur {
 
     //A user can be part of only one team but a team can have multiple users
     //@JsonView(CustomJsonView.UtilisateurView.class)
-    @JsonIgnore
+    @JsonView(CustomJsonView.UtilisateurView.class)
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
     //A user can create multiple tickets but a ticket can only be assigned to one user
-    @JsonIgnore
+    @JsonView(CustomJsonView.UtilisateurView.class)
     @OneToMany(mappedBy = "utilisateur")
     private Set<Ticket> tickets;
 

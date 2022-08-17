@@ -1,9 +1,12 @@
 package fr.alexandreklotz.quickdesk.backend.service.implementation;
 
+import fr.alexandreklotz.quickdesk.backend.error.ContractException;
 import fr.alexandreklotz.quickdesk.backend.error.DeviceException;
 import fr.alexandreklotz.quickdesk.backend.error.UtilisateurException;
+import fr.alexandreklotz.quickdesk.backend.model.Contract;
 import fr.alexandreklotz.quickdesk.backend.model.Device;
 import fr.alexandreklotz.quickdesk.backend.model.Utilisateur;
+import fr.alexandreklotz.quickdesk.backend.repository.ContractRepository;
 import fr.alexandreklotz.quickdesk.backend.repository.DeviceRepository;
 import fr.alexandreklotz.quickdesk.backend.repository.UtilisateurRepository;
 import fr.alexandreklotz.quickdesk.backend.service.DeviceService;
@@ -19,14 +22,15 @@ import java.util.UUID;
 public class DeviceServiceImpl implements DeviceService {
 
     private DeviceRepository deviceRepository;
+    private ContractRepository contractRepository;
     private UtilisateurRepository utilisateurRepository;
 
     @Autowired
-    DeviceServiceImpl(DeviceRepository deviceRepository, UtilisateurRepository utilisateurRepository){
+    DeviceServiceImpl(DeviceRepository deviceRepository, UtilisateurRepository utilisateurRepository, ContractRepository contractRepository){
         this.deviceRepository = deviceRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.contractRepository = contractRepository;
     }
-
 
     @Override
     public List<Device> getAllDevices() {
@@ -46,14 +50,24 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device createDevice(Device device) throws UtilisateurException {
-        if(device.getDeviceUtilisateur() != null){
-            Optional<Utilisateur> deviceUser = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
-            if(device.getDeviceUtilisateur() != null && deviceUser.isEmpty()){
+    public Device createDevice(Device device) throws UtilisateurException, ContractException {
+
+        if(device.getUtilisateur() != null){
+            Optional<Utilisateur> deviceUser = utilisateurRepository.findById(device.getUtilisateur().getId());
+            if(device.getUtilisateur() != null && deviceUser.isEmpty()){
                 throw new UtilisateurException("ERROR : The user assigned to this device doesn't exist.");
             }
             deviceUser.get().setDevice(device);
-            utilisateurRepository.saveAndFlush(deviceUser.get());
+            //utilisateurRepository.saveAndFlush(deviceUser.get());
+        }
+
+        if(device.getContract() != null){
+            Optional<Contract> contract = contractRepository.findById(device.getContract().getId());
+            if(contract.isPresent()){
+                device.setContract(contract.get());
+            } else if(contract.isEmpty()){
+                throw new ContractException("ERROR : The contrac " + device.getContract().getId() + " doesn't exist.");
+            }
         }
 
         device.setDeviceCreated(LocalDateTime.now());
@@ -63,27 +77,47 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device updateDevice(Device device) throws DeviceException, UtilisateurException {
+    public Device updateDevice(Device device) throws DeviceException, UtilisateurException, ContractException {
+
         Optional<Device> devBdd = deviceRepository.findById(device.getId());
         if(devBdd.isEmpty()){
             throw new DeviceException("ERROR : The device you're trying to update doesn't exist.");
         }
 
-        if(device.getDeviceUtilisateur() != null){
-            Optional<Utilisateur> userDev = utilisateurRepository.findById(device.getDeviceUtilisateur().getId());
-            if(userDev.isEmpty()){
-                throw new UtilisateurException("ERROR : The user you're trying to assign to this device doesn't exist.");
+        if(device.getUtilisateur() != null){
+            Optional<Utilisateur> userDev = utilisateurRepository.findById(device.getUtilisateur().getId());
+            if(userDev.isPresent()){
+                userDev.get().setDevice(device);
+                //utilisateurRepository.saveAndFlush(userDev.get());
+            } else if(userDev.isEmpty()){
+                throw new UtilisateurException("ERROR : The user " + device.getUtilisateur().getId() + " you're trying to assign to this device doesn't exist.");
             }
         }
 
-        //device.setDeviceCreated(devBdd.get().getDeviceCreated()); //Necessary ?
+        if(device.getContract() != null){
+            Optional<Contract> contract = contractRepository.findById(device.getContract().getId());
+            if(contract.isPresent()){
+                device.setContract(contract.get());
+            } else if(contract.isEmpty()){
+                throw new ContractException("ERROR : The contrac " + device.getContract().getId() + " doesn't exist.");
+            }
+        }
 
         deviceRepository.saveAndFlush(device);
         return device;
     }
 
     @Override
-    public void deleteDeviceById(UUID devId){
-        deviceRepository.deleteById(devId);
+    public void deleteDeviceById(UUID devId) throws DeviceException {
+        Optional<Device> device = deviceRepository.findById(devId);
+        if(device.isPresent()){
+            Optional<Utilisateur> utilisateur = utilisateurRepository.findById(device.get().getUtilisateur().getId());
+            if(utilisateur.isPresent()){
+                utilisateur.get().setDevice(null);
+                deviceRepository.deleteById(devId);
+            } else {
+                throw new DeviceException("ERROR : The device " + devId + " couldn't be deleted because it doesn't exist.");
+            }
+        }
     }
 }

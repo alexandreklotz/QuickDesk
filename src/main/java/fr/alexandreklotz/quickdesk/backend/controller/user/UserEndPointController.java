@@ -1,5 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.controller.user;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.error.CommentException;
 import fr.alexandreklotz.quickdesk.backend.error.DefaultValueException;
 import fr.alexandreklotz.quickdesk.backend.error.TicketException;
@@ -8,6 +9,7 @@ import fr.alexandreklotz.quickdesk.backend.model.Comment;
 import fr.alexandreklotz.quickdesk.backend.model.Ticket;
 import fr.alexandreklotz.quickdesk.backend.service.CommentService;
 import fr.alexandreklotz.quickdesk.backend.service.TicketService;
+import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,7 @@ public class UserEndPointController {
     //TODO : Implement a password reset method in UtilisateurService/ServiceImpl and here. It has to work for both admins and users and it needs to verify
     // that the calling user is indeed the correct user.
 
+    @JsonView(CustomJsonView.TicketView.class)
     @GetMapping("/user/ticket/getOpenedTickets")
     public List<Ticket> getOpenedTickets(HttpServletRequest request) throws UtilisateurException{
         Principal principal = request.getUserPrincipal();
@@ -43,6 +46,7 @@ public class UserEndPointController {
         return ticketService.getOpenedTickets(userLogin);
     }
 
+    @JsonView(CustomJsonView.TicketView.class)
     @GetMapping("/ticket/{ticketNbr}") //This method will be used by both admins and users. This is why this URL doesn't start with /user
     public Ticket getUserTicket(@PathVariable Long ticketNbr, HttpServletRequest request) throws TicketException, UtilisateurException {
         Principal principal = request.getUserPrincipal();
@@ -50,21 +54,25 @@ public class UserEndPointController {
         return ticketService.getTicketByNumber(ticketNbr, userLogin);
     }
 
+    @JsonView(CustomJsonView.TicketView.class)
     @PostMapping("/user/ticket/create")
     public Ticket createUserTicket(@RequestBody Ticket ticket) throws DefaultValueException {
         return ticketService.createUserTicket(ticket);
     }
 
+    @JsonView(CustomJsonView.CommentView.class)
     @PostMapping("/ticket/{ticketNbr}/addComment") //This method will be used by both admins and users. This is why this URL doesn't start with /user
     public Comment addCommentToTicket(@RequestBody Comment comment) throws TicketException {
         return commentService.createNewComment(comment);
     }
 
+    @JsonView(CustomJsonView.CommentView.class)
     @PutMapping("/ticket/{ticketNbr}/commentUpdate") //This method will be used by both admins and users. This is why this URL doesn't start with /user
     public Comment updateExistingComment(@RequestBody Comment comment) throws TicketException, CommentException {
         return commentService.updateComment(comment);
     }
 
+    @JsonView(CustomJsonView.CommentView.class)
     @DeleteMapping("/comment/id/{commentId}/delete") //This method will be used by both admins and users. This is why this URL doesn't start with /user
     public void deleteCommentById(@PathVariable UUID commentId) throws CommentException {
         commentService.deleteCommentById(commentId);

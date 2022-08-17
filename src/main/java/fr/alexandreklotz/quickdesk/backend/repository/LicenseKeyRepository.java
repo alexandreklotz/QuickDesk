@@ -12,6 +12,6 @@ import java.util.UUID;
 @Repository
 public interface LicenseKeyRepository extends JpaRepository<LicenseKey, UUID> {
 
-    @Query("FROM LicenseKey l WHERE l.lkey = :key")
+    @Query("FROM LicenseKey l WHERE l.licenseSerial = :key")
     Optional<LicenseKey> getLicenseByLicenseKey(@Param("key")String key);
 }

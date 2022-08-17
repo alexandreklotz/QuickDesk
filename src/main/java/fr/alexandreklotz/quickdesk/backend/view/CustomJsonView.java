@@ -32,11 +32,4 @@ public class CustomJsonView {
 
     public static class TicketTypeView{}
 
-    public static class TicketTypeDefaultValueView{}
-
-    public static class TicketStatusDefaultValueView{}
-
-    public static class TicketCategoryDefaultValueView{}
-
-    public static class TicketPriorityDefaultValueView{}
 }

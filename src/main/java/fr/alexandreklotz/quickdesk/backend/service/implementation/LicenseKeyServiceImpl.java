@@ -48,10 +48,11 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
 
         if(licenseKey.getSoftware() != null){
             Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-            if(licSoftware.isEmpty()){
+            if(licSoftware.isPresent()){
+                licenseKey.setSoftware(licSoftware.get());
+            } else if(licSoftware.isEmpty()){
                 throw new SoftwareException("ERROR : The software you're trying to assign to this license key doesn't exist.");
             }
-            //licenseKey.setSoftware(licSoftware.get());
         }
 
         licenseKeyRepository.saveAndFlush(licenseKey);
@@ -60,6 +61,7 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
 
     @Override
     public LicenseKey updateLicenseKey(LicenseKey licenseKey) throws LicenseKeyException, SoftwareException {
+
         Optional<LicenseKey> updatedLic = licenseKeyRepository.findById(licenseKey.getId());
         if(updatedLic.isEmpty()){
             throw new LicenseKeyException("ERROR : The license key you're trying to update doesn't exist.");
@@ -67,11 +69,13 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
 
         if(licenseKey.getSoftware() != null){
             Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-            if(licSoftware.isEmpty()){
+            if(licSoftware.isPresent()){
+                licenseKey.setSoftware(licSoftware.get());
+            } else if(licSoftware.isEmpty()){
                 throw new SoftwareException("ERROR : The software you're trying to assign to this license key doesn't exist.");
             }
-            //updatedLic.get().setSoftware(licSoftware.get());
         }
+
         licenseKeyRepository.saveAndFlush(licenseKey);
         return licenseKey;
     }

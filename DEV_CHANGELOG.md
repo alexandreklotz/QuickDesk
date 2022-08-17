@@ -1,5 +1,25 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 17/08/2022
+
+* Minor code modifications in `DeviceServiceImpl` => It now manages contracts.
+* The relation between `Software` and `Contract` has been reverted to a @ManyToOne (Software -> Contract)
+* The relation between `Device` and `Contract` has been created. It's a @ManyToOne (Device -> Contract)
+
+*I have to run other tests to ensure that everything works fine in what's been fixed in the modified `ServiceImpl` classes.*
+
+*There might be other things i forgot to write in this changelog but only minor changes have been made. I need to test these modifications.
+Once done, i'll fix the security issue and everything should be ready for the front-end development to start.*
+
+***
+### 16/18/2022
+
+*The JSON errors were caused by the fact that i had forgot to use the @JsonView bean in the controllers. It now works. I now have a few issues with a few entities and especially to linked entities such as `Device` for example.*
+
+*A few changes have been made in a few `ServiceImpl` classes and other changes will be made.*
+
+*Need to check when you update a device, all the fields are null afterwards. I might implement two methods to update a user's device, one from the user JSON which sends the device id to the serviceimpl and the classic updatedevice from serviceimpl*
+***
 ### 13/08/2022
 *I'm currently testing the API to ensure that everything works as intended. It allows me to fix issues or coding mistakes and think about other interfaces/methods i'll implement .*
 

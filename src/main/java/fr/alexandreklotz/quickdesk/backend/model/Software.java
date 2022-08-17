@@ -56,14 +56,14 @@ public class Software {
     //TODO : Check the relation between software and contract
 
     //A software can be linked to only one contract but a contract can be linked to multiple software
-    /*@JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})
+    @JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})
     @ManyToOne
     @JoinColumn(name = "contract_id")
-    private Contract contract;*/
+    private Contract contract;
 
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.SoftwareView.class})
+    /*@JsonView({CustomJsonView.ContractView.class, CustomJsonView.SoftwareView.class})
     @ManyToMany(mappedBy = "ctrSoftware")
-    private Set<Contract> contracts;
+    private Set<Contract> contracts;*/
 
     /////////////////////
     //Getters & setters//
@@ -110,12 +110,20 @@ public class Software {
         this.licenses = licenses;
     }
 
-    public Set<Contract> getContracts() {
+    /*public Set<Contract> getContracts() {
         return contracts;
     }
 
     public void setContracts(Set<Contract> contracts) {
         this.contracts = contracts;
+    }*/
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
     @Override

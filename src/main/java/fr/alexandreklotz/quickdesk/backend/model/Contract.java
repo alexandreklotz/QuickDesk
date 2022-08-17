@@ -25,7 +25,7 @@ public class Contract {
     @JsonView(CustomJsonView.ContractView.class)
     private UUID id;
 
-    @JsonView(CustomJsonView.ContractView.class)
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
     @Column
     private String ctrName;
 
@@ -33,7 +33,7 @@ public class Contract {
     @Column
     private String ctrComment;
 
-    @JsonView(CustomJsonView.ContractView.class)
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
     @Column
     private String ctrNumber;
 
@@ -50,24 +50,30 @@ public class Contract {
     /////////////
 
     //A contract can be linked to multiple software but a software can only be linked to one contract
-    /*@JsonView(CustomJsonView.ContractView.class)
-    @OneToMany(mappedBy = "contract")
-    private Set<Software> ctrSoftware;*/
-
     @JsonView(CustomJsonView.ContractView.class)
+    @OneToMany(mappedBy = "contract")
+    private Set<Software> ctrSoftware;
+
+    /*@JsonView(CustomJsonView.ContractView.class)
     @ManyToMany
     @JoinTable(
             name = "contract_software",
             joinColumns = @JoinColumn(name = "software_id"),
             inverseJoinColumns = @JoinColumn(name = "contract_id")
     )
-    private Set<Software> ctrSoftware;
+    private Set<Software> ctrSoftware;*/
 
     //A contract can only have one contractor but a contractor can have multiple contracts
     @JsonView(CustomJsonView.ContractView.class)
     @ManyToOne
     @JoinColumn(name = "contractor_id")
     private Contractor contractor;
+
+    //device
+    @JsonView(CustomJsonView.ContractView.class)
+    @OneToMany(mappedBy = "contract")
+    private Set<Device> devices;
+
 
     /////////////////////
     //Getters & setters//
@@ -85,16 +91,16 @@ public class Contract {
         return ctrName;
     }
 
-    public void setCtrName(String ctrname) {
-        this.ctrName = ctrname;
+    public void setCtrName(String ctrName) {
+        this.ctrName = ctrName;
     }
 
     public String getCtrComment() {
         return ctrComment;
     }
 
-    public void setCtrComment(String ctrcomment) {
-        this.ctrComment = ctrcomment;
+    public void setCtrComment(String ctrComment) {
+        this.ctrComment = ctrComment;
     }
 
     public String getCtrNumber() {

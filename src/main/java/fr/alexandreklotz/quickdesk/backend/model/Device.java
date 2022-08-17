@@ -1,8 +1,6 @@
 package fr.alexandreklotz.quickdesk.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.alexandreklotz.quickdesk.backend.view.CustomJsonView;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,7 +27,7 @@ public class Device {
     private UUID id;
 
     @JsonView({CustomJsonView.DeviceView.class, CustomJsonView.UtilisateurView.class})
-    @Column(nullable = false)
+    @Column
     private String deviceName;
 
     @JsonView(CustomJsonView.DeviceView.class)
@@ -46,8 +44,8 @@ public class Device {
 
     @JsonView(CustomJsonView.DeviceView.class)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(nullable = false)
-    private LocalDateTime deviceCreated;
+    @Column
+    private static LocalDateTime deviceCreated;
 
     ///////////////
     //Constructor//
@@ -62,8 +60,13 @@ public class Device {
     //A device can be assigned to multiple users but a user can only be assigned to one device
     @JsonView(CustomJsonView.DeviceView.class)
     @OneToOne(mappedBy = "device")
-    private Utilisateur deviceUtilisateur;
+    private Utilisateur utilisateur;
 
+    //A device can only be assigned to one contract but a contract can have multiple devices assigned
+    @JsonView(CustomJsonView.DeviceView.class)
+    @ManyToOne
+    @JoinColumn(name="contract_id")
+    private Contract contract;
 
     /////////////////////
     //Getters & setters//
@@ -118,12 +121,19 @@ public class Device {
         this.deviceCreated = deviceCreated;
     }
 
-    public Utilisateur getDeviceUtilisateur() {
-        return deviceUtilisateur;
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
     }
 
-    public void setDeviceUtilisateur(Utilisateur utilisateurs) {
-        this.deviceUtilisateur = utilisateurs;
+    public void setUtilisateur(Utilisateur utilisateurs) {
+        this.utilisateur = utilisateurs;
     }
 
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 }

@@ -11,6 +11,7 @@ import fr.alexandreklotz.quickdesk.backend.repository.DeviceRepository;
 import fr.alexandreklotz.quickdesk.backend.repository.RolesRepository;
 import fr.alexandreklotz.quickdesk.backend.repository.TeamRepository;
 import fr.alexandreklotz.quickdesk.backend.repository.UtilisateurRepository;
+import fr.alexandreklotz.quickdesk.backend.service.DeviceService;
 import fr.alexandreklotz.quickdesk.backend.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -104,10 +105,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
 
-        if(utilisateur.getRole() == null){
+        if(utilisateur.getRole() != null){
+            Optional<Roles> role = rolesRepository.findById(utilisateur.getRole().getId());
+            if(role.isPresent()){
+                utilisateur.setRole(role.get());
+            }
+        } else if(utilisateur.getRole() == null){
             Roles roleBdd = rolesRepository.getById(3L);
             utilisateur.setRole(roleBdd);
         }
+
 
         if(utilisateur.getTeam() != null){
             Optional<Team> team = teamRepository.findById(utilisateur.getTeam().getId());
@@ -118,8 +125,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         if(utilisateur.getDevice() != null){
             Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
-            if(device.isEmpty()){
-                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " doesn't exist and cannot be assigned to the user.");
+            if(device.isPresent()){
+                device.get().setUtilisateur(utilisateur);
+            } else if(device.isEmpty()){
+                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " assigned to " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
         }
 
@@ -141,19 +150,37 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         if(utilisateur.getTeam() != null){
             Optional<Team> team = teamRepository.findById(utilisateur.getTeam().getId());
-            if(team.isEmpty()){
+            if(team.isPresent()){
+                utilisateur.setTeam(team.get());
+            } else if(team.isEmpty()){
                 throw new TeamException("ERROR : The team you assigned to the user " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
         }
 
+        if(utilisateur.getRole() != null){
+            Optional<Roles> role = rolesRepository.findById(utilisateur.getRole().getId());
+            if(role.isPresent()){
+                utilisateur.setRole(role.get());
+            }
+        } else {
+            utilisateur.setRole(updatedUser.get().getRole());
+        }
+
         if(utilisateur.getDevice() != null){
             Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
-            if(device.isEmpty()){
-                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " doesn't exist.");
+            if(device.isPresent()){
+                device.get().setUtilisateur(utilisateur);
+            } else if(device.isEmpty()){
+                throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " assigned to " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
         }
 
-        utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
+
+        if(utilisateur.getUtilPwd() != null){
+            utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
+        } else {
+            utilisateur.setUtilPwd(updatedUser.get().getUtilPwd());
+        }
 
         utilisateurRepository.saveAndFlush(utilisateur);
 

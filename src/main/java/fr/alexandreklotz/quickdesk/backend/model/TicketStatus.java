@@ -27,7 +27,7 @@ public class TicketStatus {
     private UUID id;
 
     @Column(nullable = false)
-    @JsonView(CustomJsonView.TicketStatusView.class)
+    @JsonView({CustomJsonView.TicketStatusView.class, CustomJsonView.TicketView.class})
     private String name;
 
     @Column(nullable = false)
@@ -45,7 +45,7 @@ public class TicketStatus {
     /////////////
 
     //One status per ticket but multiple tickets can have the same status
-    @JsonIgnore
+    @JsonView(CustomJsonView.TicketStatusView.class)
     @OneToMany(mappedBy = "ticketStatus")
     private Set<Ticket> tickets;
 

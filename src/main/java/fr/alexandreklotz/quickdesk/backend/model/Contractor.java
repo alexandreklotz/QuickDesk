@@ -26,7 +26,7 @@ public class Contractor {
     @JsonView(CustomJsonView.ContractorView.class)
     private UUID id;
 
-    @JsonView(CustomJsonView.ContractorView.class)
+    @JsonView({CustomJsonView.ContractorView.class, CustomJsonView.ContractView.class})
     @Column(nullable = false)
     private String contractorName;
 
