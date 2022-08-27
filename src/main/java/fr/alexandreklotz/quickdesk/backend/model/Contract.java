@@ -25,7 +25,7 @@ public class Contract {
     @JsonView(CustomJsonView.ContractView.class)
     private UUID id;
 
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class, CustomJsonView.SoftwareView.class})
     @Column
     private String ctrName;
 
@@ -33,7 +33,7 @@ public class Contract {
     @Column
     private String ctrComment;
 
-    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class})
+    @JsonView({CustomJsonView.ContractView.class, CustomJsonView.ContractorView.class, CustomJsonView.SoftwareView.class})
     @Column
     private String ctrNumber;
 
@@ -125,5 +125,13 @@ public class Contract {
 
     public void setContractor(Contractor contractor) {
         this.contractor = contractor;
+    }
+
+    public Set<Device> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(Set<Device> devices) {
+        this.devices = devices;
     }
 }

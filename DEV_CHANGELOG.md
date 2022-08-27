@@ -1,5 +1,13 @@
 # QuickDesk Lite Coding Changelog
 ***
+###23/08/2022
+*Some logic in some `ServiceImpl` classes will receive minor changes once front-end development will start. Some methods like __closeTicket__ in `TicketServiceImpl` will probably be deleted.*
+*I still need to fix security issues (access to /admin or access to tickets through /ticket/ticketNbr link). Other minor changes will be made aswell.*
+***
+### 22/08/2022
+*Ran some tests again, playing around with JSON and my Post requests just to ensure that everything works as intended.
+A few fixes still need to be done but they are minor fixes.*
+***
 ### 17/08/2022
 
 * Minor code modifications in `DeviceServiceImpl` => It now manages contracts.

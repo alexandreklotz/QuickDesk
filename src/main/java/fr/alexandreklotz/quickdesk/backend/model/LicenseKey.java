@@ -21,10 +21,10 @@ public class LicenseKey {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(nullable = false, columnDefinition = "BINARY(16)")
-    @JsonView(CustomJsonView.LicenseKeyView.class)
+    @JsonView({CustomJsonView.LicenseKeyView.class, CustomJsonView.SoftwareView.class})
     private UUID id;
 
-    @JsonView(CustomJsonView.LicenseKeyView.class)
+    @JsonView({CustomJsonView.LicenseKeyView.class, CustomJsonView.SoftwareView.class})
     @Column
     private String licenseSerial;
 
@@ -39,7 +39,7 @@ public class LicenseKey {
     /////////////
 
     //A licensekey can only be assigned to one software but a software can have multiple license keys.
-    @JsonView({CustomJsonView.LicenseKeyView.class, CustomJsonView.SoftwareView.class})
+    @JsonView(CustomJsonView.LicenseKeyView.class)
     @ManyToOne
     @JoinColumn(name = "software_id")
     private Software software;

@@ -58,20 +58,16 @@ public class SoftwareServiceImpl implements SoftwareService {
                 if(lkey.isEmpty()){
                     throw new LicenseKeyException("ERROR : The license with the key " + license.getId() + " doesn't exist.");
                 }
-                /*lkey.get().setSoftware(software);
-                licenseKeyRepository.saveAndFlush(lkey.get());*/
+                lkey.get().setSoftware(software);
             }
         }
 
-        if(software.getContracts() != null){
-            for(Contract contract : software.getContracts()){
-                Optional<Contract> softCtr = contractRepository.findById(contract.getId());
-                if(softCtr.isEmpty()){
-                    throw new ContractException("ERROR : The specified contract doesn't exist. \n ID : " + contract.getId());
-                }
-                Set<Contract> softwareContracts = software.getContracts();
-                softwareContracts.add(softCtr.get());
+        if(software.getContract() != null){
+            Optional<Contract> contract = contractRepository.findById(software.getContract().getId());
+            if(contract.isEmpty()){
+                throw new ContractException("ERROR : The contrat with the id " + software.getContract().getId() + " doesn't exist");
             }
+            software.setContract(contract.get());
         }
 
         softwareRepository.saveAndFlush(software);
@@ -91,22 +87,20 @@ public class SoftwareServiceImpl implements SoftwareService {
             for(LicenseKey license : software.getLicenses()){
                 Optional<LicenseKey> lkey = licenseKeyRepository.findById(license.getId());
                 if(lkey.isEmpty()){
-                    throw new LicenseKeyException("ERROR : The license with the id " + license.getId() + " doesn't exist.");
+                    throw new LicenseKeyException("ERROR : The license with the key " + license.getId() + " doesn't exist.");
                 }
-                //lkey.get().setSoftware(updatedSoftware.get());
+                lkey.get().setSoftware(software);
             }
         }
 
-        if(software.getContracts() != null){
-            for(Contract contract : software.getContracts()){
-                Optional<Contract> softCtr = contractRepository.findById(contract.getId());
-                if(softCtr.isEmpty()){
-                    throw new ContractException("ERROR : The specified contract doesn't exist. \n ID : " + contract.getId());
-                }
-                Set<Contract> softwareContracts = software.getContracts();
-                softwareContracts.add(softCtr.get());
+        if(software.getContract() != null){
+            Optional<Contract> contract = contractRepository.findById(software.getContract().getId());
+            if(contract.isEmpty()){
+                throw new ContractException("ERROR : The contrat with the id " + software.getContract().getId() + " doesn't exist");
             }
+            software.setContract(contract.get());
         }
+
 
         softwareRepository.saveAndFlush(software);
         return software;

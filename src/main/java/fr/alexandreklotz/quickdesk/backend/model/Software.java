@@ -22,10 +22,10 @@ public class Software {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(nullable = false, columnDefinition = "BINARY(16)")
-    @JsonView(CustomJsonView.SoftwareView.class)
+    @JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})
     private UUID id;
 
-    @JsonView(CustomJsonView.SoftwareView.class)
+    @JsonView({CustomJsonView.SoftwareView.class, CustomJsonView.ContractView.class})
     @Column(nullable = false)
     private String name;
 

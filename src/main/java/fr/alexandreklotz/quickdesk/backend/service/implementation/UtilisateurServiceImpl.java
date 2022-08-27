@@ -125,11 +125,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         if(utilisateur.getDevice() != null){
             Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
-            if(device.isPresent()){
-                device.get().setUtilisateur(utilisateur);
-            } else if(device.isEmpty()){
+            if(device.isEmpty()){
                 throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " assigned to " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
+            device.get().setUtilisateur(utilisateur);
         }
 
         utilisateurRepository.saveAndFlush(utilisateur);
@@ -150,11 +149,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         if(utilisateur.getTeam() != null){
             Optional<Team> team = teamRepository.findById(utilisateur.getTeam().getId());
-            if(team.isPresent()){
-                utilisateur.setTeam(team.get());
-            } else if(team.isEmpty()){
+            if(team.isEmpty()){
                 throw new TeamException("ERROR : The team you assigned to the user " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
+            utilisateur.setTeam(team.get());
         }
 
         if(utilisateur.getRole() != null){
@@ -168,11 +166,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         if(utilisateur.getDevice() != null){
             Optional<Device> device = deviceRepository.findById(utilisateur.getDevice().getId());
-            if(device.isPresent()){
-                device.get().setUtilisateur(utilisateur);
-            } else if(device.isEmpty()){
+            if(device.isEmpty()){
                 throw new DeviceException("ERROR : The device " + utilisateur.getDevice().getId() + " assigned to " + utilisateur.getUtilLogin() + " doesn't exist.");
             }
+            device.get().setUtilisateur(utilisateur);
         }
 
 
