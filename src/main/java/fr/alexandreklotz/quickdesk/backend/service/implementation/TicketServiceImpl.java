@@ -58,10 +58,12 @@ public class TicketServiceImpl implements TicketService {
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(login);
         if(userBdd.isEmpty()){
-            throw new UtilisateurException("The user doesn't exist, cannot retrieve any tickets.");
+            throw new UtilisateurException("ERROR : The user doesn't exist, cannot retrieve any tickets.");
         }
 
-        List<Ticket> allTickets = ticketRepository.findAll();
+        return (List<Ticket>) userBdd.get().getTickets();
+
+        /*List<Ticket> allTickets = ticketRepository.findAll();
         List<Ticket> openedTickets = new ArrayList<>();
 
         for(Ticket ticket : allTickets) {
@@ -70,7 +72,7 @@ public class TicketServiceImpl implements TicketService {
                 openedTickets.add(ticket);
             }
         }
-        return openedTickets;
+        return openedTickets;*/
     }
 
 
@@ -79,16 +81,19 @@ public class TicketServiceImpl implements TicketService {
 
         Optional<Utilisateur> userBdd = utilisateurRepository.findUserWithLogin(login);
         if(userBdd.isEmpty()){
-            throw new UtilisateurException("The specified admin doesn't exist.");
+            throw new UtilisateurException("ERROR : The specified admin doesn't exist.");
         }
-        List<Ticket> allTickets = ticketRepository.findAll();
+
+        return ticketRepository.getAdminAssignedTickets(userBdd.get().getId());
+
+        /*List<Ticket> allTickets = ticketRepository.findAll();
         List<Ticket> assignedTickets = new ArrayList<>();
         for(Ticket ticket : allTickets){
             if(ticket.getAssignedAdmin().equals(userBdd.get().getId())){
                 assignedTickets.add(ticket);
             }
         }
-        return assignedTickets;
+        return assignedTickets;*/
     }
 
     ////////////////////////

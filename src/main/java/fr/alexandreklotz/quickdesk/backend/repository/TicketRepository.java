@@ -13,6 +13,9 @@ import java.util.UUID;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
+    @Query("FROM Ticket t WHERE t.assignedAdmin = :adminId")
+    List<Ticket> getAdminAssignedTickets (@Param("adminId")UUID adminId);
+
     @Query(value = "SELECT max(ticketNumber) FROM Ticket")
     Long getLatestTicketNumber();
 

@@ -58,17 +58,16 @@ public class DeviceServiceImpl implements DeviceService {
                 throw new UtilisateurException("ERROR : The user assigned to this device doesn't exist.");
             }
             deviceUser.get().setDevice(device);
-            //utilisateurRepository.saveAndFlush(deviceUser.get());
         }
 
         if(device.getContract() != null){
             Optional<Contract> contract = contractRepository.findById(device.getContract().getId());
-            if(contract.isPresent()){
-                device.setContract(contract.get());
-            } else if(contract.isEmpty()){
+            if(contract.isEmpty()){
                 throw new ContractException("ERROR : The contrac " + device.getContract().getId() + " doesn't exist.");
             }
+            device.setContract(contract.get());
         }
+
 
         device.setDeviceCreated(LocalDateTime.now());
 
@@ -86,21 +85,18 @@ public class DeviceServiceImpl implements DeviceService {
 
         if(device.getUtilisateur() != null){
             Optional<Utilisateur> userDev = utilisateurRepository.findById(device.getUtilisateur().getId());
-            if(userDev.isPresent()){
-                userDev.get().setDevice(device);
-                //utilisateurRepository.saveAndFlush(userDev.get());
-            } else if(userDev.isEmpty()){
+            if(userDev.isEmpty()){
                 throw new UtilisateurException("ERROR : The user " + device.getUtilisateur().getId() + " you're trying to assign to this device doesn't exist.");
             }
+            userDev.get().setDevice(device);
         }
 
         if(device.getContract() != null){
             Optional<Contract> contract = contractRepository.findById(device.getContract().getId());
-            if(contract.isPresent()){
-                device.setContract(contract.get());
-            } else if(contract.isEmpty()){
+            if(contract.isEmpty()){
                 throw new ContractException("ERROR : The contrac " + device.getContract().getId() + " doesn't exist.");
             }
+            device.setContract(contract.get());
         }
 
         deviceRepository.saveAndFlush(device);
@@ -109,15 +105,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void deleteDeviceById(UUID devId) throws DeviceException {
-        Optional<Device> device = deviceRepository.findById(devId);
-        if(device.isPresent()){
-            Optional<Utilisateur> utilisateur = utilisateurRepository.findById(device.get().getUtilisateur().getId());
-            if(utilisateur.isPresent()){
-                utilisateur.get().setDevice(null);
-                deviceRepository.deleteById(devId);
-            } else {
-                throw new DeviceException("ERROR : The device " + devId + " couldn't be deleted because it doesn't exist.");
-            }
-        }
+        deviceRepository.deleteById(devId);
     }
 }

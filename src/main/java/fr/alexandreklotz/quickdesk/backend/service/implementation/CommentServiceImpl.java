@@ -76,11 +76,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteCommentById(UUID commentId) throws CommentException{
-        Optional<Comment> deletedComment = commentRepository.findById(commentId);
-        if(deletedComment.isEmpty()){
-            throw new CommentException("ERROR : This comment doesn't exist or has been deleted.");
-        }
-        //TODO : Implement a check to verify if the calling user is the author of this comment or if it's an admin. See if it needs to be implemented in other classes.
         commentRepository.deleteById(commentId);
+        //TODO : Implement a check to verify if the calling user is the author of this comment or if it's an admin. See if it needs to be implemented in other classes.
     }
 }

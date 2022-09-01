@@ -1,5 +1,11 @@
 # QuickDesk Lite Coding Changelog
 ***
+###01/09/2022
+* Modified the logic in `TicketServiceImpl` for the `getOpenedTickets` method. I was retrieving all the tickets and then comparing the ticket owner id with the calling user's id which is a __terrible__ idea. I only have to return the __getTickets()__ getter in order to retrieve them.
+* Applied the same logic to `getAssignedTickets`. Instead of iterating through all the tickets and comparing IDs, i created an interface in `TicketRepository` to retrieve all the assigned tickets with an sql query => `getAdminAssignedTickets`
+* `createDevice`, `updateDevice` and `deleteDevice` code has been modified in `DeviceServiceImpl`.
+* Some code has also been modified in `createUser` and `updateUser` in `UtilisateurServiceImpl`.
+***
 ###23/08/2022
 *Some logic in some `ServiceImpl` classes will receive minor changes once front-end development will start. Some methods like __closeTicket__ in `TicketServiceImpl` will probably be deleted.*
 *I still need to fix security issues (access to /admin or access to tickets through /ticket/ticketNbr link). Other minor changes will be made aswell.*

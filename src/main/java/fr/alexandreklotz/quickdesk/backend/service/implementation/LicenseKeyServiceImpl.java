@@ -48,11 +48,10 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
 
         if(licenseKey.getSoftware() != null){
             Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-            if(licSoftware.isPresent()){
-                licenseKey.setSoftware(licSoftware.get());
-            } else if(licSoftware.isEmpty()){
+            if(licSoftware.isEmpty()){
                 throw new SoftwareException("ERROR : The software you're trying to assign to this license key doesn't exist.");
             }
+            licenseKey.setSoftware(licSoftware.get());
         }
 
         licenseKeyRepository.saveAndFlush(licenseKey);
@@ -69,11 +68,10 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
 
         if(licenseKey.getSoftware() != null){
             Optional<Software> licSoftware = softwareRepository.findById(licenseKey.getSoftware().getId());
-            if(licSoftware.isPresent()){
-                licenseKey.setSoftware(licSoftware.get());
-            } else if(licSoftware.isEmpty()){
+            if(licSoftware.isEmpty()){
                 throw new SoftwareException("ERROR : The software you're trying to assign to this license key doesn't exist.");
             }
+            licenseKey.setSoftware(licSoftware.get());
         }
 
         licenseKeyRepository.saveAndFlush(licenseKey);

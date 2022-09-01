@@ -105,14 +105,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         utilisateur.setUtilPwd(passwordEncoder.encode(utilisateur.getUtilPwd()));
 
-        if(utilisateur.getRole() != null){
+        if(utilisateur.getRole() != null) {
             Optional<Roles> role = rolesRepository.findById(utilisateur.getRole().getId());
-            if(role.isPresent()){
+            if (role.isPresent()) {
                 utilisateur.setRole(role.get());
+            } else if (utilisateur.getRole() == null) {
+                Roles roleBdd = rolesRepository.getById(3L);
+                utilisateur.setRole(roleBdd);
             }
-        } else if(utilisateur.getRole() == null){
-            Roles roleBdd = rolesRepository.getById(3L);
-            utilisateur.setRole(roleBdd);
         }
 
 
@@ -159,9 +159,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             Optional<Roles> role = rolesRepository.findById(utilisateur.getRole().getId());
             if(role.isPresent()){
                 utilisateur.setRole(role.get());
+            } else {
+                utilisateur.setRole(updatedUser.get().getRole());
             }
-        } else {
-            utilisateur.setRole(updatedUser.get().getRole());
         }
 
         if(utilisateur.getDevice() != null){
