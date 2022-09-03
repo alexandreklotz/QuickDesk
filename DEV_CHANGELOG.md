@@ -1,5 +1,9 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 03/09/2022
+*Project has been refactored. The `backend` and `frontend` folders have been deleted since the Angular front end will be added in the `/resources` folder.*
+*JSONViews will be removed and there's still a few fixes to be made. But except that, i now need the front-end to see what's missing and what could be improved (in my opinion)*
+***
 ### 01/09/2022
 * Modified the logic in `TicketServiceImpl` for the `getOpenedTickets` method. I was retrieving all the tickets and then comparing the ticket owner id with the calling user's id which is a __terrible__ idea. I only have to return the __getTickets()__ getter in order to retrieve them.
 * Applied the same logic to `getAssignedTickets`. Instead of iterating through all the tickets and comparing IDs, i created an interface in `TicketRepository` to retrieve all the assigned tickets with an sql query => `getAdminAssignedTickets`
