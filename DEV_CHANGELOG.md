@@ -1,8 +1,21 @@
 # QuickDesk Lite Coding Changelog
 ***
+### 24/09/2022
+*Some minor fixes. Everything that has been modified has been added in the 05/09 changelog. I didn't push my code back then, which is why i added changes in the previous changelog.*
+***
+### 05/09/2022
+*I'm thinking about implementing ticket queues prefix, for example if a ticket is created in the network queue and this queue has the NETW prefix, the ticket number or reference would be something like NETW-2649.
+I just need to see how i can implement it, especially the number part. The prefix would be simple, but implementing a ticket number depending on the queue without adding a variable in the model sounds tricky.
+I think i'll just leave it as it is, my main goal right now is to have something functional enough to implement the front-end*
+
+*I'm also thinking about creating an index in the MySQL database for the `getLatestTicketNbr` method. It will depend of the performance of both methods, apparently indexes aren't so practical sometimes.*
+
+* `createAdminTicket` method wasn't setting the ticket number on new admin tickets. It has now been implemented.
+* SecurityConfig has received changes : antMatchers have been modified. The URLs in the controllers have been modified accordingly. `.hasRole` has been replaced by `hasAuthority`.
+***
 ### 03/09/2022
 *Project has been refactored. The `backend` and `frontend` folders have been deleted since the Angular front end will be added in the `/resources` folder.*
-*JSONViews will be removed and there's still a few fixes to be made. But except that, i now need the front-end to see what's missing and what could be improved (in my opinion)*
+*I now need the front-end to see what's missing and what could be improved (in my opinion)*
 ***
 ### 01/09/2022
 * Modified the logic in `TicketServiceImpl` for the `getOpenedTickets` method. I was retrieving all the tickets and then comparing the ticket owner id with the calling user's id which is a __terrible__ idea. I only have to return the __getTickets()__ getter in order to retrieve them.

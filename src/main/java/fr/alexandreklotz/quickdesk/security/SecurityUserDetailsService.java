@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
 
-    @Autowired
     private UtilisateurRepository utilisateurRepository;
+
+    @Autowired
+    SecurityUserDetailsService(UtilisateurRepository utilisateurRepository){
+        this.utilisateurRepository = utilisateurRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Utilisateur utilisateur = utilisateurRepository
                 .findUserLoginAndRoles(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+                .orElseThrow(() -> new UsernameNotFoundException("SECURITY ERROR : Cannot load user :" + username + ". User doesn't exist"));
 
                 return new SecurityUserDetails(utilisateur);
     }

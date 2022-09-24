@@ -47,7 +47,7 @@ public class UserEndPointController {
     }
 
     @JsonView(CustomJsonView.TicketView.class)
-    @GetMapping("/ticket/{ticketNbr}") //This method will be used by both admins and users. This is why this URL doesn't start with /user
+    @GetMapping("/all/ticket/{ticketNbr}")
     public Ticket getUserTicket(@PathVariable Long ticketNbr, HttpServletRequest request) throws TicketException, UtilisateurException {
         Principal principal = request.getUserPrincipal();
         String userLogin = principal.getName();
@@ -61,19 +61,19 @@ public class UserEndPointController {
     }
 
     @JsonView(CustomJsonView.CommentView.class)
-    @PostMapping("/ticket/{ticketNbr}/addComment") //This method will be used by both admins and users. This is why this URL doesn't start with /user
+    @PostMapping("/all/ticket/{ticketNbr}/addComment")
     public Comment addCommentToTicket(@RequestBody Comment comment) throws TicketException {
         return commentService.createNewComment(comment);
     }
 
     @JsonView(CustomJsonView.CommentView.class)
-    @PutMapping("/ticket/{ticketNbr}/commentUpdate") //This method will be used by both admins and users. This is why this URL doesn't start with /user
+    @PutMapping("/all/ticket/{ticketNbr}/commentUpdate")
     public Comment updateExistingComment(@RequestBody Comment comment) throws TicketException, CommentException {
         return commentService.updateComment(comment);
     }
 
     @JsonView(CustomJsonView.CommentView.class)
-    @DeleteMapping("/comment/id/{commentId}/delete") //This method will be used by both admins and users. This is why this URL doesn't start with /user
+    @DeleteMapping("/all/comment/id/{commentId}/delete")
     public void deleteCommentById(@PathVariable UUID commentId) throws CommentException {
         commentService.deleteCommentById(commentId);
     }

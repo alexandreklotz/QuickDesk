@@ -175,6 +175,7 @@ public class TicketServiceImpl implements TicketService {
         //We set automatic values such as time and editable ticket
         ticket.setTicketDateCreated(LocalDateTime.now());
         ticket.setEditableTicket(true);
+        ticket.setTicketNumber(getLatestTicketNumber());
 
         //We define conditions to manage empty fields
         if(ticket.getTicketStatus() == null){
