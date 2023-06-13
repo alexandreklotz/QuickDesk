@@ -1,3 +1,3 @@
-# QuickDesk Lite
+# QuickDesk
 
-The README file will be updated once the project will be finished.
+**Project cancelled for the time being**
